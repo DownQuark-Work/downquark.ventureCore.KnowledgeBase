@@ -1,3 +1,3 @@
-# mlnck.me Metadata
+# DownQuark's Centralized Knowledge Base
 
-:rotating_light: **WARNING** :rotating_light: This README should only show on the repository at https://github.com/mlnck/.opensource. If it is showing on some other repo, please open an issue to have it fixed.
+This is a collection of documentation and development resources to be used as reference material and/or a guide when working in other repositories.
