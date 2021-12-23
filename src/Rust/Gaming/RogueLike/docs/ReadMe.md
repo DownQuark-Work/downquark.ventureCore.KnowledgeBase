@@ -1,0 +1,1 @@
+- http://bfnightly.bracketproductions.com/rustbook/
