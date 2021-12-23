@@ -7,11 +7,11 @@
 - https://www.gridsagegames.com/blog/2018/10/how-to-make-a-roguelike/
 - http://pcg.wikidot.com/
   - http://pcg.wikidot.com/pcg-algorithm:map-generation
-** RUST **
-- http://bfnightly.bracketproductions.com/rustbook/
+- https://nluqo.github.io/broughlike-tutorial/
 
 ### Design:
 - https://www.reddit.com/r/roguelikedev/wiki/tilesets
+- https://opengameart.org/art-search-advanced
 
 ### Tools:
 - [ASCII art editor](https://www.gridsagegames.com/rexpaint/)
