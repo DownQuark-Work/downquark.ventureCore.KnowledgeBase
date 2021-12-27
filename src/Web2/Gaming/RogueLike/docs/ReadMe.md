@@ -12,6 +12,10 @@
 ### Design:
 - https://www.reddit.com/r/roguelikedev/wiki/tilesets
 - https://opengameart.org/art-search-advanced
+- https://forums.tigsource.com/index.php?topic=14166.0
 
 ### Tools:
 - [ASCII art editor](https://www.gridsagegames.com/rexpaint/)
+  - https://extended-ascii-viewer.herokuapp.com/
+- https://dwarffortresswiki.org/Tileset_repository#1
+  - https://dwarffortresswiki.org/index.php/DF2014:Graphics_set_repository
