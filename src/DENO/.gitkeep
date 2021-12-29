@@ -10,17 +10,16 @@ https://doc.deno.land/
 https://deno.land/manual@v1.15.3/testing#testing
 
 
-std|3rdParties
--|-
+std
 https://deno.land/std|https://deno.land/x/
 https://deno.land/std@0.119.0/log|https://deno.land/x/ky@v0.23.0
--|https://deno.land/x/mod@v2.2.11
--|https://deno.land/x/darango@0.0.4 \[ArangoDB]
--|https://deno.land/x/tdd@v0.6
--|https://deno.land/x/pool@v0.1.0 \[resource pool]
--|https://deno.land/x/quarrel@v0.5.0
--|https://deno.land/x/middleware@1.2.0
--|https://deno.land/x/rdf@0.4.0
+
+3rd|Parties
+-|-
+https://deno.land/x/mod@v2.2.11|https://deno.land/x/darango@0.0.4 \[ArangoDB]|
+https://deno.land/x/tdd@v0.6|https://deno.land/x/pool@v0.1.0 \[resource pool]|
+https://deno.land/x/quarrel@v0.5.0|https://deno.land/x/middleware@1.2.0|
+https://deno.land/x/rdf@0.4.0|https://deno.land/x/seeded_numbers@1.0.3
 
 https://dev.to/t/deno
 https://oakserver.github.io/oak/ # http middleware
