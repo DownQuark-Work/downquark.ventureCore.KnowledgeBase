@@ -17,3 +17,5 @@ Here are some other resources that will be referenced throughout:
 - https://github.com/jlevy/the-art-of-command-line
 
 And, of course, _always_ remember the **[Octoverse](https://octoverse.github.com/)**
+ - https://octoverse.github.com/sustainable-communities/
+  - links to top 20 repos about 80% down the page
