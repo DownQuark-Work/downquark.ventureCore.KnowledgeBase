@@ -19,3 +19,7 @@ Here are some other resources that will be referenced throughout:
 And, of course, _always_ remember the **[Octoverse](https://octoverse.github.com/)**
  - https://octoverse.github.com/sustainable-communities/
   - links to top 20 repos about 80% down the page
+
+And finally, a couple miscellaneous links
+-  https://github.com/actions/toolkit
+-  https://www.codeproject.com/Articles/359654/11-important-database-designing-rules-which-I-fo-2
