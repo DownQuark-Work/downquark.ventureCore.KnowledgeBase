@@ -14,6 +14,9 @@ std
 https://deno.land/std|https://deno.land/x/
 https://deno.land/std@0.119.0/log|https://deno.land/x/ky@v0.23.0
 
+> New: via ProductHunt
+> https://lumeland.github.io/getting-started/examples/
+
 3rd|Parties
 -|-
 https://deno.land/x/mod@v2.2.11|https://deno.land/x/darango@0.0.4 \[ArangoDB]|
