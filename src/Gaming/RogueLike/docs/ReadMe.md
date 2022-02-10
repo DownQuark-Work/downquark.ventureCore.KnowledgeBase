@@ -8,6 +8,7 @@
 - http://pcg.wikidot.com/
   - http://pcg.wikidot.com/pcg-algorithm:map-generation
 - https://nluqo.github.io/broughlike-tutorial/
+- https://www.codeproject.com/Articles/420046/Loot-Tables-Random-Maps-and-Monsters-Part-I
 
 ### Design:
 - https://www.reddit.com/r/roguelikedev/wiki/tilesets
