@@ -57,13 +57,14 @@ class Grid {
     console.log('repeating: ', iterations)
   }
   printGrid(){
+    console.log('this.renderedGrid', this.renderedGrid)
     let printRow = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         printRow.push(this.gridmap[`${gX}|${gY}`].stateCur)
       }
       console.log(...printRow)
-      // this.renderedGrid.push([...printRow])
+      this.renderedGrid.push([...printRow])
       printRow = []
     }
   }
