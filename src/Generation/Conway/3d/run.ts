@@ -63,7 +63,7 @@ class Grid {
         printRow.push(this.gridmap[`${gX}|${gY}`].stateCur)
       }
       console.log(...printRow)
-      this.renderedGrid.push([...printRow])
+      // this.renderedGrid.push([...printRow])
       printRow = []
     }
   }
