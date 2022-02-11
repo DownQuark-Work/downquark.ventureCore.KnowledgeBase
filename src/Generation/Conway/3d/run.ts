@@ -49,7 +49,6 @@ class Grid {
     }
   }
   cycleLife(){
-    console.log('---')
     Object.keys(this._gridmap).forEach(cell => {
       // determine living neighbors
       let livingNeighbors = 0
@@ -76,17 +75,16 @@ class Grid {
     })
     Object.values(this._gridmap).forEach(cell => cell.applyNextState())
   }
-  // deno-lint-ignore no-explicit-any
-  finalizeGrid(golArr?: any[]){
+
+  finalizeGrid(golArr?:Array<Array<string[]>> ){
     let printRow = []
-    // deno-lint-ignore no-explicit-any
-    const returnGrid:any = []
+    const returnGrid:Array<string[]> = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
-        // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
+        const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
@@ -104,7 +102,7 @@ let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt
 const grd = new Grid(gridH, gridW)
 grd.init()
 
-grd.finalizeGrid()
+// grd.finalizeGrid()
 if(iterationsRemaining < 0)
 { // used for continuous animation
   setInterval(() => {
@@ -115,9 +113,7 @@ if(iterationsRemaining < 0)
 }
 else
 { // used to create a fixed array of lifecycles and output the result
-    // TODO: make this output the array
-  // deno-lint-ignore no-explicit-any
-  const GameOfLife: any[]|undefined = []
+  const GameOfLife:Array<Array<string[]>> = []
   while(iterationsRemaining)
   {
     grd.cycleLife()
