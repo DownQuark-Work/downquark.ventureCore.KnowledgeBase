@@ -14,6 +14,9 @@ class Cell {
     console.log(`Created cell at position: ${this.x},${this.y} with current state ${this.stateCur}`);
     
   }
+  getSurroundingValues(){
+
+  }
   storeNextState(){
     // if lived
     // - increment _amtLived
@@ -35,6 +38,7 @@ class Grid {
   readonly h: number
   readonly w: number
   gridmap: {[k:string]:Cell} = {}
+  renderedGrid: Array<number[]> = []
   constructor(h:number,w:number) {
     this.h = h;
     this.w = w;
@@ -59,6 +63,7 @@ class Grid {
         printRow.push(this.gridmap[`${gX}|${gY}`].stateCur)
       }
       console.log(...printRow)
+      this.renderedGrid.push([...printRow])
       printRow = []
     }
   }
