@@ -3,7 +3,7 @@ const SURVIVING_CELL_COMPARISON_TYPE = 'ALIVE'
 const SURVIVING_CELL_RANGE = [2,3]
 // 2: Any dead cell with three live neighbours becomes a live cell.
 const TO_LIFE_COMPARISON_TYPE = 'ALIVE'
-const TO_LIFE_RANGE = [3]
+const TO_LIFE_RANGE = [3,3]
 // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
 const GRID_HEIGHT = 10
