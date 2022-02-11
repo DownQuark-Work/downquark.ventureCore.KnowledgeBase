@@ -76,20 +76,25 @@ class Grid {
     })
     Object.values(this._gridmap).forEach(cell => cell.applyNextState())
   }
-  finalizeGrid(){
+  // deno-lint-ignore no-explicit-any
+  finalizeGrid(golArr?: any[]){
     let printRow = []
+    // deno-lint-ignore no-explicit-any
+    const returnGrid:any = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
-      console.log(...printRow)
+
+      golArr ? returnGrid.push(printRow) : console.log(...printRow)
       printRow = []
     }
+    golArr && golArr.push(returnGrid)
   }
 }
 const gridH = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
@@ -111,11 +116,13 @@ if(iterationsRemaining < 0)
 else
 { // used to create a fixed array of lifecycles and output the result
     // TODO: make this output the array
-  // const GameOfLife = []
+  // deno-lint-ignore no-explicit-any
+  const GameOfLife: any[]|undefined = []
   while(iterationsRemaining)
   {
     grd.cycleLife()
-    grd.finalizeGrid()
+    grd.finalizeGrid(GameOfLife)
     iterationsRemaining--
   }
+  console.log('GameOfLife', GameOfLife)
 }
