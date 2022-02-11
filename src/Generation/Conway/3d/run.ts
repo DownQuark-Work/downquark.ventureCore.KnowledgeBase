@@ -76,13 +76,14 @@ class Grid {
     })
     Object.values(this._gridmap).forEach(cell => cell.applyNextState())
   }
-  printGrid(){
+  finalizeGrid(){
     let printRow = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
@@ -98,10 +99,23 @@ let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt
 const grd = new Grid(gridH, gridW)
 grd.init()
 
-grd.printGrid()
-while(iterationsRemaining)
-{
-  grd.cycleLife()
-  grd.printGrid()
-  iterationsRemaining--
+grd.finalizeGrid()
+if(iterationsRemaining < 0)
+{ // used for continuous animation
+  setInterval(() => {
+    console.clear()
+    grd.cycleLife()
+    grd.finalizeGrid()
+  }, 300)
+}
+else
+{ // used to create a fixed array of lifecycles and output the result
+    // TODO: make this output the array
+  // const GameOfLife = []
+  while(iterationsRemaining)
+  {
+    grd.cycleLife()
+    grd.finalizeGrid()
+    iterationsRemaining--
+  }
 }
