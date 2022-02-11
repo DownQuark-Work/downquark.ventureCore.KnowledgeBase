@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-case-declarations
 import { SETTINGS } from './_settings.ts'
 
 class Cell {
@@ -39,12 +40,13 @@ class Grid {
     this.w = w;
   }
   // Creates initial 2D Grid and Assigns Cell
-  // type seedFnc = ()=>Array<number[]>
-  init(seed?: (x:number,y:number)=>number){
+  //((x:number,y:number)=>number) | Array<number[]>
+  init(seed = ''){
+    const _seed = seed ? String(seed).split('') : []
     for(let gX = 0; gX < this.w; gX++) {
       for(let gY = 0; gY < this.h; gY++) {
-        const cellInitValue = (typeof seed === 'undefined') ? Math.round(Math.random()) : seed(gX,gY) // TODO: create function(s) to handle seeding
-        this._gridmap[`${gX}|${gY}`] = new Cell(gX,gY,cellInitValue)
+        const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString()
+        this._gridmap[`${gX}|${gY}`] = cellInitValue ? new Cell(gX,gY,parseInt(cellInitValue,10)) : new Cell(gX,gY,0)
       }
     }
   }
@@ -82,9 +84,9 @@ class Grid {
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
-        const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
+        // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
@@ -95,14 +97,33 @@ class Grid {
     golArr && golArr.push(returnGrid)
   }
 }
+
+const parseSeedArg = (seedArg:string) => {
+  if(!/^.[1-9]+$/g.test(seedArg)) return '' // seed is allowed 1 non-numeric character and then only numbers
+  const parseType = (/^[^0-9]/g.test(seedArg)) ? seedArg.slice(0,1) : 'DEFAULT' // parse type is for scalable future solutions
+  seedArg = seedArg.replace(parseType,'')
+  const cellAmt = gridW * gridH
+  switch (parseType)
+  { // future scalability stub
+    case 'DEFAULT':
+    default :
+      let seedBinary = parseInt(seedArg,10).toString(2)
+      while(seedBinary.length < cellAmt)
+      { seedBinary = parseInt(seedBinary,10).toString(2) }
+      console.log('seedBinary', seedBinary)
+      return seedBinary.slice(0,cellAmt)
+  }
+}
+
 const gridH = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
-  gridW = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH
+  gridW = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
+  seedArg = Deno.args[3] ? parseSeedArg(Deno.args[3]) : ''
 let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt(Deno.args[2],10) : SETTINGS.ITERATIONS
 
+console.log('seedArg', seedArg)
 const grd = new Grid(gridH, gridW)
-grd.init()
+grd.init(seedArg)
 
-// grd.finalizeGrid()
 if(iterationsRemaining < 0)
 { // used for continuous animation
   setInterval(() => {
