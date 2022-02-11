@@ -13,7 +13,7 @@ class Cell {
     this.stateCur = a
     
   }
-  storeNextState(survived= false){
+  storeNextState(survived = false){
     if(survived) {
       this._amtLived++
       this._stateNext = this._amtLived
@@ -25,7 +25,8 @@ class Cell {
     // - stateNext = _amtLived - _amtDied <- may make fun results
   }
   applyNextState(){
-    console.log('setting', this.x, this.y)
+    if (typeof this._stateNext === 'number') this.stateCur = this._stateNext
+    this._stateNext = 'UNSET'
     // set stateCur to stateNext
     // - do this only _after_ every cell has stateNext defined
     // set stateNext to UNSET
@@ -63,7 +64,7 @@ class Grid {
           const gmY = curCellPos[1]+yy
           if(!(gmX < 0 || gmY < 0 || gmX > this.w-1 || gmY > this.h-1
             || (gmX === curCellPos[0] && gmY === curCellPos[1]))) // don't check self or out of bounds
-          { livingNeighbors += this.gridmap[gmX+'|'+gmY].stateCur }
+          { livingNeighbors += Math.max(Math.min(this.gridmap[gmX+'|'+gmY].stateCur,1),0) }
         }
       }
       if(curCell.stateCur > 0)
@@ -76,13 +77,14 @@ class Grid {
         { curCell.storeNextState(true) } else { curCell.storeNextState() }
       }
     })
-    console.log('all cells updated', Object.values(this.gridmap))
+    Object.values(this.gridmap).forEach(cell => cell.applyNextState())
   }
   printGrid(){
     let printRow = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
-        printRow.push(this.gridmap[`${gX}|${gY}`].stateCur)
+        const renderChar = this.gridmap[`${gX}|${gY}`].stateCur // > 0 ? 'X' : '_'
+        printRow.push(renderChar)
       }
       console.log(...printRow)
       printRow = []
