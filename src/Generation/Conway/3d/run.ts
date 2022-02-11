@@ -22,14 +22,11 @@ class Cell {
       this._stateNext = this._amtDied
     }
     // _OR_
-    // - stateNext = _amtLived - _amtDied <- may make fun results
+    // this._stateNext = this._amtLived - this._amtDied <- may make fun results
   }
   applyNextState(){
     if (typeof this._stateNext === 'number') this.stateCur = this._stateNext
     this._stateNext = 'UNSET'
-    // set stateCur to stateNext
-    // - do this only _after_ every cell has stateNext defined
-    // set stateNext to UNSET
   }
 }
 
@@ -83,7 +80,9 @@ class Grid {
     let printRow = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
-        const renderChar = this.gridmap[`${gX}|${gY}`].stateCur // > 0 ? 'X' : '_'
+        // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this.gridmap[`${gX}|${gY}`].stateCur)
+        // const renderChar = SETTINGS.RENDER_AS.BINARY(this.gridmap[`${gX}|${gY}`].stateCur)
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this.gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         printRow.push(renderChar)
       }
       console.log(...printRow)
@@ -97,7 +96,7 @@ let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt
 
 const grd = new Grid(gridH, gridW)
 grd.init()
-// console.log('printGrid', grd.printGrid)
+
 grd.printGrid()
 while(iterationsRemaining)
 {
@@ -105,5 +104,3 @@ while(iterationsRemaining)
   grd.printGrid()
   iterationsRemaining--
 }
-
-// console.log('SETTINGS', SETTINGS)
