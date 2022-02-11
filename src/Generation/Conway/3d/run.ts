@@ -25,6 +25,7 @@ class Cell {
     // - stateNext = _amtLived - _amtDied <- may make fun results
   }
   applyNextState(){
+    console.log('setting', this.x, this.y)
     // set stateCur to stateNext
     // - do this only _after_ every cell has stateNext defined
     // set stateNext to UNSET
@@ -74,9 +75,8 @@ class Grid {
         if(livingNeighbors >= SETTINGS.TO_LIFE_RANGE[0] && livingNeighbors <= SETTINGS.TO_LIFE_RANGE[1])
         { curCell.storeNextState(true) } else { curCell.storeNextState() }
       }
-      console.log('POST', livingNeighbors, curCell.stateCur, curCell._stateNext)
     })
-    console.log('all cells updated')
+    console.log('all cells updated', Object.values(this.gridmap))
   }
   printGrid(){
     let printRow = []
