@@ -9,7 +9,7 @@ const TO_LIFE_RANGE = [3,3]
 const GRID_HEIGHT = 10
 const GRID_WIDTH = 10
 
-const ITERATIONS = 5
+const ITERATIONS = 0
 
 const RENDER_AS = {
   BINARY: (state:number) => state > 0 ? '1' : '0',
