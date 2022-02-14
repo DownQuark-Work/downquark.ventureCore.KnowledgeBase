@@ -20,6 +20,7 @@ const RENDER_AS = {
 }
 // command to run to check this: deno run run.ts 10 10 100 129 (notice different iteration count when on vs off - position [2,9] is cause)
 const RENDER_AGGREGATE_DELTA = true // FALSE returns high/low when aggregating
+const RETURN_ALL_STEPS = false // not recommended for large grids
 
 export const SETTINGS = {
   GRID_HEIGHT,
@@ -27,6 +28,7 @@ export const SETTINGS = {
   ITERATIONS,
   RENDER_AGGREGATE_DELTA,
   RENDER_AS,
+  RETURN_ALL_STEPS,
   SURVIVING_CELL_COMPARISON_TYPE,
   SURVIVING_CELL_RANGE,
   TO_LIFE_COMPARISON_TYPE,
