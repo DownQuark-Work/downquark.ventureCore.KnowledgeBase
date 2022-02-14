@@ -37,6 +37,6 @@ downloads and caches the code on first use.
 https://github.com/denoland/deno/issues/9175
 
 ```
-cellular_automata=$(deno run run.ts 10 10 100 10)
+cellular_automata=$(deno run cellular_automata.ts 10 10 100 10)
 echo $cellular_automata
 ```
