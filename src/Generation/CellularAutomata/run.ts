@@ -138,17 +138,17 @@ if(iterationsRemaining < 1)
 }
 else
 { // used to create a fixed array of lifecycles and output the result
-  const GameOfLifeSteps:Array<Array<string[]>> = []
-  let GameOfLife:Array<Array<string[]>> = []
+  const CellularAutomataSteps:Array<Array<string[]>> = []
+  let CellularAutomata:Array<Array<string[]>> = []
   while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
   {
     grd.cycleLife()
-    grd.finalizeGrid(GameOfLifeSteps)
+    grd.finalizeGrid(CellularAutomataSteps)
     iterationsRemaining--
-    GameOfLife = [GameOfLifeSteps[GameOfLifeSteps.length-1]]
+    CellularAutomata = [CellularAutomataSteps[CellularAutomataSteps.length-1]]
     ++curIt
   }
-  GameOfLife = (SETTINGS.RETURN_ALL_STEPS) ? GameOfLifeSteps : GameOfLife
-  console.log('GameOfLife', GameOfLife, GameOfLife.length)
+  CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
+  console.log('CellularAutomata', CellularAutomata, CellularAutomata.length)
   console.log(`iterations run: ${curIt}`)
 }
