@@ -47,12 +47,12 @@ class Grid {
       for(let gY = 0; gY < this.h; gY++) {
         const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString()
         this._gridmap[`${gX}|${gY}`] = cellInitValue
-          ? new Cell(gX,gY,parseInt(cellInitValue,10)%2)
+          ? new Cell(gX,gY,parseInt(cellInitValue,10)%2) // change modulo for differing amount of initial live cells
           : new Cell(gX,gY,0)
         verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
-    // console.log('verifySeed', verifySeed)
+    console.log('verifySeed', verifySeed)
   }
   cycleLife(){
     Object.keys(this._gridmap).forEach(cell => {
@@ -114,8 +114,8 @@ const parseSeedArg = (seedArg:number) => {
   return seededStr.split('')
 }
 
-const gridH = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
-  gridW = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
+const gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
+  gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
   seedArg = Deno.args[3] ? parseSeedArg(parseInt(Deno.args[3],10)) : parseSeedArg(new Date().getTime())
 let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt(Deno.args[2],10) : SETTINGS.ITERATIONS
 const grd = new Grid(gridH, gridW)
