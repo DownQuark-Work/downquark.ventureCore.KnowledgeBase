@@ -16,16 +16,17 @@ class Cell {
   }
   storeNextState(survived = false){
     if(survived) {
-      this._amtLived++
-      this._stateNext = this._amtLived
+      // this._amtLived++
+      this._stateNext = ++this._amtLived
+      // this._stateNext = ++this._amtLived + this._amtDied
     } else {
-      this._amtDied--
-      this._stateNext = this._amtDied
+      // this._amtDied--
+      this._stateNext = --this._amtDied
+      // this._stateNext = this._amtLived + --this._amtDied
     }
-    // _OR_
-    // this._stateNext = this._amtLived - this._amtDied <- may make fun results
   }
   applyNextState(){
+    
     if (typeof this._stateNext === 'number') this.stateCur = this._stateNext
     this._stateNext = 'UNSET'
   }
@@ -53,7 +54,7 @@ class Grid {
         verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
-    console.log('verifySeed', verifySeed)
+    // console.log('verifySeed', verifySeed)
   }
   cycleLife(){
     Object.keys(this._gridmap).forEach(cell => {
@@ -88,18 +89,19 @@ class Grid {
     const returnGrid:Array<string[]> = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
-        // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
+        const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
+        // const renderChar = SETTINGS.RENDER_AS.AGGREGATE_ABS(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
-      returnGrid.push(printRow)
+      returnGrid.push([...printRow]) // will be one ahead of the comparison === return. I think this is ok since nothing will ever be returned from here
       !golArr && console.log(...printRow)
       printRow = []
     }
-    if(JSON.stringify(this.comparisonGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1') === JSON.stringify(returnGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1')){ console.log('here'); return this.comparisonGrid = [['REPEATING_PATTERN']]}
+    if(JSON.stringify(this.comparisonGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1') === JSON.stringify(returnGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1')){ return this.comparisonGrid = [['REPEATING_PATTERN']]}
     this.comparisonGrid = returnGrid
     golArr && golArr.push(returnGrid)
   }
@@ -129,6 +131,7 @@ if(iterationsRemaining < 1)
     if (grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
       clearInterval(itInterval)
       console.log('final')
+      return
     }
     console.clear()
     grd.cycleLife()
@@ -147,5 +150,5 @@ else
     ++curIt
   }
   console.log('GameOfLife', GameOfLife)
-  console.log(`iterations run: ${++curIt}`)
+  console.log(`iterations run: ${curIt}`)
 }

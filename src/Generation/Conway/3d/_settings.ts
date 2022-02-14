@@ -16,6 +16,7 @@ const ITERATIONS = 0
 
 const RENDER_AS = {
   BINARY: (state:number) => state > 0 ? '1' : '0',
+  AGGREGATE_ABS: (state:number) => '' + state,
   AGGREGATE: (state:number) => '' + state,
   CHAR: (state:number,on:string,off:string) => state > 0 ? on : off
 }
