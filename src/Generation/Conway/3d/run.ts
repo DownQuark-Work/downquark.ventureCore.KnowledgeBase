@@ -15,15 +15,13 @@ class Cell {
     
   }
   storeNextState(survived = false){
-    if(survived) {
-      // this._amtLived++
-      this._stateNext = ++this._amtLived
-      // this._stateNext = ++this._amtLived + this._amtDied
-    } else {
-      // this._amtDied--
-      this._stateNext = --this._amtDied
-      // this._stateNext = this._amtLived + --this._amtDied
-    }
+    (survived)
+      ? SETTINGS.RENDER_AGGREGATE_DELTA // only matters if RENDER_AS === AGGREGATE
+        ? this._stateNext = ++this._amtLived + this._amtDied
+        : this._stateNext = ++this._amtLived
+      : SETTINGS.RENDER_AGGREGATE_DELTA // only matters if RENDER_AS === AGGREGATE
+        ? this._stateNext = this._amtLived + --this._amtDied
+        : this._stateNext = --this._amtDied
   }
   applyNextState(){
     
@@ -90,11 +88,10 @@ class Grid {
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
-        // const renderChar = SETTINGS.RENDER_AS.AGGREGATE_ABS(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
-        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'cell-active','cell-inactive')
         printRow.push(renderChar)
       }
       returnGrid.push([...printRow]) // will be one ahead of the comparison === return. I think this is ok since nothing will ever be returned from here

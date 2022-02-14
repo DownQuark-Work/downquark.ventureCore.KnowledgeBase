@@ -1,5 +1,4 @@
 // 1: Any live cell with two or three live neighbours survives.
-// B678/S345678. 
 const SURVIVING_CELL_COMPARISON_TYPE = 'ALIVE'
 // const SURVIVING_CELL_RANGE = [2,3] // GOL
 const SURVIVING_CELL_RANGE = [3,4,5,6,7,8] // Rogue
@@ -16,15 +15,17 @@ const ITERATIONS = 0
 
 const RENDER_AS = {
   BINARY: (state:number) => state > 0 ? '1' : '0',
-  AGGREGATE_ABS: (state:number) => '' + state,
   AGGREGATE: (state:number) => '' + state,
   CHAR: (state:number,on:string,off:string) => state > 0 ? on : off
 }
+// command to run to check this: deno run run.ts 10 10 100 129 (notice different iteration count when on vs off - position [2,9] is cause)
+const RENDER_AGGREGATE_DELTA = true // FALSE returns high/low when aggregating
 
 export const SETTINGS = {
   GRID_HEIGHT,
   GRID_WIDTH,
   ITERATIONS,
+  RENDER_AGGREGATE_DELTA,
   RENDER_AS,
   SURVIVING_CELL_COMPARISON_TYPE,
   SURVIVING_CELL_RANGE,
