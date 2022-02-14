@@ -71,11 +71,11 @@ class Grid {
       }
       if(curCell.stateCur > 0)
       { // currently alive
-        if(livingNeighbors >= SETTINGS.SURVIVING_CELL_RANGE[0] && livingNeighbors <= SETTINGS.SURVIVING_CELL_RANGE[1])
+        if(SETTINGS.SURVIVING_CELL_RANGE.includes(livingNeighbors))
         { curCell.storeNextState(true) } else { curCell.storeNextState() }
       }
       else {
-        if(livingNeighbors >= SETTINGS.TO_LIFE_RANGE[0] && livingNeighbors <= SETTINGS.TO_LIFE_RANGE[1])
+        if(SETTINGS.TO_LIFE_RANGE.includes(livingNeighbors))
         { curCell.storeNextState(true) } else { curCell.storeNextState() }
       }
     })

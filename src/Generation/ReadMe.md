@@ -9,3 +9,7 @@ In a different direction - use this to generate mock data for testing/etc
   https://processing.org/examples
 
   https://galaxykate0.tumblr.com/post/139774965871/so-you-want-to-build-a-generator#Conclusions
+
+  http://pcg.wikidot.com/category-pcg-algorithms
+  http://pcg.wikidot.com/pcg-algorithm:dungeon-generation
+  https://donjon.bin.sh/fantasy/adventure/

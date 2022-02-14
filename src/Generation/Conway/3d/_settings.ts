@@ -1,9 +1,12 @@
 // 1: Any live cell with two or three live neighbours survives.
+// B678/S345678. 
 const SURVIVING_CELL_COMPARISON_TYPE = 'ALIVE'
-const SURVIVING_CELL_RANGE = [2,3]
+// const SURVIVING_CELL_RANGE = [2,3] // GOL
+const SURVIVING_CELL_RANGE = [3,4,5,6,7,8] // Rogue
 // 2: Any dead cell with three live neighbours becomes a live cell.
 const TO_LIFE_COMPARISON_TYPE = 'ALIVE'
-const TO_LIFE_RANGE = [3,3]
+// const TO_LIFE_RANGE = [3,3] // GOL
+const TO_LIFE_RANGE = [6,7,8] // Rogue
 // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
 const GRID_HEIGHT = 10
@@ -27,3 +30,6 @@ export const SETTINGS = {
   TO_LIFE_COMPARISON_TYPE,
   TO_LIFE_RANGE,
 }
+
+// http://pcg.wikidot.com/category-pcg-algorithms
+// https://www.hermetic-systems.com/compsci/cellular_automata_algorithms.htm
