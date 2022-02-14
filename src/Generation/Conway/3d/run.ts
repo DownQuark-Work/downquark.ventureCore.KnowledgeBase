@@ -32,9 +32,10 @@ class Cell {
 }
 
 class Grid {
+  comparisonGrid:Array<string[]> = [['GRID_INIT']]
+  private _gridmap: {[k:string]:Cell} = {}
   readonly h: number
   readonly w: number
-  private _gridmap: {[k:string]:Cell} = {}
   constructor(h:number,w:number) {
     this.h = h;
     this.w = w;
@@ -94,10 +95,13 @@ class Grid {
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
-
-      golArr ? returnGrid.push(printRow) : console.log(...printRow)
+      returnGrid.push(printRow)
+      !golArr && console.log(...printRow)
       printRow = []
     }
+    if (JSON.stringify(this.comparisonGrid) === JSON.stringify(returnGrid)) { return this.comparisonGrid = [['REPEATING_PATTERN']]}
+    this.comparisonGrid = returnGrid
+    // console.log('this.comparisonGrid, returnGrid', this.comparisonGrid, returnGrid)
     golArr && golArr.push(returnGrid)
   }
 }
@@ -116,26 +120,33 @@ const gridH = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0
   gridW = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
   seedArg = Deno.args[3] ? parseSeedArg(parseInt(Deno.args[3],10)) : parseSeedArg(new Date().getTime())
 let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt(Deno.args[2],10) : SETTINGS.ITERATIONS
-console.log('seedArg', seedArg, seedArg.length)
 const grd = new Grid(gridH, gridW)
 grd.init(seedArg)
 
+let curIt = 0
 if(iterationsRemaining < 1)
 { // used for continuous animation
-  setInterval(() => {
+  const itInterval = setInterval(() => {
+    if (grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
+      clearInterval(itInterval)
+      console.log('final')
+    }
     console.clear()
     grd.cycleLife()
     grd.finalizeGrid()
+    console.log(`iterations run: ${++curIt}`)
   }, 300)
 }
 else
 { // used to create a fixed array of lifecycles and output the result
   const GameOfLife:Array<Array<string[]>> = []
-  while(iterationsRemaining)
+  while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
   {
     grd.cycleLife()
     grd.finalizeGrid(GameOfLife)
     iterationsRemaining--
+    ++curIt
   }
   console.log('GameOfLife', GameOfLife)
+  console.log(`iterations run: ${++curIt}`)
 }
