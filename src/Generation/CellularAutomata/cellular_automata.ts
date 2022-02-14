@@ -52,7 +52,7 @@ class Grid {
         verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
-    console.log('verifySeed', verifySeed)
+    // console.log('::verifySeed::', verifySeed)
   }
   cycleLife(){
     Object.keys(this._gridmap).forEach(cell => {
@@ -88,13 +88,13 @@ class Grid {
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
-        // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
+        const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'cell-active','cell-inactive')
         printRow.push(renderChar)
       }
-      returnGrid.push([...printRow]) // will be one ahead of the comparison === return. I think this is ok since nothing will ever be returned from here
+      returnGrid.push([...printRow])
       !golArr && console.log(...printRow)
       printRow = []
     }
@@ -105,6 +105,7 @@ class Grid {
 }
 
 const parseSeedArg = (seedArg:number) => {
+  cellularAutomataReturnObject.seedArg = seedArg
   const cellAmt = gridW * gridH
   // deno-lint-ignore no-explicit-any
   const seed = new (PRNG as any)(seedArg)
@@ -114,6 +115,11 @@ const parseSeedArg = (seedArg:number) => {
   return seededStr.split('')
 }
 
+const cellularAutomataReturnObject: {
+  iterations_run?:number
+  CellularAutomata?:Array<Array<string[]>>,
+  seedArg?:number
+} = {}
 const gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
   seedArg = Deno.args[3] ? parseSeedArg(parseInt(Deno.args[3],10)) : parseSeedArg(new Date().getTime())
@@ -133,7 +139,7 @@ if(iterationsRemaining < 1)
     console.clear()
     grd.cycleLife()
     grd.finalizeGrid()
-    console.log(`iterations run: ${++curIt}`)
+    console.log(`::iterations run:: ${++curIt}`)
   }, 300)
 }
 else
@@ -149,6 +155,10 @@ else
     ++curIt
   }
   CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
-  console.log('CellularAutomata', CellularAutomata, CellularAutomata.length)
-  console.log(`iterations run: ${curIt}`)
+  cellularAutomataReturnObject.CellularAutomata = CellularAutomata
+  // console.log('::CellularAutomata::', CellularAutomata)
+  // console.log('::CellularAutomataLength::', CellularAutomata.length)
+  // console.log(`::iterations run:: ${curIt}`)
+  cellularAutomataReturnObject.iterations_run = curIt
+  console.log(JSON.stringify(cellularAutomataReturnObject))
 }
