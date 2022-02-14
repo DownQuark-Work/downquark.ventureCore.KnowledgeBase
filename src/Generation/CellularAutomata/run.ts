@@ -87,10 +87,10 @@ class Grid {
     const returnGrid:Array<string[]> = []
     for(let gY = 0; gY < this.h; gY++) {
       for(let gX = 0; gX < this.w; gX++) {
-        const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
+        // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'cell-active','cell-inactive')
         printRow.push(renderChar)
       }
@@ -142,10 +142,10 @@ else
   let GameOfLife:Array<Array<string[]>> = []
   while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
   {
-    GameOfLife = [GameOfLifeSteps[0]]
     grd.cycleLife()
     grd.finalizeGrid(GameOfLifeSteps)
     iterationsRemaining--
+    GameOfLife = [GameOfLifeSteps[0]]
     ++curIt
   }
   GameOfLife = (SETTINGS.RETURN_ALL_STEPS) ? GameOfLifeSteps : GameOfLife
