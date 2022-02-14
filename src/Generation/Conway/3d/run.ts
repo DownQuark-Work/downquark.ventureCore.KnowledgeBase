@@ -91,17 +91,16 @@ class Grid {
         // const renderChar = SETTINGS.RENDER_AS.AGGREGATE(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.BINARY(this._gridmap[`${gX}|${gY}`].stateCur)
         // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'•','°')
-        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
-        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
+        // const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'🀫','🀆')
+        const renderChar = SETTINGS.RENDER_AS.CHAR(this._gridmap[`${gX}|${gY}`].stateCur,'class-name-on','class-name-off')
         printRow.push(renderChar)
       }
       returnGrid.push(printRow)
       !golArr && console.log(...printRow)
       printRow = []
     }
-    if (JSON.stringify(this.comparisonGrid) === JSON.stringify(returnGrid)) { return this.comparisonGrid = [['REPEATING_PATTERN']]}
+    if(JSON.stringify(this.comparisonGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1') === JSON.stringify(returnGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1')){ console.log('here'); return this.comparisonGrid = [['REPEATING_PATTERN']]}
     this.comparisonGrid = returnGrid
-    // console.log('this.comparisonGrid, returnGrid', this.comparisonGrid, returnGrid)
     golArr && golArr.push(returnGrid)
   }
 }
