@@ -1,5 +1,5 @@
 import { SETTINGS } from './_settings.ts'
-import { PRNG } from './seed.ts'
+import { PRNG } from '../_Seed/prng.ts'
 
 class Cell {
   private _amtDied = 0

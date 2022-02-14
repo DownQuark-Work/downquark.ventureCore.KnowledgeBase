@@ -1,10 +1,8 @@
 // 1: Any live cell with two or three live neighbours survives.
-const SURVIVING_CELL_COMPARISON_TYPE = 'ALIVE'
 // const SURVIVING_CELL_RANGE = [2,3] // Avatar
 // const SURVIVING_CELL_RANGE = [2,3] // GOL
 const SURVIVING_CELL_RANGE = [3,4,5,6,7,8] // Rogue
 // 2: Any dead cell with three live neighbours becomes a live cell.
-const TO_LIFE_COMPARISON_TYPE = 'ALIVE'
 // const TO_LIFE_RANGE = [0,1] // Avatar
 // const TO_LIFE_RANGE = [3] // GOL
 const TO_LIFE_RANGE = [6,7,8] // Rogue
@@ -31,9 +29,7 @@ export const SETTINGS = {
   RENDER_AGGREGATE_DELTA,
   RENDER_AS,
   RETURN_ALL_STEPS,
-  SURVIVING_CELL_COMPARISON_TYPE,
   SURVIVING_CELL_RANGE,
-  TO_LIFE_COMPARISON_TYPE,
   TO_LIFE_RANGE,
 }
 
