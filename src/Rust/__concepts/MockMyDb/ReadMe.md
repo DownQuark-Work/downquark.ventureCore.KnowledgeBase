@@ -1,4 +1,5 @@
 Start here for file openeing and reading / etc
+- https://doc.rust-lang.org/book/ch12-00-an-io-project.html
 - https://doc.rust-lang.org/stable/rust-by-example/std_misc.html
 
 Brush up on:
@@ -8,3 +9,4 @@ Brush up on:
 
 Include:
 - https://doc.rust-lang.org/stable/rust-by-example/testing.html
+- https://doc.rust-lang.org/stable/rust-by-example/meta/doc.html
