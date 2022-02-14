@@ -10,3 +10,7 @@ Brush up on:
 Include:
 - https://doc.rust-lang.org/stable/rust-by-example/testing.html
 - https://doc.rust-lang.org/stable/rust-by-example/meta/doc.html
+
+Reference:
+- https://doc.rust-lang.org/book/appendix-02-operators.html
+- https://doc.rust-lang.org/book/appendix-01-keywords.html
