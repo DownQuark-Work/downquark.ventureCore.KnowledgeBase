@@ -1,0 +1,76 @@
+brew install deno
+https://deno.land/manual
+- https://deno.land/manual@v1.17.1/examples
+https://deno.com/deploy/docs
+- https://deno.com/deploy/docs/examples
+- https://deno.com/deploy/docs/resources-frameworks
+https://doc.deno.land/
+- https://doc.deno.land/deno/stable
+
+https://deno.land/manual@v1.15.3/testing#testing
+
+
+std
+https://deno.land/std|https://deno.land/x/
+https://deno.land/std@0.119.0/log|https://deno.land/x/ky@v0.23.0
+
+> New: via ProductHunt
+> https://lumeland.github.io/getting-started/examples/
+
+3rd|Parties
+-|-
+https://deno.land/x/mod@v2.2.11|https://deno.land/x/darango@0.0.4 \[ArangoDB]|
+https://deno.land/x/tdd@v0.6|https://deno.land/x/pool@v0.1.0 \[resource pool]|
+https://deno.land/x/quarrel@v0.5.0|https://deno.land/x/middleware@1.2.0|
+https://deno.land/x/rdf@0.4.0|https://deno.land/x/seeded_numbers@1.0.3
+https://deno.land/x/stego@v0.1|https://deno.land/x/fonction@v2.1.0-beta.4
+https://deno.land/x/emoji@0.1.2|.x
+
+https://dev.to/t/deno
+https://oakserver.github.io/oak/ # http middleware
+https://dev.to/moose/lets-build-a-web-crawler-4jf
+https://dev.to/diguifi/meet-the-world-s-tiniest-8bit-mmorpg-3kj6
+- https://diguifi.itch.io/tiny-land
+- https://github.com/tiny-devs/tiny-dungeon-online
+
+
+`$ deno info https://deno.land/std@0.67.0/http/file_server.ts`
+`$ deno info https://deno.land/std@0.106.0/ws/mod.ts` # websockets
+`$ deno run --allow-net=deno.land https://deno.land/std/examples/curl.ts https://deno.land/`
+`$ deno run --allow-net --allow-read https://deno.land/std/examples/chat/server.ts` # chat server on 8080
+`$ deno run --allow-net --allow-read https://deno.land/std/examples/flags.ts -a -b c --anything`
+
+
+## Scaffolding
+### SIMPLE modules
+ALIAS _denoMod_ IS CREATED FOR BELOW (usage): `$ denoMod dq_deno`
+```
+# mod is a command line tool to quickly scaffold a new Deno module.
+# It creates app and dependency entrypoints, a .gitignore file,
+# and has options to add a test-driven setup and/or include a basic CI pipeline.
+deno run https://deno.land/x/mod/mod.ts --help
+#
+deno run \
+--allow-read=my_deno_module \
+--allow-run=git \
+--allow-write=my_deno_module \
+https://deno.land/x/mod/mod.ts \
+--name my_deno_module
+# OR
+deno run --A https://deno.land/x/mod/mod.ts -n my_deno_module --ci
+deno run --A https://deno.land/x/mod/mod.ts -n my_deno_module --js
+```
+
+### COMPLEX APPS
+> Deprecated, ut a great start and structure: /Users/mlnck/Desktop/tmp/denotmp/server.js
+https://deno.land/x/yolk@1.1.0
+`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js createproject``
+- add another applet
+`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js createapplet secondaryapplet`
+- run it
+`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js run`
+
+
+https://github.com/denjucks/awesome-oak
+
+https://docs.rs/deno_core/latest/deno_core/
