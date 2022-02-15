@@ -27,3 +27,5 @@ In a different direction - use this to generate mock data for testing/etc
   CA && Drunkard's Walk
   https://blog.jrheard.com/procedural-dungeon-generation-cellular-automata
   https://blog.jrheard.com/procedural-dungeon-generation-drunkards-walk-in-clojurescript
+
+  go to lib: https://github.com/Tw1ddle/MarkovNameGenerator
