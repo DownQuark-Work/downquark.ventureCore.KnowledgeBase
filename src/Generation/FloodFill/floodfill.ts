@@ -46,7 +46,6 @@ FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
 FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
 FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
 
-// console.log('floodFillGrids', floodFillGrids)
-floodFillGrids[0].forEach(r => console.log(...r))
-console.log('FloodFillReturnObject', FloodFillReturnObject)
+// floodFillGrids[0].forEach(r => console.log(...r))
 
+console.log(JSON.stringify(FloodFillReturnObject))
