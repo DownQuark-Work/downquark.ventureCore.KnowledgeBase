@@ -1,11 +1,11 @@
-// import { parse } from "https://deno.land/std/flags/mod.ts"
+// deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 11)
 
 // https://learnersbucket.com/examples/algorithms/flood-fill-algorithm-in-javascript/
 // Prepend every "room" with an id ->  [[12,12,12,-2,3,3],[10,12,12,-2,3,-4]] -> [[1:12,1:12,1:12,-2,2:3,2:3],[3:10,1:12,1:12,-2,2:3,-4]]
 // - no need to append a room to <= 0
 
-const CellularAutomataArguments = Deno.args[0]
-console.log('CellularAutomataArguments', JSON.parse(CellularAutomataArguments))
+const CellularAutomataArguments = JSON.parse(Deno.args[0])
+console.log('CellularAutomataArguments', CellularAutomataArguments)
 
 // let curRoom = 0
 

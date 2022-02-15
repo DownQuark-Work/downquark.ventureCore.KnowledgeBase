@@ -32,6 +32,7 @@ class Cell {
 
 class Grid {
   comparisonGrid:Array<string[]> = [['GRID_INIT']]
+  verifySeed = 0
   private _gridmap: {[k:string]:Cell} = {}
   readonly h: number
   readonly w: number
@@ -42,17 +43,16 @@ class Grid {
   // Creates initial 2D Grid and Assigns Cell
   init(seed:string[]){
     const _seed = [...seed]
-    let verifySeed = 0
+    // let verifySeed = 0
     for(let gX = 0; gX < this.w; gX++) {
       for(let gY = 0; gY < this.h; gY++) {
         const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString()
         this._gridmap[`${gX}|${gY}`] = cellInitValue
           ? new Cell(gX,gY,parseInt(cellInitValue,10)%2) // change modulo for differing amount of initial live cells
           : new Cell(gX,gY,0)
-        verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
+        this.verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
-    // console.log('::verifySeed::', verifySeed)
   }
   cycleLife(){
     Object.keys(this._gridmap).forEach(cell => {
@@ -118,7 +118,8 @@ const parseSeedArg = (seedArg:number) => {
 const cellularAutomataReturnObject: {
   iterations_run?:number
   CellularAutomata?:Array<Array<string[]>>,
-  seedArg?:number
+  seedArg?:number,
+  verifySeed?:number
 } = {}
 const gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
@@ -156,9 +157,7 @@ else
   }
   CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
   cellularAutomataReturnObject.CellularAutomata = CellularAutomata
-  // console.log('::CellularAutomata::', CellularAutomata)
-  // console.log('::CellularAutomataLength::', CellularAutomata.length)
-  // console.log(`::iterations run:: ${curIt}`)
+  cellularAutomataReturnObject.verifySeed = grd.verifySeed
   cellularAutomataReturnObject.iterations_run = curIt
   console.log(JSON.stringify(cellularAutomataReturnObject))
 }
