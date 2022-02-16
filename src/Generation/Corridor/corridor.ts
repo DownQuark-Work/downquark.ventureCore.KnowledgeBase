@@ -1,5 +1,5 @@
-// deno run Corridor/corridor.ts $(FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12))
-
+// deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 11))  <-- seed with a replaced shuffled value
+// deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12))  <-- seed needing 7 connections
 const CorridorReturnObject: {
 //   seedArg?:number,
 //   verifySeed?:number,
@@ -18,12 +18,10 @@ FloodFillArguments.RoomAmount.map((rm: any) => {
   shuffleIndexes = shuffleIndexes.slice(0,FloodFillArguments.FloodFilledAutomata[0].length)
   const shuffleIndexedArr = shuffleIndexes.split('')
   
-  const shuffleArray = (arr:any) => {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j =  parseInt(shuffleIndexedArr?.shift() || '0',10)
-      const temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
+  const shuffleArray = (arr:number[]) => {
+    for (let i:number = arr.length - 1; i > 0; i--) {
+      const j =  parseInt(shuffleIndexedArr?.shift() || '0',10) as number
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr
   }
@@ -42,4 +40,4 @@ console.log('cooridorMapIndexes', cooridorMapIndexes)
 console.log('TODO: Make pathhs from open areas based on MapIndexes')
 // console.log('FloodFillArguments.RoomAmount', FloodFillArguments.FloodFilledAutomata)
 
-// [array[i], array[j]] = [array[j], array[i]];
+// FloodFillArguments.FloodFilledAutomata[0].forEach((row: string[]) => console.log(...row))
