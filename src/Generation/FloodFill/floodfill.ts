@@ -3,9 +3,9 @@
 const FloodFillReturnObject: {
   seedArg?:number,
   verifySeed?:number,
-  RoomAmount?:number,
+  RoomAmount?:number[],
   FloodFilledAutomata?:Array<Array<string[]>>
-} = {}
+} = {RoomAmount:[]}
 const CellularAutomataArguments = JSON.parse(Deno.args[0])
 const grids:Array<Array<string[]>> = CellularAutomataArguments.CellularAutomata
 // console.log('grid', grids)
@@ -37,7 +37,7 @@ const flood = (grd:Array<string[]>) => {
       }
     }
   }
-  FloodFillReturnObject.RoomAmount = curRoom
+  FloodFillReturnObject.RoomAmount?.push(curRoom)
   return grd
 }
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to filll each step
