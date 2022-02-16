@@ -121,7 +121,7 @@ const cellularAutomataReturnObject: {
   seedArg?:number,
   verifySeed?:number
 } = {}
-const gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
+let gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
   seedArg = Deno.args[3] ? parseSeedArg(parseInt(Deno.args[3],10)) : parseSeedArg(new Date().getTime())
 let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt(Deno.args[2],10) : SETTINGS.ITERATIONS
@@ -160,4 +160,27 @@ else
   cellularAutomataReturnObject.verifySeed = grd.verifySeed
   cellularAutomataReturnObject.iterations_run = curIt
   console.log(JSON.stringify(cellularAutomataReturnObject))
+}
+
+// TODO: Implement this for browser builds
+export const configureCellularAutomata = (props:{gridW:number,gridH:number,seedAr?:number,iterationsRemaining?:number}) => {
+  const {
+    gridW: argGridW = 10,
+    gridH: argGridH = 10,
+    seedAr: argSeedAr = new Date().getTime(),
+    iterationsRemaining: argIterationsRemaining
+  } = props
+  console.log('-->', {
+    argGridW,
+    argGridH,
+    argSeedAr,
+    argIterationsRemaining
+  }, 'INIT FROM HERE IF NOT USING CLI')
+  gridW = argGridW
+  gridH = argGridH
+  seedArg = parseSeedArg(argSeedAr)
+  iterationsRemaining = argIterationsRemaining ? argIterationsRemaining : 0
+  // get Grid
+  // grid.init(parseSeedArg(seedAr))
+  // return cellularAutomataReturnObject
 }

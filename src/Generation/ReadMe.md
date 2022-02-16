@@ -29,3 +29,4 @@ In a different direction - use this to generate mock data for testing/etc
   https://blog.jrheard.com/procedural-dungeon-generation-drunkards-walk-in-clojurescript
 
   go to lib: https://github.com/Tw1ddle/MarkovNameGenerator
+  https://www.cssportal.com/css-generators.php
