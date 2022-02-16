@@ -20,3 +20,9 @@ see:
 downquark.sandBox.Antiquarks_Comprehensive/web/Client/gaming/rogue/test.ts
 
 http://roguebasin.com/index.php/Dijkstra_Maps_Visualized
+
+CHARACTERS:
+https://i.redd.it/5v1rtg5rtnsz.png
+
+https://i.pinimg.com/originals/54/66/2e/54662eecd5b6f182d923f3ac2c9db719.jpg
+https://www.deviantart.com/brainee1/art/Chart-of-the-72-Classes-195825849
