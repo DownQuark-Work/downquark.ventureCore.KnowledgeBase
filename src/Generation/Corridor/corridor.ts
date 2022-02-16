@@ -19,7 +19,6 @@ FloodFillArguments.RoomAmount.map((rm: any) => {
   const shuffleIndexedArr = shuffleIndexes.split('')
   
   const shuffleArray = (arr:any) => {
-    console.log('arr', arr)
     for (let i = arr.length - 1; i > 0; i--) {
       const j =  parseInt(shuffleIndexedArr?.shift() || '0',10)
       const temp = arr[i];
@@ -40,17 +39,7 @@ FloodFillArguments.RoomAmount.map((rm: any) => {
   return hasShuffled
 })
 console.log('cooridorMapIndexes', cooridorMapIndexes)
-// console.log('FloodFillArguments.RoomAmount', FloodFillArguments.RoomAmount)
-// console.log('coridor', corridorMappings())
+console.log('TODO: Make pathhs from open areas based on MapIndexes')
+// console.log('FloodFillArguments.RoomAmount', FloodFillArguments.FloodFilledAutomata)
 
-// const shuffledRooms = [...Array(10).keys()]
-// console.log('shuffledRooms', shuffledRooms)
-// const shuffleArray = array => {
-//   for (let i = array.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1));
-//     const temp = array[i];
-//     array[i] = array[j];
-//     array[j] = temp;
-//   }
-// }
 // [array[i], array[j]] = [array[j], array[i]];
