@@ -1,4 +1,4 @@
-// deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 11)
+// deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12)
 
 const FloodFillReturnObject: {
   seedArg?:number,
