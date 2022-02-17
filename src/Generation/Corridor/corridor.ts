@@ -14,7 +14,7 @@ CorridorReturnObject.CorridorAutomata = [
   ...FloodFillArguments.FloodFilledAutomata,
 ];
 // determine access points
-FloodFillArguments.RoomAmount.forEach((rm: any) => {
+FloodFillArguments.RoomAmount.forEach((rm: number) => {
   let shuffleIndexes = FloodFillArguments.verifySeed.toString(2) + '';
   while (
     shuffleIndexes.split('').length <
