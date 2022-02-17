@@ -5,6 +5,7 @@
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 60 40 100 13))  <-- larger one, looks nice
 import {renderGrid} from '../_utils/cli-view.ts'
 
+const _DEBUG =false
 const CorridorReturnObject: {
   seedArg?: number;
   verifySeed?: number;
@@ -85,6 +86,6 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
+_DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
 
 console.log(JSON.stringify(CorridorReturnObject))

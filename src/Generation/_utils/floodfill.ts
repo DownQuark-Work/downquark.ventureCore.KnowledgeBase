@@ -1,6 +1,7 @@
 // deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 13)
 import {renderGrid} from './cli-view.ts'
 
+const _DEBUG =false
 const FloodFillReturnObject: {
   seedArg?:number,
   verifySeed?:number,
@@ -50,6 +51,6 @@ FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
 FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
 FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
 
-// renderGrid(floodFillGrids[0])
+_DEBUG && renderGrid(floodFillGrids[0])
 
 console.log(JSON.stringify(FloodFillReturnObject))
