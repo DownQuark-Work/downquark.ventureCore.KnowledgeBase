@@ -16,6 +16,8 @@ http://roguebasin.com/index.php/Articles << AMAZING resource
 
 - http://roguebasin.com/index.php/Finding_graphical_tiles
 
+- https://www.gamedeveloper.com/design/how-to-make-a-roguelike << Another tut
+
 see:
 downquark.sandBox.Antiquarks_Comprehensive/web/Client/gaming/rogue/test.ts
 
@@ -26,3 +28,5 @@ https://i.redd.it/5v1rtg5rtnsz.png
 
 https://i.pinimg.com/originals/54/66/2e/54662eecd5b6f182d923f3ac2c9db719.jpg
 https://www.deviantart.com/brainee1/art/Chart-of-the-72-Classes-195825849
+
+https://www.reddit.com/r/PixelArt/comments/q2tal2/underwater_pirate_pixelart_card_game_concept/?utm_medium=android_app&utm_source=share

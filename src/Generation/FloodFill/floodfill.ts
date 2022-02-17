@@ -4,8 +4,9 @@ const FloodFillReturnObject: {
   seedArg?:number,
   verifySeed?:number,
   RoomAmount?:number[],
+  RoomEgress?:{[k:string]: number[]},
   FloodFilledAutomata?:Array<Array<string[]>>
-} = {RoomAmount:[]}
+} = {RoomAmount:[], RoomEgress:{}}
 const CellularAutomataArguments = JSON.parse(Deno.args[0])
 const grids:Array<Array<string[]>> = CellularAutomataArguments.CellularAutomata
 // console.log('grid', grids)
@@ -33,6 +34,7 @@ const flood = (grd:Array<string[]>) => {
       const cur = grd[row][column]
       if(!/⊡/g.test(cur) && parseInt(cur,10) > 0) {
         fill(grd,row,column,curRoom)
+        if (FloodFillReturnObject?.RoomEgress) FloodFillReturnObject.RoomEgress[curRoom] = [row, column]
         curRoom++
       }
     }
@@ -40,6 +42,10 @@ const flood = (grd:Array<string[]>) => {
   FloodFillReturnObject.RoomAmount?.push(curRoom)
   return grd
 }
+
+
+// TODO: return coordinate (only single needed of edge of flood fill to use when connecting corridors)
+
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to filll each step
 const floodFillGrids = grids.map(grid => flood(grid))
 FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
