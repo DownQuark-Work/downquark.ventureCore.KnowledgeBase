@@ -1,6 +1,8 @@
 import { SETTINGS } from './_settings.ts'
 import { PRNG } from '../_Seed/prng.ts'
 
+import {renderGrid} from '../_misc/cli-view.ts'
+
 class Cell {
   private _amtDied = 0
   private _amtLived = 0
@@ -95,12 +97,12 @@ class Grid {
         printRow.push(renderChar)
       }
       returnGrid.push([...printRow])
-      !golArr && console.log(...printRow)
+      // !golArr && console.log(...printRow)
       printRow = []
     }
     if(JSON.stringify(this.comparisonGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1') === JSON.stringify(returnGrid).replace(/^-.*/g,'0').replace(/[1-9]+/g,'1')){ return this.comparisonGrid = [['REPEATING_PATTERN']]}
     this.comparisonGrid = returnGrid
-    golArr && golArr.push(returnGrid)
+    golArr ? golArr.push(returnGrid) : renderGrid(returnGrid)
   }
 }
 
@@ -123,8 +125,8 @@ const cellularAutomataReturnObject: {
 } = {}
 let gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
-  seedArg = Deno.args[3] ? parseSeedArg(parseInt(Deno.args[3],10)) : parseSeedArg(new Date().getTime())
-let iterationsRemaining = (Deno.args[2] && parseInt(Deno.args[2],10)) ? parseInt(Deno.args[2],10) : SETTINGS.ITERATIONS
+  seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2],10)) : parseSeedArg(new Date().getTime())
+let iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
 const grd = new Grid(gridH, gridW)
 grd.init(seedArg)
 
@@ -137,7 +139,6 @@ if(iterationsRemaining < 1)
       console.log('final')
       return
     }
-    console.clear()
     grd.cycleLife()
     grd.finalizeGrid()
     console.log(`::iterations run:: ${++curIt}`)

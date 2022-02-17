@@ -11,7 +11,7 @@ const TO_LIFE_RANGE = [6,7,8] // Rogue
 const GRID_HEIGHT = 10
 const GRID_WIDTH = 10
 
-const ITERATIONS = 0
+const ITERATIONS = 20
 
 const RENDER_AS = {
   BINARY: (state:number) => state > 0 ? '1' : '0',

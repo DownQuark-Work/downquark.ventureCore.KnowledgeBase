@@ -1,6 +1,8 @@
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 11))  <-- seed with a replaced shuffled value
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12))  <-- seed needing 7 connections
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 60 40 100 13))  <-- larger one, looks nice
+import {renderGrid} from '../_misc/cli-view.ts'
+
 const CorridorReturnObject: {
   seedArg?: number;
   verifySeed?: number;
@@ -55,7 +57,7 @@ const createBridge = (brdg: Array<number[]>) => {
   function bridgeRows() {
     for (let i = 0; i < Math.abs(deltaRow); i++) {
       const keyCell = s[0] + i * Math.max(Math.min(deltaRow, 1), -1);
-      if (CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]] === '0') {
+      if (!/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]])) {
         CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]] = '#'; // brdgId+'#'
       }
     }
@@ -63,7 +65,7 @@ const createBridge = (brdg: Array<number[]>) => {
   function bridgeColumns() {
     for (let i = 0; i < Math.abs(deltaCol); i++) {
       const keyCell = s[1] + i * Math.max(Math.min(deltaCol, 1), -1);
-      if (CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell] === '0') {
+      if (!/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])) {
         CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell] = '#'; // brdgId+'#'
       }
     }
@@ -81,7 +83,6 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-// CorridorReturnObject.CorridorAutomata[0].forEach((row: string[]) =>
-//   console.log(...row)
-// );
+renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
+
 console.log(JSON.stringify(CorridorReturnObject))

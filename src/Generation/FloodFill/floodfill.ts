@@ -43,9 +43,6 @@ const flood = (grd:Array<string[]>) => {
   return grd
 }
 
-
-// TODO: return coordinate (only single needed of edge of flood fill to use when connecting corridors)
-
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to filll each step
 const floodFillGrids = grids.map(grid => flood(grid))
 FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
