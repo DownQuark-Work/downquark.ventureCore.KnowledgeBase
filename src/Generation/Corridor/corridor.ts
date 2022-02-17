@@ -81,7 +81,7 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-CorridorReturnObject.CorridorAutomata[0].forEach((row: string[]) =>
-  console.log(...row)
-);
-// console.log(JSON.stringify(CorridorReturnObject))
+// CorridorReturnObject.CorridorAutomata[0].forEach((row: string[]) =>
+//   console.log(...row)
+// );
+console.log(JSON.stringify(CorridorReturnObject))
