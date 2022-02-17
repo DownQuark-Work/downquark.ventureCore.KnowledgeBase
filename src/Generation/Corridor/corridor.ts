@@ -1,5 +1,6 @@
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 11))  <-- seed with a replaced shuffled value
 // deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12))  <-- seed needing 7 connections
+// deno run Corridor/corridor.ts $(deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 60 40 100 13))  <-- larger one, looks nice
 const CorridorReturnObject: {
   seedArg?: number;
   verifySeed?: number;
@@ -80,7 +81,7 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-// CorridorReturnObject.CorridorAutomata[0].forEach((row: string[]) =>
-//   console.log(...row)
-// );
-console.log(JSON.stringify(CorridorReturnObject))
+CorridorReturnObject.CorridorAutomata[0].forEach((row: string[]) =>
+  console.log(...row)
+);
+// console.log(JSON.stringify(CorridorReturnObject))
