@@ -1,4 +1,5 @@
-// deno run FloodFill/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 100 12)
+// deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 13)
+import {renderGrid} from './cli-view.ts'
 
 const FloodFillReturnObject: {
   seedArg?:number,
@@ -43,12 +44,12 @@ const flood = (grd:Array<string[]>) => {
   return grd
 }
 
-// this should rarely (if ever) have a length > 1 but including in case there's a use case to filll each step
+// this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
 const floodFillGrids = grids.map(grid => flood(grid))
 FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
 FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
 FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
 
-// floodFillGrids[0].forEach(r => console.log(...r))
+// renderGrid(floodFillGrids[0])
 
 console.log(JSON.stringify(FloodFillReturnObject))

@@ -1,7 +1,7 @@
 import { SETTINGS } from './_settings.ts'
 import { PRNG } from '../_Seed/prng.ts'
 
-import {renderGrid} from '../_misc/cli-view.ts'
+import {renderGrid} from '../_utils/cli-view.ts'
 
 class Cell {
   private _amtDied = 0
