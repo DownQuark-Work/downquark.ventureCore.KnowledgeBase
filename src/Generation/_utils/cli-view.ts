@@ -11,7 +11,7 @@ export const renderGrid = (Grid:Array<string[]>, _DEBUG = false) => {
   console.log(...bottomBorder)
 }
 
-const runGeneratorSubProcess = async () => {
+export const runGeneratorSubProcess = async () => {
   const p = Deno.run({
     // deno run ./_utils/corridor.ts $(deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 11))
     cmd: [

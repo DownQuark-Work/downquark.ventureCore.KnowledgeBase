@@ -123,18 +123,65 @@ const cellularAutomataReturnObject: {
   seedArg?:number,
   verifySeed?:number
 } = {}
-let gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
+// TODO: Implement this for browser builds
+// `$ deno doc ./CellularAutomata/cellular_automata.ts` to see the below working
+// https://deno.land/manual@v1.18.1/tools/documentation_generator
+/**
+ * Adds x and y.
+ * @param {number} x
+ * @param {number} y
+ * @returns {number} Sum of x and y
+ */
+//  export const configureCellularAutomata = (props:{gridW:number,gridH:number,seedAr?:number,iterationsRemaining?:number}) => {
+//   const {
+//     gridW: argGridW = 10,
+//     gridH: argGridH = 10,
+//     seedAr: argSeedAr = new Date().getTime(),
+//     iterationsRemaining: argIterationsRemaining
+//   } = props
+//   console.log('-->', {
+//     argGridW,
+//     argGridH,
+//     argSeedAr,
+//     argIterationsRemaining
+//   }, 'INIT FROM HERE IF NOT USING CLI')
+//   gridW = argGridW
+//   gridH = argGridH
+//   seedArg = parseSeedArg(argSeedAr)
+//   iterationsRemaining = argIterationsRemaining ? argIterationsRemaining : 0
+//   // get Grid
+//   grid.init(parseSeedArg(seedAr))
+//   return cellularAutomataReturnObject
+// }
+// deno-lint-ignore no-inferrable-types no-explicit-any
+let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
+if(typeof Deno !== 'undefined' && Deno?.args.length){
+  // allow to be run from command line
+  gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
   seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2],10)) : parseSeedArg(new Date().getTime())
-let iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
-const grd = new Grid(gridH, gridW)
-grd.init(seedArg)
+  iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
+  grd = new Grid(gridH, gridW)
+  grd.init(seedArg)
+}
+const initCellularAutomata = (props:{gw:number, gh:number, sa:number, ir:number}) => {
+    // allow to be run from js module
+    gridW = props.gw || SETTINGS.GRID_WIDTH,
+    gridH = props.gh || SETTINGS.GRID_HEIGHT,
+    seedArg = props.sa ? parseSeedArg(props.sa) : parseSeedArg(new Date().getTime())
+    iterationsRemaining = props.ir || SETTINGS.ITERATIONS
+    grd = new Grid(gridH, gridW)
+    grd.init(seedArg)
+}
+if(window.location?.search){ initCellularAutomata({gw:12, gh:12, sa:12, ir:12}) }
+// document.getElementById('generate-button').addEventListener('')
 
 let curIt = 0
+// const onGridAndSeedInit = () => {
 if(iterationsRemaining < 1)
 { // used for continuous animation
   const itInterval = setInterval(() => {
-    if (grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
+    if (typeof grd.comparisonGrid !== undefined && grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
       clearInterval(itInterval)
       console.log('final')
       return
@@ -148,7 +195,7 @@ else
 { // used to create a fixed array of lifecycles and output the result
   const CellularAutomataSteps:Array<Array<string[]>> = []
   let CellularAutomata:Array<Array<string[]>> = []
-  while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
+  while(typeof grd.comparisonGrid !== undefined && grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
   {
     grd.cycleLife()
     grd.finalizeGrid(CellularAutomataSteps)
@@ -162,34 +209,4 @@ else
   cellularAutomataReturnObject.iterations_run = curIt
   console.log(JSON.stringify(cellularAutomataReturnObject))
 }
-
-// TODO: Implement this for browser builds
-// `$ deno doc ./CellularAutomata/cellular_automata.ts` to see the below working
-// https://deno.land/manual@v1.18.1/tools/documentation_generator
-/**
- * Adds x and y.
- * @param {number} x
- * @param {number} y
- * @returns {number} Sum of x and y
- */
-export const configureCellularAutomata = (props:{gridW:number,gridH:number,seedAr?:number,iterationsRemaining?:number}) => {
-  const {
-    gridW: argGridW = 10,
-    gridH: argGridH = 10,
-    seedAr: argSeedAr = new Date().getTime(),
-    iterationsRemaining: argIterationsRemaining
-  } = props
-  console.log('-->', {
-    argGridW,
-    argGridH,
-    argSeedAr,
-    argIterationsRemaining
-  }, 'INIT FROM HERE IF NOT USING CLI')
-  gridW = argGridW
-  gridH = argGridH
-  seedArg = parseSeedArg(argSeedAr)
-  iterationsRemaining = argIterationsRemaining ? argIterationsRemaining : 0
-  // get Grid
-  // grid.init(parseSeedArg(seedAr))
-  // return cellularAutomataReturnObject
-}
+// }
