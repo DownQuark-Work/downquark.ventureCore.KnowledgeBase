@@ -44,6 +44,51 @@ PRNG.prototype.next = function(a, b) {
         return this._seed / 2147483647 * (b - a) + a;
     }
 };
+const FloodFillReturnObject = {
+    RoomAmount: [],
+    RoomEgress: {
+    }
+};
+const fill = (g, r, c, n)=>{
+    if (c < 0 || r < 0 || c > g[0].length - 1 || r > g.length - 1) return;
+    const cur = g[r][c], ff = n + '⊡' + cur;
+    if (/⊡/g.test(cur)) return;
+    if (parseInt(cur, 10) < 1) return;
+    g[r][c] = ff;
+    fill(g, r - 1, c, n);
+    fill(g, r + 1, c, n);
+    fill(g, r, c - 1, n);
+    fill(g, r, c + 1, n);
+};
+const flood = (grd1)=>{
+    let curRoom = 0;
+    for(let row = 0; row < grd1.length; row++){
+        for(let column = 0; column < grd1[row].length; column++){
+            const cur = grd1[row][column];
+            if (!/⊡/g.test(cur) && parseInt(cur, 10) > 0) {
+                fill(grd1, row, column, curRoom);
+                if (FloodFillReturnObject?.RoomEgress) FloodFillReturnObject.RoomEgress[curRoom] = [
+                    row,
+                    column
+                ];
+                curRoom++;
+            }
+        }
+    }
+    FloodFillReturnObject.RoomAmount?.push(curRoom);
+    return grd1;
+};
+const applyFloodFill = (grids)=>{
+    const floodFillGrids = grids.map((grid)=>flood(grid)
+    );
+    console.log('floodFillGrids', floodFillGrids);
+    returnFloodFilled(floodFillGrids);
+    return FloodFillReturnObject;
+};
+const returnFloodFilled = (fFG)=>{
+    FloodFillReturnObject.FloodFilledAutomata = fFG;
+};
+console.log(JSON.stringify(FloodFillReturnObject));
 const renderGrid = (Grid1, _DEBUG = false)=>{
     !_DEBUG && console.clear();
     const topBorder = [
@@ -210,7 +255,8 @@ const onGridAndSeedInit = ()=>{
         cellularAutomataReturnObject.CellularAutomata = CellularAutomata;
         cellularAutomataReturnObject.verifySeed = grd.verifySeed;
         cellularAutomataReturnObject.iterations_run = curIt;
-        console.log(JSON.stringify(cellularAutomataReturnObject));
+        const floodFilledMap = applyFloodFill(CellularAutomata);
+        console.log('floodFilledMap', floodFilledMap);
     }
 };
 let gridW, gridH, seedArg, iterationsRemaining = 0, grd;

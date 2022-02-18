@@ -48,16 +48,11 @@ const flood = (grd:Array<string[]>) => {
 export const applyFloodFill = (grids:Array<Array<string[]>>) => {
   const grds = [...grids]
   const floodFillGrids = grids.map(grid => flood(grid))
-  console.log('floodFillGrids', floodFillGrids)
   returnFloodFilled(floodFillGrids)
   return FloodFillReturnObject
 }
 const returnFloodFilled = (fFG:any) => {
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
 FloodFillReturnObject.FloodFilledAutomata = fFG
-// FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
-// FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
-}
 // _DEBUG && renderGrid(floodFillGrids[0])
-
-console.log(JSON.stringify(FloodFillReturnObject))
+}

@@ -165,9 +165,8 @@ const onGridAndSeedInit = () => {
     cellularAutomataReturnObject.CellularAutomata = CellularAutomata
     cellularAutomataReturnObject.verifySeed = grd.verifySeed
     cellularAutomataReturnObject.iterations_run = curIt
-    // console.log(JSON.stringify(cellularAutomataReturnObject))
     const floodFilledMap = applyFloodFill(CellularAutomata)
-    console.log('floodFilledMap', floodFilledMap)
+    console.log('floodFilledMap', floodFilledMap, 'fFM')
   }
 }
 
