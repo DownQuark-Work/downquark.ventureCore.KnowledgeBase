@@ -35,3 +35,4 @@ span[contenteditable][data-gen-attr] {
 #game span[data-point-type="on"][data-point-variant="grass"] { background-color:bisque }
 #game span[data-point-type="on"][data-point-variant="water"] { background-color:lightskyblue }
 #game span[data-point-type="off"][data-point-variant="water"] { background-color:darkblue }
+#generate-button[disabled] {display: none;}

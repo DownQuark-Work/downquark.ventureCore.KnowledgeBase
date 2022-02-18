@@ -4,9 +4,6 @@ import {createCorridors} from '../../../../../../../../Generation/_utils/corrido
 // import {renderGrid} from '../../../../../../../../Generation/_utils/cli-view.ts'
 
 export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}, cb?:()=>void) => void = ({gw, gh, sa, ir}, cb = ()=>{}) => {
-  console.log('??',document?.getElementById('generate-button')?.getAttribute('disabled'))
-  console.log('??',document?.getElementById('generate-button')?.setAttribute('disabled','true'))
-  console.log('generating with {gw, gh, sa, ir}', {gw, gh, sa, ir})
   const dungeonAutomata = initCellularAutomata({gw, gh, sa, ir})
   const dungeonRooms = dungeonAutomata.CellularAutomata && applyFloodFill(dungeonAutomata.CellularAutomata, (dungeonAutomata.seedArg || 0), (dungeonAutomata.verifySeed || 0))
   const dungeonCorridor =  createCorridors(dungeonRooms)
