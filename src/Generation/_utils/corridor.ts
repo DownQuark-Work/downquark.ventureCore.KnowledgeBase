@@ -11,17 +11,23 @@ const CorridorReturnObject: {
   verifySeed?: number;
   CorridorAutomata: Array<Array<string[]>>;
 } = { CorridorAutomata: [] };
-const FloodFillArguments = JSON.parse(Deno.args[0]);
-
+const FloodFillArguments: {[k:string]:any} = {
+  seedArg: 0,
+  verifySeed: 0,
+  RoomAmount: [0],
+  RoomEgress: {} as {[k:string]:number[]},
+  FloodFilledAutomata:[[['NOT_YET_SET']]]
+}
+  
 const corridorMapIndexes: Array<number[]> = [];
-CorridorReturnObject.seedArg = FloodFillArguments.seedArg;
-CorridorReturnObject.verifySeed = FloodFillArguments.verifySeed;
-CorridorReturnObject.CorridorAutomata = [
-  ...FloodFillArguments.FloodFilledAutomata,
-];
+// determine access points
+const determineAccessPoints = () => { // REFACTORED FNC START
+  CorridorReturnObject.seedArg = FloodFillArguments.seedArg;
+  CorridorReturnObject.verifySeed = FloodFillArguments.verifySeed;
+  CorridorReturnObject.CorridorAutomata = [
+    ...FloodFillArguments.FloodFilledAutomata,
+  ];
 
-  // determine access points
-// const determineAccessPoints = () => { // REFACTORED FNC START
 FloodFillArguments.RoomAmount.forEach((rm: number) => {
   let shuffleIndexes = FloodFillArguments.verifySeed.toString(2) + '';
   while (
@@ -52,7 +58,7 @@ FloodFillArguments.RoomAmount.forEach((rm: number) => {
     corridorMapIndexes.push([rm, hasShuffled[indx]]);
   });
 });
-// } determineAccessPoints REFACTORED FNC END
+} // determineAccessPoints REFACTORED FNC END
 
 const createBridge = (brdg: Array<number[]>) => {
   const [s, e] = brdg;
@@ -79,11 +85,12 @@ const createBridge = (brdg: Array<number[]>) => {
   bridgeRows();
   bridgeColumns();
 };
+
 //apply access points
-// export const CreateCorridors = () => {
+export const CreateCorridors = () => {
 
 // - trigger below function to create `corridorMapIndexes`
-// determineAccessPoints
+determineAccessPoints()
 
 // then should be able to just let it run
 for (let i = 0; i < corridorMapIndexes.length; i++) {
@@ -95,8 +102,15 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-// and return `CorridorReturnObject` when finished
-// END EXPORT
 _DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
-
+// stringify for cli
 console.log(JSON.stringify(CorridorReturnObject))
+// and return `CorridorReturnObject` when finished
+return CorridorReturnObject
+}// END EXPORT
+
+if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
+  const denoArgs = JSON.parse(Deno.args[0]);
+  Object.entries(denoArgs).forEach(entry => FloodFillArguments[entry[0]] = entry[1])
+  FloodFillArguments && CreateCorridors()
+}
