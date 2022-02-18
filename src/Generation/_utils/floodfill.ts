@@ -1,7 +1,7 @@
 // deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 13)
 import {renderGrid} from './cli-view.ts'
 
-const _DEBUG =false
+const _DEBUG = false
 const FloodFillReturnObject: {
   seedArg?:number,
   verifySeed?:number,
@@ -49,10 +49,16 @@ export const applyFloodFill = (grids:Array<Array<string[]>>) => {
   const grds = [...grids]
   const floodFillGrids = grids.map(grid => flood(grid))
   returnFloodFilled(floodFillGrids)
+  typeof Deno !== 'undefined' && console.log(JSON.stringify(FloodFillReturnObject))
   return FloodFillReturnObject
 }
 const returnFloodFilled = (fFG:any) => {
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
 FloodFillReturnObject.FloodFilledAutomata = fFG
-// _DEBUG && renderGrid(floodFillGrids[0])
+_DEBUG && renderGrid(fFG[0])
+}
+
+if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
+  const denoFloodFillProps = JSON.parse(Deno.args[0])
+  denoFloodFillProps && applyFloodFill(denoFloodFillProps.CellularAutomata)
 }

@@ -6,6 +6,8 @@ import { PRNG } from '../_Seed/prng.ts'
 // import {applyFloodFill} from '../_utils/floodfill.ts'
 import {renderGrid} from '../_utils/cli-view.ts'
 
+const _DEBUG = false
+
 class Cell {
   private _amtDied = 0
   private _amtLived = 0
@@ -165,8 +167,8 @@ const onGridAndSeedInit = () => {
     cellularAutomataReturnObject.CellularAutomata = CellularAutomata
     cellularAutomataReturnObject.verifySeed = grd.verifySeed
     cellularAutomataReturnObject.iterations_run = curIt
-    console.log('cellularAutomataReturnObject', cellularAutomataReturnObject)
-    return cellularAutomataReturnObject
+    typeof Deno !== 'undefined' && console.log(JSON.stringify(cellularAutomataReturnObject))
+    // return cellularAutomataReturnObject
     // const floodFilledMap = applyFloodFill(CellularAutomata)
     // console.log('floodFilledMap', floodFilledMap, 'fFM')
   }
@@ -174,13 +176,14 @@ const onGridAndSeedInit = () => {
 
 let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
 export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, ir?:number}) => {
-  console.log('props', props)
+  _DEBUG && console.log('props', props)
   gridW = props.gw || SETTINGS.GRID_WIDTH,
   gridH = props.gh || SETTINGS.GRID_HEIGHT,
   seedArg = props.sa ? parseSeedArg(props.sa) : parseSeedArg(new Date().getTime())
   iterationsRemaining = props.ir || SETTINGS.ITERATIONS
   grd = new Grid(gridH, gridW)
-  return grd.init(seedArg, onGridAndSeedInit)
+  grd.init(seedArg, onGridAndSeedInit)
+  return cellularAutomataReturnObject
 }
 
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
