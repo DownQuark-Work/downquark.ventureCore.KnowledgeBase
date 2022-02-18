@@ -164,6 +164,14 @@ else
 }
 
 // TODO: Implement this for browser builds
+// `$ deno doc ./CellularAutomata/cellular_automata.ts` to see the below working
+// https://deno.land/manual@v1.18.1/tools/documentation_generator
+/**
+ * Adds x and y.
+ * @param {number} x
+ * @param {number} y
+ * @returns {number} Sum of x and y
+ */
 export const configureCellularAutomata = (props:{gridW:number,gridH:number,seedAr?:number,iterationsRemaining?:number}) => {
   const {
     gridW: argGridW = 10,

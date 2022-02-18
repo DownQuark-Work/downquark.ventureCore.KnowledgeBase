@@ -1,3 +1,19 @@
+## Deno
+- https://deno.land/manual@v1.18.1/examples/http_server
+  - https://deno.land/manual@v1.18.1/examples/file_server
+- https://deno.land/manual@v1.18.1/tools/bundler
+- https://deno.land/manual@v1.18.1/typescript/configuration#targeting-deno-and-the-browser
+- https://deno.land/manual@v1.18.1/getting_started/permissions
+^--should be enough to get html running with the deno CLI scripts
+v-- maybe this one too
+https://deno.land/manual@v1.18.1/tools/compiler
+  - https://doc.deno.land/deno/unstable/~/Deno.CompilerOptions
+
+- https://deno.land/manual@v1.18.1/examples/subprocess
+- https://deno.land/manual@v1.18.1/tools/formatter
+- https://deno.land/manual@v1.18.1/runtime/web_platform_apis#other-apis
+
+## Rogue
 convert [this](http://bfnightly.bracketproductions.com/rustbook/chapter_0.html) to javascript
 
 http://roguebasin.com/index.php/Articles << AMAZING resource
