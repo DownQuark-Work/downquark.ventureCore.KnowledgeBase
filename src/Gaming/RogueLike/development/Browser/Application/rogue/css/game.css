@@ -4,18 +4,29 @@ body>section>div {
   margin: 1rem auto;
   text-align: initial;
 }
-#game {
-  border: 1px solid black;
-  font-family: 1rem;
-  font-family: monospace;
-  line-height: 1rem;
-  min-height: 25ch;
-  min-width: 25ch;
-  padding: 1ch;
-}
 span[contenteditable][data-gen-attr] {
   background-color: rgba(95,168,150,.6);
   font-size: 1.125rem;
   padding:.25rem;
   text-decoration: underline;
 }
+#game {
+  border: 1px solid black;
+  font-family: 1rem;
+  font-family: monospace;
+  line-height: 0.6rem;
+  /* line-height: 1rem; */
+  min-height: 25ch;
+  min-width: 25ch;
+  padding: 1ch;
+}
+#game span[data-point] {
+  display: inline-block;
+  height: .875rem;
+  overflow: hidden;
+  text-align: center;
+  width: .875rem;
+}
+#game span[data-point-type="bridge"] { background-color:chocolate }
+#game span[data-point-type="off"] { background-color: black }
+#game span[data-point-type="on"] { background-color:bisque }
