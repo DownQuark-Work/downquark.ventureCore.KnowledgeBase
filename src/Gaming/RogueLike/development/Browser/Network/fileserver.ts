@@ -20,8 +20,7 @@ async function handleHttp(conn: Deno.Conn) {
     // Try opening the file
     let file;
     try {
-      // file = await Deno.open('../Application/rogue/index.html', { read: true });
-      console.log('../Application/rogue/ + filepath', '../Application/rogue' + filepath)
+      // console.log('../Application/rogue/ + filepath', '../Application/rogue' + filepath) // Debug
       file = await Deno.open('../Application/rogue/' + filepath, { read: true });
       const stat = await file.stat();
 
