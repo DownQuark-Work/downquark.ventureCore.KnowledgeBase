@@ -9,8 +9,8 @@ const FloodFillReturnObject: {
   RoomEgress?:{[k:string]: number[]},
   FloodFilledAutomata?:Array<Array<string[]>>
 } = {RoomAmount:[], RoomEgress:{}}
-const CellularAutomataArguments = JSON.parse(Deno.args[0])
-const grids:Array<Array<string[]>> = CellularAutomataArguments.CellularAutomata
+// const CellularAutomataArguments = JSON.parse(Deno.args[0])
+// const grids:Array<Array<string[]>> = CellularAutomataArguments.CellularAutomata
 // console.log('grid', grids)
 
 const fill = (g:Array<string[]>,r:number,c:number,n:number) => {
@@ -45,12 +45,19 @@ const flood = (grd:Array<string[]>) => {
   return grd
 }
 
+export const applyFloodFill = (grids:Array<Array<string[]>>) => {
+  const grds = [...grids]
+  const floodFillGrids = grids.map(grid => flood(grid))
+  console.log('floodFillGrids', floodFillGrids)
+  returnFloodFilled(floodFillGrids)
+  return FloodFillReturnObject
+}
+const returnFloodFilled = (fFG:any) => {
 // this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
-const floodFillGrids = grids.map(grid => flood(grid))
-FloodFillReturnObject.FloodFilledAutomata = floodFillGrids
-FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
-FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
-
-_DEBUG && renderGrid(floodFillGrids[0])
+FloodFillReturnObject.FloodFilledAutomata = fFG
+// FloodFillReturnObject.seedArg = CellularAutomataArguments.seedArg
+// FloodFillReturnObject.verifySeed = CellularAutomataArguments.verifySeed
+}
+// _DEBUG && renderGrid(floodFillGrids[0])
 
 console.log(JSON.stringify(FloodFillReturnObject))
