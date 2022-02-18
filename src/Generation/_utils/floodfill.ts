@@ -1,4 +1,4 @@
-// deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 20 20 13)
+//  deno run ./_utils/floodfill.ts $(deno run ./CellularAutomata/cellular_automata.ts 35 20 13)
 import {renderGrid} from './cli-view.ts'
 
 const _DEBUG = false
@@ -9,14 +9,11 @@ const FloodFillReturnObject: {
   RoomEgress?:{[k:string]: number[]},
   FloodFilledAutomata?:Array<Array<string[]>>
 } = {RoomAmount:[], RoomEgress:{}}
-// const CellularAutomataArguments = JSON.parse(Deno.args[0])
-// const grids:Array<Array<string[]>> = CellularAutomataArguments.CellularAutomata
-// console.log('grid', grids)
 
 const fill = (g:Array<string[]>,r:number,c:number,n:number) => {
   if(c < 0 || r < 0 || c > g[0].length-1 || r > g.length-1) return
   const cur = g[r][c],
-    ff = n+'⊡'+cur // String(n).replace(/1/g,'X') // '⊡'+n+'⫶' + g[r][c]\\\
+    ff = n+'⊡'+cur
   if(/⊡/g.test(cur)) return
   if(parseInt(cur,10) < 1) return
   
