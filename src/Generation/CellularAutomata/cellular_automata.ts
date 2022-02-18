@@ -3,7 +3,7 @@
 import { SETTINGS } from './_settings.ts'
 import { PRNG } from '../_Seed/prng.ts'
 
-import {applyFloodFill} from '../_utils/floodfill.ts'
+// import {applyFloodFill} from '../_utils/floodfill.ts'
 import {renderGrid} from '../_utils/cli-view.ts'
 
 class Cell {
@@ -165,8 +165,10 @@ const onGridAndSeedInit = () => {
     cellularAutomataReturnObject.CellularAutomata = CellularAutomata
     cellularAutomataReturnObject.verifySeed = grd.verifySeed
     cellularAutomataReturnObject.iterations_run = curIt
-    const floodFilledMap = applyFloodFill(CellularAutomata)
-    console.log('floodFilledMap', floodFilledMap, 'fFM')
+    console.log('cellularAutomataReturnObject', cellularAutomataReturnObject)
+    return cellularAutomataReturnObject
+    // const floodFilledMap = applyFloodFill(CellularAutomata)
+    // console.log('floodFilledMap', floodFilledMap, 'fFM')
   }
 }
 
@@ -178,7 +180,7 @@ export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, 
   seedArg = props.sa ? parseSeedArg(props.sa) : parseSeedArg(new Date().getTime())
   iterationsRemaining = props.ir || SETTINGS.ITERATIONS
   grd = new Grid(gridH, gridW)
-  grd.init(seedArg, onGridAndSeedInit)
+  return grd.init(seedArg, onGridAndSeedInit)
 }
 
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
