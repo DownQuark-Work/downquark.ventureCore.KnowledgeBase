@@ -1,3 +1,10 @@
+# Structure
+## Topo Level Folders Relate to Application Layers
+- Application (final files which are delivered)
+- Network (deno server)
+- Persistence (dbs)
+- Protocol (chain)
+
 ## Deno
 - https://deno.land/manual@v1.18.1/examples/http_server
   - https://deno.land/manual@v1.18.1/examples/file_server
