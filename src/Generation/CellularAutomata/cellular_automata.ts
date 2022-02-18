@@ -172,7 +172,7 @@ const onGridAndSeedInit = () => {
 
 // deno-lint-ignore no-inferrable-types no-explicit-any
 let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
-const initCellularAutomata = () => {
+export const initCellularAutomata = () => {
   // const initCellularAutomata = (props:{gw:number, gh:number, sa:number, ir:number}) => {
       // allow to be run from js
   const {gw, gh, sa, ir} = document.getElementById('grid-config')?.innerHTML ? JSON.parse(document.getElementById('grid-config')?.innerHTML as any) : {gw:SETTINGS.GRID_WIDTH, gh:SETTINGS.GRID_HEIGHT, sa:new Date().getTime(), ir:SETTINGS.ITERATIONS},
@@ -184,10 +184,6 @@ const initCellularAutomata = () => {
   grd.init(seedArg, onGridAndSeedInit)
 }
 
-if(typeof document !== 'undefined' && document?.getElementById('grid-config')){
-  (document.getElementById('grid-config') as any).innerHTML = JSON.stringify({gw:35, gh:20, sa:13, ir:12})
-}
-typeof document !== 'undefined' && document?.getElementById('generate-button')?.addEventListener('click',initCellularAutomata)
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
   gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
   gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
