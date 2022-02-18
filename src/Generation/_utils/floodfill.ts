@@ -42,7 +42,9 @@ const flood = (grd:Array<string[]>) => {
   return grd
 }
 
-export const applyFloodFill = (grids:Array<Array<string[]>>) => {
+export const applyFloodFill = (grids:Array<Array<string[]>>, seedProp:number, verifySeed:number) => {
+  FloodFillReturnObject.seedArg = seedProp
+  FloodFillReturnObject.verifySeed = verifySeed
   const grds = [...grids]
   const floodFillGrids = grids.map(grid => flood(grid))
   returnFloodFilled(floodFillGrids)
@@ -57,5 +59,5 @@ _DEBUG && renderGrid(fFG[0])
 
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
   const denoFloodFillProps = JSON.parse(Deno.args[0])
-  denoFloodFillProps && applyFloodFill(denoFloodFillProps.CellularAutomata)
+  denoFloodFillProps && applyFloodFill(denoFloodFillProps.CellularAutomata, denoFloodFillProps.seedArg, denoFloodFillProps.verifySeed)
 }
