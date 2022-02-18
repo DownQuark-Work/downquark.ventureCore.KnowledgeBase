@@ -170,25 +170,21 @@ const onGridAndSeedInit = () => {
   }
 }
 
-// deno-lint-ignore no-inferrable-types no-explicit-any
 let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
-export const initCellularAutomata = () => {
-  // const initCellularAutomata = (props:{gw:number, gh:number, sa:number, ir:number}) => {
-      // allow to be run from js
-  const {gw, gh, sa, ir} = document.getElementById('grid-config')?.innerHTML ? JSON.parse(document.getElementById('grid-config')?.innerHTML as any) : {gw:SETTINGS.GRID_WIDTH, gh:SETTINGS.GRID_HEIGHT, sa:new Date().getTime(), ir:SETTINGS.ITERATIONS},
-  gridW = gw || SETTINGS.GRID_WIDTH,
-  gridH = gh || SETTINGS.GRID_HEIGHT,
-  seedArg = sa ? parseSeedArg(sa) : parseSeedArg(new Date().getTime())
-  iterationsRemaining = ir || SETTINGS.ITERATIONS
+export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, ir?:number}) => {
+  console.log('props', props)
+  gridW = props.gw || SETTINGS.GRID_WIDTH,
+  gridH = props.gh || SETTINGS.GRID_HEIGHT,
+  seedArg = props.sa ? parseSeedArg(props.sa) : parseSeedArg(new Date().getTime())
+  iterationsRemaining = props.ir || SETTINGS.ITERATIONS
   grd = new Grid(gridH, gridW)
   grd.init(seedArg, onGridAndSeedInit)
 }
 
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
-  gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
-  gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
-  seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2],10)) : parseSeedArg(new Date().getTime())
-  iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
-  grd = new Grid(gridH, gridW)
-  grd.init(seedArg, onGridAndSeedInit)
+  const gw = Deno.args?.[0] && parseInt(Deno.args[0],10) || 0,
+        gh = Deno.args?.[1] && parseInt(Deno.args[1],10) || 0,
+        sa = Deno.args?.[2] && parseInt(Deno.args[2],10) || 0,
+        ir = Deno.args?.[3] && parseInt(Deno.args[3],10) || 0
+  initCellularAutomata({ gw, gh, sa, ir})
 }
