@@ -1,4 +1,4 @@
-// deno run --allow-read --allow-net file_server.ts
+// deno run --allow-read --allow-net fileserver.ts
 import * as path from 'https://deno.land/std@0.123.0/path/mod.ts';
 import { readableStreamFromReader } from 'https://deno.land/std@0.123.0/streams/mod.ts';
 
