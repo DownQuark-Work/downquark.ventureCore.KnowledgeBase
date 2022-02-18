@@ -81,14 +81,12 @@ const flood = (grd1)=>{
 const applyFloodFill = (grids)=>{
     const floodFillGrids = grids.map((grid)=>flood(grid)
     );
-    console.log('floodFillGrids', floodFillGrids);
     returnFloodFilled(floodFillGrids);
     return FloodFillReturnObject;
 };
 const returnFloodFilled = (fFG)=>{
     FloodFillReturnObject.FloodFilledAutomata = fFG;
 };
-console.log(JSON.stringify(FloodFillReturnObject));
 const renderGrid = (Grid1, _DEBUG = false)=>{
     !_DEBUG && console.clear();
     const topBorder = [
@@ -256,7 +254,7 @@ const onGridAndSeedInit = ()=>{
         cellularAutomataReturnObject.verifySeed = grd.verifySeed;
         cellularAutomataReturnObject.iterations_run = curIt;
         const floodFilledMap = applyFloodFill(CellularAutomata);
-        console.log('floodFilledMap', floodFilledMap);
+        console.log('floodFilledMap', floodFilledMap, 'fFM');
     }
 };
 let gridW, gridH, seedArg, iterationsRemaining = 0, grd;

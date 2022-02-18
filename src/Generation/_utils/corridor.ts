@@ -19,7 +19,9 @@ CorridorReturnObject.verifySeed = FloodFillArguments.verifySeed;
 CorridorReturnObject.CorridorAutomata = [
   ...FloodFillArguments.FloodFilledAutomata,
 ];
+
 // determine access points
+// const determineAccessPoints = () => { // REFACTORED FNC START
 FloodFillArguments.RoomAmount.forEach((rm: number) => {
   let shuffleIndexes = FloodFillArguments.verifySeed.toString(2) + '';
   while (
@@ -50,6 +52,7 @@ FloodFillArguments.RoomAmount.forEach((rm: number) => {
     corridorMapIndexes.push([rm, hasShuffled[indx]]);
   });
 });
+// } determineAccessPoints REFACTORED FNC END
 
 const createBridge = (brdg: Array<number[]>) => {
   const [s, e] = brdg;
@@ -77,6 +80,12 @@ const createBridge = (brdg: Array<number[]>) => {
   bridgeColumns();
 };
 //apply access points
+// export const CreateCorridors = () => {
+
+// - trigger below function to create `corridorMapIndexes`
+// determineAccessPoints
+
+// then should be able to just let it run
 for (let i = 0; i < corridorMapIndexes.length; i++) {
   const bridgeSpan = [
     FloodFillArguments.RoomEgress[corridorMapIndexes[i][0]],
@@ -86,6 +95,8 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
+// and return `CorridorReturnObject` when finished
+// END EXPORT
 _DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
 
 console.log(JSON.stringify(CorridorReturnObject))
