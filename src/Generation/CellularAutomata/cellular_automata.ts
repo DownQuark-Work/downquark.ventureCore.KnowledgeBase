@@ -3,7 +3,6 @@
 import { SETTINGS } from './_settings.ts'
 import { PRNG } from '../_Seed/prng.ts'
 
-// import {applyFloodFill} from '../_utils/floodfill.ts'
 import {renderGrid} from '../_utils/cli-view.ts'
 
 const _DEBUG = false
@@ -51,7 +50,6 @@ class Grid {
   init(seed:string[], oGASI:()=>void){
     const _seed = [...seed],
     _onGridAndSeedInit = oGASI
-    // let verifySeed = 0
     for(let gX = 0; gX < this.w; gX++) {
       for(let gY = 0; gY < this.h; gY++) {
         const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString()
@@ -168,13 +166,11 @@ const onGridAndSeedInit = () => {
     cellularAutomataReturnObject.verifySeed = grd.verifySeed
     cellularAutomataReturnObject.iterations_run = curIt
     typeof Deno !== 'undefined' && console.log(JSON.stringify(cellularAutomataReturnObject))
-    // return cellularAutomataReturnObject
-    // const floodFilledMap = applyFloodFill(CellularAutomata)
-    // console.log('floodFilledMap', floodFilledMap, 'fFM')
   }
 }
 
 let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
+// Browser
 export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, ir?:number}) => {
   _DEBUG && console.log('props', props)
   gridW = props.gw || SETTINGS.GRID_WIDTH,
@@ -185,7 +181,7 @@ export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, 
   grd.init(seedArg, onGridAndSeedInit)
   return cellularAutomataReturnObject
 }
-
+// Deno
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
   const gw = Deno.args?.[0] && parseInt(Deno.args[0],10) || 0,
         gh = Deno.args?.[1] && parseInt(Deno.args[1],10) || 0,

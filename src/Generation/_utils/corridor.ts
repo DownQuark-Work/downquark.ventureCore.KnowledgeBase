@@ -87,8 +87,7 @@ const createBridge = (brdg: Array<number[]>) => {
 };
 
 //apply access points
-export const CreateCorridors = () => {
-
+const initCreation = () => {
 // - trigger below function to create `corridorMapIndexes`
 determineAccessPoints()
 
@@ -104,13 +103,18 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
 
 _DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
 // stringify for cli
-console.log(JSON.stringify(CorridorReturnObject))
-// and return `CorridorReturnObject` when finished
-return CorridorReturnObject
+typeof Deno !== 'undefined' && console.log(JSON.stringify(CorridorReturnObject))
 }// END EXPORT
 
+// Browser
+export const createCorridors = (browserArgs:any) => {
+  Object.entries(browserArgs).forEach(entry => FloodFillArguments[entry[0]] = entry[1])
+  FloodFillArguments && initCreation()
+  return CorridorReturnObject
+}
+// CLI
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
   const denoArgs = JSON.parse(Deno.args[0]);
   Object.entries(denoArgs).forEach(entry => FloodFillArguments[entry[0]] = entry[1])
-  FloodFillArguments && CreateCorridors()
+  FloodFillArguments && initCreation()
 }

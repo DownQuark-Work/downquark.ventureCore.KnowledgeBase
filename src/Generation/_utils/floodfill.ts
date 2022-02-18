@@ -42,6 +42,13 @@ const flood = (grd:Array<string[]>) => {
   return grd
 }
 
+const returnFloodFilled = (fFG:any) => {
+  // this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
+  FloodFillReturnObject.FloodFilledAutomata = fFG
+  _DEBUG && renderGrid(fFG[0])
+  }
+
+// Browser
 export const applyFloodFill = (grids:Array<Array<string[]>>, seedProp:number, verifySeed:number) => {
   FloodFillReturnObject.seedArg = seedProp
   FloodFillReturnObject.verifySeed = verifySeed
@@ -51,12 +58,7 @@ export const applyFloodFill = (grids:Array<Array<string[]>>, seedProp:number, ve
   typeof Deno !== 'undefined' && console.log(JSON.stringify(FloodFillReturnObject))
   return FloodFillReturnObject
 }
-const returnFloodFilled = (fFG:any) => {
-// this should rarely (if ever) have a length > 1 but including in case there's a use case to fill each step
-FloodFillReturnObject.FloodFilledAutomata = fFG
-_DEBUG && renderGrid(fFG[0])
-}
-
+// CLI
 if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
   const denoFloodFillProps = JSON.parse(Deno.args[0])
   denoFloodFillProps && applyFloodFill(denoFloodFillProps.CellularAutomata, denoFloodFillProps.seedArg, denoFloodFillProps.verifySeed)
