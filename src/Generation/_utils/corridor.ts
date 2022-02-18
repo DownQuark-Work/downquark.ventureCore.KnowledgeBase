@@ -20,7 +20,7 @@ CorridorReturnObject.CorridorAutomata = [
   ...FloodFillArguments.FloodFilledAutomata,
 ];
 
-// determine access points
+  // determine access points
 // const determineAccessPoints = () => { // REFACTORED FNC START
 FloodFillArguments.RoomAmount.forEach((rm: number) => {
   let shuffleIndexes = FloodFillArguments.verifySeed.toString(2) + '';
