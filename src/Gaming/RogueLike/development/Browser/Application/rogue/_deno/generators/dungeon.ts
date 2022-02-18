@@ -30,6 +30,7 @@ export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}, cb?:(
     row.forEach((i,idx) => {
       dungeonMapString += `<span data-point="${idx}|${indx}" data-point-type="`
       dungeonMapString += i === '#' ? 'bridge">&nbsp;' : /⊡|^1$/g.test(i) ? 'on">&nbsp;' : 'off">&nbsp;'
+      // dungeonMapString += i === '#' ? 'bridge">&nbsp;' : /⊡|^1$/g.test(i) ? 'on" data-point-variant="water">&nbsp;' : 'off" data-point-variant="water">&nbsp;'
       dungeonMapString += `</span>`
     })
     dungeonMapString += '<br />'
