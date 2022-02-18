@@ -225,6 +225,14 @@ const initCellularAutomata = ()=>{
     grd = new Grid(gridH1, gridW1);
     grd.init(seedArg2, onGridAndSeedInit);
 };
+if (typeof document !== 'undefined' && document?.getElementById('grid-config')) {
+    document.getElementById('grid-config').innerHTML = JSON.stringify({
+        gw: 35,
+        gh: 20,
+        sa: 13,
+        ir: 12
+    });
+}
 typeof document !== 'undefined' && document?.getElementById('generate-button')?.addEventListener('click', initCellularAutomata);
 if (typeof Deno !== 'undefined' && Deno?.args.length) {
     gridW = Deno.args[0] && parseInt(Deno.args[0], 10) ? parseInt(Deno.args[0], 10) : SETTINGS.GRID_HEIGHT, gridH = Deno.args[1] && parseInt(Deno.args[1], 10) ? parseInt(Deno.args[1], 10) : SETTINGS.GRID_WIDTH, seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2], 10)) : parseSeedArg(new Date().getTime());
