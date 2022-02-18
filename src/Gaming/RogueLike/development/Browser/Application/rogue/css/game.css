@@ -1,0 +1,15 @@
+body>section {text-align: center;}
+body>section>div {
+  display: inline-block;
+  margin: 1rem auto;
+  text-align: initial;
+}
+#game {
+  border: 1px solid black;
+  font-family: 1rem;
+  font-family: monospace;
+  line-height: 1rem;
+  min-height: 20ch;
+  min-width: 20ch;
+  padding: 1ch;
+}

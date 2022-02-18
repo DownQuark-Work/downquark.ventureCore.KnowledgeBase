@@ -101,7 +101,7 @@ for (let i = 0; i < corridorMapIndexes.length; i++) {
   createBridge(bridgeSpan);
 }
 
-_DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0], true)
+_DEBUG && renderGrid(CorridorReturnObject.CorridorAutomata[0])
 // stringify for cli
 typeof Deno !== 'undefined' && console.log(JSON.stringify(CorridorReturnObject))
 }// END EXPORT
