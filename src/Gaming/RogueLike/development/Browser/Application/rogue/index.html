@@ -26,9 +26,16 @@
 <body>
 <section>
   <div>
-    <div id="game">XX<br/>XX</div>
-    <p>Make a Dungeon Below 👇</p>
-    <div id="grid-config"></div>
+    <div id="game" style="position:relative"><p style="position:absolute; bottom:0">👇 Make a Dungeon Below</p></div>
+    <div id="grid-config">
+      <h4>Dungeon Settings</h4>
+      <p>
+        Width: <span contenteditable data-gen-attr="gw">80</span> 
+        Height: <span contenteditable data-gen-attr="gh">40</span> 
+        Seed: <span contenteditable data-gen-attr="sa"></span> 
+        Max Generations: <span contenteditable data-gen-attr="ir">5</span> 
+      </p>
+    </div>
     <button id="generate-button">Generate Dungeon</button>
   </div>
 </section>

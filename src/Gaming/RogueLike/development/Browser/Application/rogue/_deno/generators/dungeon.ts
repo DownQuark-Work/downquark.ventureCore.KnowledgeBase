@@ -1,9 +1,12 @@
 import {initCellularAutomata} from '../../../../../../../../Generation/CellularAutomata/cellular_automata.ts'
 import {applyFloodFill} from '../../../../../../../../Generation/_utils/floodfill.ts'
 import {createCorridors} from '../../../../../../../../Generation/_utils/corridor.ts'
-import {renderGrid} from '../../../../../../../../Generation/_utils/cli-view.ts'
+// import {renderGrid} from '../../../../../../../../Generation/_utils/cli-view.ts'
 
-export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}) => void = ({gw, gh, sa, ir}) => {
+export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}, cb?:()=>void) => void = ({gw, gh, sa, ir}, cb = ()=>{}) => {
+  console.log('??',document?.getElementById('generate-button')?.getAttribute('disabled'))
+  console.log('??',document?.getElementById('generate-button')?.setAttribute('disabled','true'))
+  console.log('generating with {gw, gh, sa, ir}', {gw, gh, sa, ir})
   const dungeonAutomata = initCellularAutomata({gw, gh, sa, ir})
   const dungeonRooms = dungeonAutomata.CellularAutomata && applyFloodFill(dungeonAutomata.CellularAutomata, (dungeonAutomata.seedArg || 0), (dungeonAutomata.verifySeed || 0))
   const dungeonCorridor =  createCorridors(dungeonRooms)
@@ -22,10 +25,13 @@ export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}) => vo
   const dungeonMap = document.getElementById('game')
   if (dungeonMap) dungeonMap.innerHTML = ''
   
-  // TODO: this can be much more efficient - but keep a ref to gRow for memo as components are all moved around
+  let dungeonMapString = ''
   dungeonMap && dungeon.forEach((row: string[],indx:number) => {
-    const graphics = row.map(i => i === '#' ? '#' : /⊡|^1$/g.test(i) ? 'X' : '&nbsp;')
-    graphics.forEach(char => dungeonMap.innerHTML = dungeonMap.innerHTML + char)
-    dungeonMap.innerHTML = dungeonMap.innerHTML + '<br />'
+    row.forEach(i => {
+      dungeonMapString += i === '#' ? '#' : /⊡|^1$/g.test(i) ? 'X' : '&nbsp;'
+    })
+    dungeonMapString += '<br />'
   })
+  if (dungeonMap) dungeonMap.innerHTML = dungeonMapString
+  cb && cb()
 }

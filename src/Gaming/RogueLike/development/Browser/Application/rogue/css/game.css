@@ -9,7 +9,13 @@ body>section>div {
   font-family: 1rem;
   font-family: monospace;
   line-height: 1rem;
-  min-height: 20ch;
-  min-width: 20ch;
+  min-height: 25ch;
+  min-width: 25ch;
   padding: 1ch;
+}
+span[contenteditable][data-gen-attr] {
+  background-color: rgba(95,168,150,.6);
+  font-size: 1.125rem;
+  padding:.25rem;
+  text-decoration: underline;
 }
