@@ -99,10 +99,10 @@ class Grid {
         this.h = h;
         this.w = w;
     }
-    init(seed) {
+    init(seed, oGASI) {
         const _seed = [
             ...seed
-        ];
+        ], _onGridAndSeedInit = oGASI;
         for(let gX = 0; gX < this.w; gX++){
             for(let gY = 0; gY < this.h; gY++){
                 const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString();
@@ -110,6 +110,10 @@ class Grid {
                 this.verifySeed += cellInitValue ? parseInt(cellInitValue, 10) : 0;
             }
         }
+        this.comparisonGrid = [
+            []
+        ];
+        _onGridAndSeedInit();
     }
     cycleLife() {
         Object.keys(this._gridmap).forEach((cell)=>{
@@ -177,54 +181,54 @@ const parseSeedArg = (seedArg1)=>{
 };
 const cellularAutomataReturnObject = {
 };
+let curIt = 0;
+const onGridAndSeedInit = ()=>{
+    if (iterationsRemaining < 1) {
+        const itInterval = setInterval(()=>{
+            if (grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
+                clearInterval(itInterval);
+                console.log('final');
+                return;
+            }
+            grd.cycleLife();
+            grd.finalizeGrid();
+            console.log(`::iterations run:: ${++curIt}`);
+        }, 300);
+    } else {
+        const CellularAutomataSteps = [];
+        let CellularAutomata = [];
+        while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining){
+            grd.cycleLife();
+            grd.finalizeGrid(CellularAutomataSteps);
+            iterationsRemaining--;
+            CellularAutomata = [
+                CellularAutomataSteps[CellularAutomataSteps.length - 1]
+            ];
+            ++curIt;
+        }
+        CellularAutomata = SETTINGS.RETURN_ALL_STEPS ? CellularAutomataSteps : CellularAutomata;
+        cellularAutomataReturnObject.CellularAutomata = CellularAutomata;
+        cellularAutomataReturnObject.verifySeed = grd.verifySeed;
+        cellularAutomataReturnObject.iterations_run = curIt;
+        console.log(JSON.stringify(cellularAutomataReturnObject));
+    }
+};
 let gridW, gridH, seedArg, iterationsRemaining = 0, grd;
-if (Deno?.args.length) {
+const initCellularAutomata = ()=>{
+    const { gw , gh , sa , ir  } = document.getElementById('grid-config')?.innerHTML ? JSON.parse(document.getElementById('grid-config')?.innerHTML) : {
+        gw: SETTINGS.GRID_WIDTH,
+        gh: SETTINGS.GRID_HEIGHT,
+        sa: new Date().getTime(),
+        ir: SETTINGS.ITERATIONS
+    }, gridW1 = gw || SETTINGS.GRID_WIDTH, gridH1 = gh || SETTINGS.GRID_HEIGHT, seedArg2 = sa ? parseSeedArg(sa) : parseSeedArg(new Date().getTime());
+    iterationsRemaining = ir || SETTINGS.ITERATIONS;
+    grd = new Grid(gridH1, gridW1);
+    grd.init(seedArg2, onGridAndSeedInit);
+};
+typeof document !== 'undefined' && document?.getElementById('generate-button')?.addEventListener('click', initCellularAutomata);
+if (typeof Deno !== 'undefined' && Deno?.args.length) {
     gridW = Deno.args[0] && parseInt(Deno.args[0], 10) ? parseInt(Deno.args[0], 10) : SETTINGS.GRID_HEIGHT, gridH = Deno.args[1] && parseInt(Deno.args[1], 10) ? parseInt(Deno.args[1], 10) : SETTINGS.GRID_WIDTH, seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2], 10)) : parseSeedArg(new Date().getTime());
     iterationsRemaining = Deno.args[3] && parseInt(Deno.args[3], 10) ? parseInt(Deno.args[3], 10) : SETTINGS.ITERATIONS;
     grd = new Grid(gridH, gridW);
-    grd.init(seedArg);
-}
-const initCellularAutomata = (props)=>{
-    gridW = props.gw || SETTINGS.GRID_WIDTH, gridH = props.gh || SETTINGS.GRID_HEIGHT, seedArg = props.sa ? parseSeedArg(props.sa) : parseSeedArg(new Date().getTime());
-    iterationsRemaining = props.ir || SETTINGS.ITERATIONS;
-    grd = new Grid(gridH, gridW);
-    grd.init(seedArg);
-};
-if (window.location?.search) {
-    initCellularAutomata({
-        gw: 12,
-        gh: 12,
-        sa: 12,
-        ir: 12
-    });
-}
-let curIt = 0;
-if (iterationsRemaining < 1) {
-    const itInterval = setInterval(()=>{
-        if (typeof grd.comparisonGrid !== undefined && grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
-            clearInterval(itInterval);
-            console.log('final');
-            return;
-        }
-        grd.cycleLife();
-        grd.finalizeGrid();
-        console.log(`::iterations run:: ${++curIt}`);
-    }, 300);
-} else {
-    const CellularAutomataSteps = [];
-    let CellularAutomata = [];
-    while(typeof grd.comparisonGrid !== undefined && grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining){
-        grd.cycleLife();
-        grd.finalizeGrid(CellularAutomataSteps);
-        iterationsRemaining--;
-        CellularAutomata = [
-            CellularAutomataSteps[CellularAutomataSteps.length - 1]
-        ];
-        ++curIt;
-    }
-    CellularAutomata = SETTINGS.RETURN_ALL_STEPS ? CellularAutomataSteps : CellularAutomata;
-    cellularAutomataReturnObject.CellularAutomata = CellularAutomata;
-    cellularAutomataReturnObject.verifySeed = grd.verifySeed;
-    cellularAutomataReturnObject.iterations_run = curIt;
-    console.log(JSON.stringify(cellularAutomataReturnObject));
+    grd.init(seedArg, onGridAndSeedInit);
 }

@@ -1,4 +1,5 @@
 // deno run -c deno.jsonc ./CellularAutomata/cellular_automata.ts 35 20 12 - specify config file for use with both DOM and CLI
+// deno bundle -c deno.jsonc ./CellularAutomata/cellular_automata.ts ../../src/Gaming/RogueLike/development/Browser/Application/rogue/js/rogue/cellular_automata.bundle.js
 import { SETTINGS } from './_settings.ts'
 import { PRNG } from '../_Seed/prng.ts'
 
@@ -44,8 +45,9 @@ class Grid {
     this.w = w;
   }
   // Creates initial 2D Grid and Assigns Cell
-  init(seed:string[]){
-    const _seed = [...seed]
+  init(seed:string[], oGASI:()=>void){
+    const _seed = [...seed],
+    _onGridAndSeedInit = oGASI
     // let verifySeed = 0
     for(let gX = 0; gX < this.w; gX++) {
       for(let gY = 0; gY < this.h; gY++) {
@@ -56,6 +58,8 @@ class Grid {
         this.verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
+    this.comparisonGrid = [[]]
+    _onGridAndSeedInit()
   }
   cycleLife(){
     Object.keys(this._gridmap).forEach(cell => {
@@ -129,18 +133,43 @@ const cellularAutomataReturnObject: {
  * @param {number} y
  * @returns {number} Sum of x and y
  */
-
+let curIt = 0
+const onGridAndSeedInit = () => {
+  if(iterationsRemaining < 1)
+  { // used for continuous animation
+    const itInterval = setInterval(() => {
+      if (grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
+        clearInterval(itInterval)
+        console.log('final')
+        return
+      }
+      grd.cycleLife()
+      grd.finalizeGrid()
+      console.log(`::iterations run:: ${++curIt}`)
+    }, 300)
+  }
+  else
+  { // used to create a fixed array of lifecycles and output the result
+    const CellularAutomataSteps:Array<Array<string[]>> = []
+    let CellularAutomata:Array<Array<string[]>> = []
+    while(grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
+    {
+      grd.cycleLife()
+      grd.finalizeGrid(CellularAutomataSteps)
+      iterationsRemaining--
+      CellularAutomata = [CellularAutomataSteps[CellularAutomataSteps.length-1]]
+      ++curIt
+    }
+    CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
+    cellularAutomataReturnObject.CellularAutomata = CellularAutomata
+    cellularAutomataReturnObject.verifySeed = grd.verifySeed
+    cellularAutomataReturnObject.iterations_run = curIt
+    console.log(JSON.stringify(cellularAutomataReturnObject))
+  }
+}
 
 // deno-lint-ignore no-inferrable-types no-explicit-any
 let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
-if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
-  gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
-  gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
-  seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2],10)) : parseSeedArg(new Date().getTime())
-  iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
-  grd = new Grid(gridH, gridW)
-  grd.init(seedArg)
-}
 const initCellularAutomata = () => {
   // const initCellularAutomata = (props:{gw:number, gh:number, sa:number, ir:number}) => {
       // allow to be run from js
@@ -150,41 +179,15 @@ const initCellularAutomata = () => {
   seedArg = sa ? parseSeedArg(sa) : parseSeedArg(new Date().getTime())
   iterationsRemaining = ir || SETTINGS.ITERATIONS
   grd = new Grid(gridH, gridW)
-  grd.init(seedArg)
+  grd.init(seedArg, onGridAndSeedInit)
 }
 // if(window.location?.search){ initCellularAutomata({gw:12, gh:12, sa:12, ir:12}) }
 typeof document !== 'undefined' && document?.getElementById('generate-button')?.addEventListener('click',initCellularAutomata)
-
-let curIt = 0
-// const onGridAndSeedInit = () => {
-if(iterationsRemaining < 1)
-{ // used for continuous animation
-  const itInterval = setInterval(() => {
-    if (typeof grd.comparisonGrid !== 'undefined' && grd.comparisonGrid[0][0] === 'REPEATING_PATTERN') {
-      clearInterval(itInterval)
-      console.log('final')
-      return
-    }
-    grd.cycleLife()
-    grd.finalizeGrid()
-    console.log(`::iterations run:: ${++curIt}`)
-  }, 300)
-}
-else
-{ // used to create a fixed array of lifecycles and output the result
-  const CellularAutomataSteps:Array<Array<string[]>> = []
-  let CellularAutomata:Array<Array<string[]>> = []
-  while(grd && typeof grd.comparisonGrid !== 'undefined' && grd.comparisonGrid[0][0] !== 'REPEATING_PATTERN' && iterationsRemaining)
-  {
-    grd.cycleLife()
-    grd.finalizeGrid(CellularAutomataSteps)
-    iterationsRemaining--
-    CellularAutomata = [CellularAutomataSteps[CellularAutomataSteps.length-1]]
-    ++curIt
-  }
-  CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
-  cellularAutomataReturnObject.CellularAutomata = CellularAutomata
-  cellularAutomataReturnObject.verifySeed = grd.verifySeed
-  cellularAutomataReturnObject.iterations_run = curIt
-  console.log(JSON.stringify(cellularAutomataReturnObject))
+if(typeof Deno !== 'undefined' && Deno?.args.length){ // allow to be run from command line
+  gridW = (Deno.args[0] && parseInt(Deno.args[0],10)) ? parseInt(Deno.args[0],10) : SETTINGS.GRID_HEIGHT,
+  gridH = (Deno.args[1] && parseInt(Deno.args[1],10)) ? parseInt(Deno.args[1],10) : SETTINGS.GRID_WIDTH,
+  seedArg = Deno.args[2] ? parseSeedArg(parseInt(Deno.args[2],10)) : parseSeedArg(new Date().getTime())
+  iterationsRemaining = (Deno.args[3] && parseInt(Deno.args[3],10)) ? parseInt(Deno.args[3],10) : SETTINGS.ITERATIONS
+  grd = new Grid(gridH, gridW)
+  grd.init(seedArg, onGridAndSeedInit)
 }
