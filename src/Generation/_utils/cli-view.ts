@@ -1,10 +1,10 @@
-export const renderGrid = (Grid:Array<string[]>, _DEBUG = false) => {
+export const renderGrid = (Grid:Array<number[]|string[]>, _DEBUG = false) => {
   !_DEBUG && console.clear()
   const topBorder = [...Array(Grid[0].length+2).fill('_')],
     bottomBorder = [...Array(Grid[0].length+2).fill('—')]
   console.log(...topBorder)
-  Grid.forEach((row: string[]) => {
-    const graphics = row.map(i => i === '#' ? '#' : /⊡|^1$/g.test(i) ? '🀫' : ' ')
+  Grid.forEach((row: number[]|string[]) => {
+    const graphics = row.map(i => i.toString() === '#' ? '#' : /⊡|^1$/g.test(i.toString()) ? '🀫' : ' ')
     const gRow = ['|', ...graphics, '|']
     console.log(...gRow)
   })
