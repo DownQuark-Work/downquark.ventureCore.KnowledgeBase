@@ -1,4 +1,6 @@
 // deno run --allow-read --allow-net fileserver.ts
+// pass argument to overwrite default file path
+// // deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
 import * as path from 'https://deno.land/std@0.123.0/path/mod.ts';
 import { readableStreamFromReader } from 'https://deno.land/std@0.123.0/streams/mod.ts';
 
@@ -20,14 +22,14 @@ async function handleHttp(conn: Deno.Conn) {
     // Try opening the file
     let file;
     try {
-      // console.log('../Application/rogue/ + filepath', '../Application/rogue' + filepath) // Debug
-      file = await Deno.open('../Application/rogue/' + filepath, { read: true });
+      const fp = Deno.args[0] || '../Application/rogue/' + filepath
+      file = await Deno.open(fp, { read: true });
       const stat = await file.stat();
 
       // If File instance is a directory, lookup for an index.html
       if (stat.isDirectory) {
         file.close();
-        const filePath = path.join('../Application/rogue/', filepath, 'index.html');
+        const filePath = Deno.args[0] || path.join('../Application/rogue/', filepath, 'index.html');
         file = await Deno.open(filePath, { read: true });
       }
     } catch {
