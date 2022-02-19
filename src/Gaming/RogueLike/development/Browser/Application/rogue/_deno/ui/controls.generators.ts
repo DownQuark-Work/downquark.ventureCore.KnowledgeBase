@@ -9,7 +9,6 @@ const setCellularAutomataArgs = () => {
     generatorArgs[arg.dataset.genAttr || 'gw'] = parseInt(arg.innerText,10)
   })
 
-  // TODO: get values from form fields so they can be updated @ runtime
   generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }), () => {document?.getElementById('generate-button')?.removeAttribute('disabled')})
 }
 (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText = new Date().getTime().toString()
