@@ -77,7 +77,7 @@ const createBridge = (brdg: Array<number[]>) => {
       if (
         keyCell < CorridorReturnObject.CorridorAutomata[0].length
         && !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]]) // only draw on open spaces
-        && CorridorReturnObject.CorridorAutomata[0][keyCell] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] !== '#' // limit to 2 width
+        && CorridorReturnObject.CorridorAutomata[0][keyCell] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] !== '#' // limit width of corridor
         && CorridorReturnObject.CorridorAutomata[0][keyCell] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] !== '#'
       ) {
         CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]] = '#'; // brdgId+'#'
