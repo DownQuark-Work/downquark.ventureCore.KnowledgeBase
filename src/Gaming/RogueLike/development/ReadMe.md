@@ -23,6 +23,8 @@ https://deno.land/manual@v1.18.1/tools/compiler
 ## Rogue
 convert [this](http://bfnightly.bracketproductions.com/rustbook/chapter_0.html) to javascript
 
+### [Room Generation](https://www.pinterest.com/pin/3870349670306539/) <-- _really_ cool
+
 http://roguebasin.com/index.php/Articles << AMAZING resource
 - http://roguebasin.com/index.php/Articles#AI
 - http://roguebasin.com/index.php/Articles#Map

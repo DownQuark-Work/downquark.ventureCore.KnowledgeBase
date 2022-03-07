@@ -1,4 +1,5 @@
 // deno bundle -c deno.jsonc ./ui/controls.generators.ts ../js/rogue/generate.dungeon.bundle.js
+// nethack is 63x18 || 73x19
 import {generateDungeon} from '../generators/dungeon.ts'
 
 const setCellularAutomataArgs = () => {

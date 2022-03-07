@@ -1,4 +1,5 @@
 https://itch.io/jam/procjam
+https://procgen.space/resources
 
  Dungeon / Room: https://gamedevelopment.tutsplus.com/tutorials/create-a-procedurally-generated-dungeon-cave-system--gamedev-10099
       - http://roguebasin.com/?title=Basic_BSP_Dungeon_generation
@@ -30,3 +31,6 @@ In a different direction - use this to generate mock data for testing/etc
 
   go to lib: https://github.com/Tw1ddle/MarkovNameGenerator
   https://www.cssportal.com/css-generators.php
+
+Insp:
+- [https://www.reddit.com/r/proceduralgeneration/comments/sxmvz8/inspired_by_other_posts_here_i_tried_my_hand_at_a/](spellboook generator)

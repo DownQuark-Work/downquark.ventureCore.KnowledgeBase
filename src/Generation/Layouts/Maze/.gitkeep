@@ -1,4 +1,6 @@
 https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap
+
+https://joeiddon.github.io/projects/javascript/maze_generation
 - backtracker (above) \[less dead ends]
 - prim (above) \[more dead ends]
 - [sidewinder](https://hurna.io/academy/algorithms/maze_generator/sidewinder.html) \[fast]
@@ -8,7 +10,5 @@ https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap
 woah: http://www.astrolog.org/labyrnth/algrithm.htm
  http://roguebasin.com/index.php/Simple_maze#Maze_Generator_in_Javascript
  http://roguebasin.com/index.php/Dynamically_Sized_Maze
-
- https://joeiddon.github.io/projects/javascript/maze_generation
 
  http://www.astrolog.org/labyrnth/algrithm.htm
