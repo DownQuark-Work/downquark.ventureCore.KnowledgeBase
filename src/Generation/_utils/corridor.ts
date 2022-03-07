@@ -19,9 +19,9 @@ const FloodFillArguments: {[k:string]:any} = {
   FloodFilledAutomata:[[['NOT_YET_SET']]]
 }
   
-const corridorMapIndexes: Array<number[]> = [];
+let corridorMapIndexes: Array<number[]> = [];
 // determine access points
-const determineAccessPoints = () => { // REFACTORED FNC START
+const determineAccessPoints = () => {
   CorridorReturnObject.seedArg = FloodFillArguments.seedArg;
   CorridorReturnObject.verifySeed = FloodFillArguments.verifySeed;
   CorridorReturnObject.CorridorAutomata = [
@@ -49,16 +49,21 @@ FloodFillArguments.RoomAmount.forEach((rm: number) => {
     }
     return arr;
   };
-  const toShuffle = [...Array(rm).keys()];
-  let hasShuffled = shuffleArray([...toShuffle]);
+  let toShuffle = [], // reset arrays for multiple generations to remain consistent
+    hasShuffled:number[] = []
+  corridorMapIndexes = []
+
+  toShuffle = [...Array(Math.ceil(rm/2)).keys()];
+  hasShuffled = shuffleArray([...Array(Math.floor(rm/2)).keys()].map(i => i+toShuffle.length));
   hasShuffled = shuffleArray([...hasShuffled]);
 
   toShuffle.forEach((rm, indx) => {
     if (rm === hasShuffled[indx]) indx = indx === 0 ? 1 : 0;
-    corridorMapIndexes.push([rm, hasShuffled[indx]]);
+    const crdr = hasShuffled[indx] || hasShuffled[0]
+    corridorMapIndexes.push([rm, crdr]);
   });
 });
-} // determineAccessPoints REFACTORED FNC END
+}
 
 const createBridge = (brdg: Array<number[]>) => {
   const [s, e] = brdg;
@@ -69,7 +74,11 @@ const createBridge = (brdg: Array<number[]>) => {
   function bridgeRows() {
     for (let i = 0; i < Math.abs(deltaRow); i++) {
       const keyCell = s[0] + i * Math.max(Math.min(deltaRow, 1), -1);
-      if (!/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]])) {
+      if (
+        !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]]) // only draw on open spaces
+        && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] !== '#' // limit to 2 width
+        && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] !== '#'
+      ) {
         CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]] = '#'; // brdgId+'#'
       }
     }
@@ -77,7 +86,11 @@ const createBridge = (brdg: Array<number[]>) => {
   function bridgeColumns() {
     for (let i = 0; i < Math.abs(deltaCol); i++) {
       const keyCell = s[1] + i * Math.max(Math.min(deltaCol, 1), -1);
-      if (!/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])) {
+      if (
+        !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])
+        && CorridorReturnObject.CorridorAutomata[0][e[0]-1][keyCell] !== '#'
+        && CorridorReturnObject.CorridorAutomata[0][e[0]+1][keyCell] !== '#'
+      ) {
         CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell] = '#'; // brdgId+'#'
       }
     }

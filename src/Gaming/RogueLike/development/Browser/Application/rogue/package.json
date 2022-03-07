@@ -7,7 +7,7 @@
   "author": "",
   "scripts": {
     "build": "parcel build index.html",
-    "dev": "echo $(caddy file-server --listen :1313)",
+    "dev": "yarn dev:bundle && echo $(open http://localhost:1313 && caddy file-server --listen :1313)",
     "dev:bundle": "deno bundle -c _deno/deno.jsonc _deno/ui/controls.generators.ts ./js/rogue/generate.dungeon.bundle.js",
     "dev:parcel": "parcel index.html --open",
     "start": "npm run build && npm run dev",
