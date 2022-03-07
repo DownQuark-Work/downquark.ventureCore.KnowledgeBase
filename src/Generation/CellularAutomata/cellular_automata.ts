@@ -169,7 +169,7 @@ const onGridAndSeedInit = () => {
   }
 }
 
-let gridW:number, gridH:number, seedArg:string[], iterationsRemaining:number = 0, grd:any
+let gridW:number, gridH:number, seedArg:string[], iterationsRemaining = 0, grd:any
 // Browser
 export const initCellularAutomata = (props:{gw?:number, gh?:number, sa?:number, ir?:number}) => {
   _DEBUG && console.log('props', props)
