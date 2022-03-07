@@ -75,9 +75,10 @@ const createBridge = (brdg: Array<number[]>) => {
     for (let i = 0; i <= Math.abs(deltaRow); i++) {
       const keyCell = s[0] + i * Math.max(Math.min(deltaRow, 1), -1);
       if (
-        !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]]) // only draw on open spaces
-        && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] !== '#' // limit to 2 width
-        && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] !== '#'
+        keyCell < CorridorReturnObject.CorridorAutomata[0].length
+        && !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]]) // only draw on open spaces
+        && CorridorReturnObject.CorridorAutomata[0][keyCell] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]-1] !== '#' // limit to 2 width
+        && CorridorReturnObject.CorridorAutomata[0][keyCell] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] && CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]+1] !== '#'
       ) {
         CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]] = '#'; // brdgId+'#'
       }
@@ -87,9 +88,10 @@ const createBridge = (brdg: Array<number[]>) => {
     for (let i = 0; i <= Math.abs(deltaCol); i++) {
       const keyCell = s[1] + i * Math.max(Math.min(deltaCol, 1), -1);
       if (
-        !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])
-        && CorridorReturnObject.CorridorAutomata[0][e[0]-1][keyCell] !== '#'
-        && CorridorReturnObject.CorridorAutomata[0][e[0]+1][keyCell] !== '#'
+        keyCell < CorridorReturnObject.CorridorAutomata[0][0].length
+        && !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])
+        && CorridorReturnObject.CorridorAutomata[0][e[0]-1] && CorridorReturnObject.CorridorAutomata[0][e[0]-1][keyCell] && CorridorReturnObject.CorridorAutomata[0][e[0]-1][keyCell] !== '#'
+        && CorridorReturnObject.CorridorAutomata[0][e[0]+1] && CorridorReturnObject.CorridorAutomata[0][e[0]+1][keyCell] && CorridorReturnObject.CorridorAutomata[0][e[0]+1][keyCell] !== '#'
       ) {
         CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell] = '#'; // brdgId+'#'
       }

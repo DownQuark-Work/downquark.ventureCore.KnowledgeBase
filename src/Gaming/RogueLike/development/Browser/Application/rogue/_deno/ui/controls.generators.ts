@@ -2,8 +2,8 @@
 // nethack is 63x18 || 73x19
 import {generateDungeon} from '../generators/dungeon.ts'
 
-const createSeedHash = () => {
-  const hashSeed = new Date().getTime().toString()
+const createSeedHash = (s = null) => {
+  const hashSeed = s || new Date().getTime().toString()
   window.location.hash = hashSeed
 }
 const setCellularAutomataArgs = () => {
@@ -19,6 +19,9 @@ const setCellularAutomataArgs = () => {
     createSeedHash()
     generatorArgs.sa = parseInt(window.location.hash.replace('#',''))
   }
+  const seedInputText = (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText
+  if( seedInputText.length && window.location.hash !== '#' + seedInputText) // reflect manual seed update
+  { window.location.hash = (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText}
 
   generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }), () => {document?.getElementById('generate-button')?.removeAttribute('disabled')})
 }
@@ -32,7 +35,6 @@ if(typeof document !== 'undefined') {
     setCellularAutomataArgs()
   })
   document?.querySelectorAll('li')?.forEach(li => li.addEventListener('click',(e) => {
-    console.log('e', (e.target as HTMLLIElement)?.innerText)
     const seedit = (e.target as HTMLLIElement)?.innerText.split(' ')
     const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
     seedit.forEach((sd,indx) => {
