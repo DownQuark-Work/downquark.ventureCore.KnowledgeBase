@@ -72,7 +72,7 @@ const createBridge = (brdg: Array<number[]>) => {
     deltaCol = e[1] - s[1];
 
   function bridgeRows() {
-    for (let i = 0; i < Math.abs(deltaRow); i++) {
+    for (let i = 0; i <= Math.abs(deltaRow); i++) {
       const keyCell = s[0] + i * Math.max(Math.min(deltaRow, 1), -1);
       if (
         !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][keyCell][s[1]]) // only draw on open spaces
@@ -84,7 +84,7 @@ const createBridge = (brdg: Array<number[]>) => {
     }
   }
   function bridgeColumns() {
-    for (let i = 0; i < Math.abs(deltaCol); i++) {
+    for (let i = 0; i <= Math.abs(deltaCol); i++) {
       const keyCell = s[1] + i * Math.max(Math.min(deltaCol, 1), -1);
       if (
         !/⊡/g.test(CorridorReturnObject.CorridorAutomata[0][e[0]][keyCell])
