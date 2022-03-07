@@ -25,4 +25,19 @@ const setCellularAutomataArgs = () => {
 if(!window.location.hash) { createSeedHash() }
 (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
 
-typeof document !== 'undefined' && document?.getElementById('generate-button')?.addEventListener('click',setCellularAutomataArgs)
+if(typeof document !== 'undefined') {
+  document?.getElementById('generate-button')?.addEventListener('click',setCellularAutomataArgs)
+  document?.getElementById('generate-random-button')?.addEventListener('click',() => {
+    (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText = ''
+    setCellularAutomataArgs()
+  })
+  document?.querySelectorAll('li')?.forEach(li => li.addEventListener('click',(e) => {
+    console.log('e', (e.target as HTMLLIElement)?.innerText)
+    const seedit = (e.target as HTMLLIElement)?.innerText.split(' ')
+    const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
+    seedit.forEach((sd,indx) => {
+      spans[indx].innerText = sd
+    })
+    setCellularAutomataArgs()
+  }))
+}
