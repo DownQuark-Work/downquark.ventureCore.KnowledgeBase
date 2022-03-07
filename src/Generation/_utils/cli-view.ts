@@ -1,13 +1,39 @@
-export const renderGrid = (Grid:Array<number[]|string[]>, _DEBUG = false) => {
-  !_DEBUG && console.clear()
-  const topBorder = [...Array(Grid[0].length+2).fill('_')],
-    bottomBorder = [...Array(Grid[0].length+2).fill('—')]
-  console.log(...topBorder)
+import { RENDER_MAZE_AS } from '../Layouts/Maze/_settings.ts'
+
+type RenderGridOptionsType = {
+  type?: string,
+}
+
+const renderDefaultGrid = (Grid:Array<number[]|string[]>) => {
   Grid.forEach((row: number[]|string[]) => {
     const graphics = row.map(i => i.toString() === '#' ? '#' : /⊡|^1$/g.test(i.toString()) ? '🀫' : ' ')
     const gRow = ['|', ...graphics, '|']
     console.log(...gRow)
   })
+}
+const renderWalledGrid = (Grid:Array<number[]|string[]>) => {
+  Grid.forEach((row: number[]|string[]) => {
+    const graphics = row.map(i => i.toString() === '#' ? '#' : /⊡|^1$/g.test(i.toString()) ? '🀫' : ' ')
+    const gRow = ['|', ...graphics, '|']
+    console.log(...gRow)
+  })
+}
+
+export const renderGrid = (Grid:Array<number[]|string[]>, opts:RenderGridOptionsType = {}, _DEBUG = false) => {
+  _DEBUG && console.log('opts', opts)
+  !_DEBUG && console.clear()
+  const topBorder:'_'[] = [...Array(Grid[0].length+2).fill('_')],
+    bottomBorder:'-'[] = [...Array(Grid[0].length+2).fill('—')]
+  console.log(...topBorder)
+  
+  switch(opts.type)
+  {
+    case RENDER_MAZE_AS.WALLED:
+      renderWalledGrid(Grid); break
+    default:
+      renderDefaultGrid(Grid)
+  }
+  
   console.log(...bottomBorder)
 }
 

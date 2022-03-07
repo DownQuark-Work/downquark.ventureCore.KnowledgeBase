@@ -1,5 +1,6 @@
 // deno run Layouts/Maze/base.ts 13 13
 import {renderGrid} from '../../_utils/cli-view.ts'
+import { SETTINGS } from './_settings.ts'
 const maze = {
   Grid:[[0]]
 }
@@ -64,4 +65,4 @@ const init = (rowAmt:number,colAmt:number) => {
 }
 
 (typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10)) // CLI
-export const setMazeProps = (c:number=0,r:number=0) => { init(r,c) } // Browser
+export const setMazeProps = (c=0,r=0) => { init(r,c) } // Browser
