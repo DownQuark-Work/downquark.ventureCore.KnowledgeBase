@@ -16,33 +16,27 @@ CELL_STATE[RENDER_MAZE_AS.PASSAGE] = {
   CONCRETE: 0,
   CARVED: 1,
 }
-CELL_STATE[RENDER_MAZE_AS.WALLED] = { // prime numbers allow for eashy combinations
-  OPEN: 0, // unchecked
-  BOTTOM: 1,
-  LEFT: 3,
-  RIGHT: 5, 
-  TOP: 7,
+/*
+  CELL_STATE[RENDER_MAZE_AS.WALLED] values
+  correspond to WALL_BORDER_MAP array
+  [0,0,0,0] =>  NO borders shown on tile
+  [1,1,1,1] => ALL sides display border
+  [0,1,1,0] => LEFT && RIGHT sides display border
+  ... etc
+*/
+CELL_STATE[RENDER_MAZE_AS.WALLED] = {
+  OPEN: 10, // unchecked
+  BOTTOM: 0,
+  LEFT: 1,
+  RIGHT: 2, 
+  TOP: 3,
 }
-
-const WALLED_STATE_IMAGE_MAP = {
-  0: '🀫', // blocks the path
-  // BASIC
-  1: '_',
-  3: '⎜',
-  5: '⎟',
-  7: '¯', // ￣
-  // CORNERS
-  4: '⎣',
-  6: '⎦',
-  10: '⎡',
-  12: '⎤',
-  z:'⨅⨆⊐⊏][]'
-}
+const WALL_BORDER_MAP = [0,0,0,0]
 
 export const SETTINGS = {
   CELL_STATE,
   GRID_HEIGHT,
   GRID_WIDTH,
   RENDER_MAZE_AS,
-  WALLED_STATE_IMAGE_MAP
+  WALL_BORDER_MAP
 }
