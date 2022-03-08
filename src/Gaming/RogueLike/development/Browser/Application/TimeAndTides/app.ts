@@ -1,3 +1,4 @@
+// deno run --allow-net --allow-read app.ts # --allow-read is required for loading data from the public/static folder
 import { Drash } from './deps.ts'
 
 import LandingResource from './resources/Landing.ts'
