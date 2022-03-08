@@ -1,7 +1,7 @@
 # Qiuck Start
 ```
 cd ./Browser/Network
-deno run --allow-read --allow-net fileserver.ts
+deno run -c ../../deno.jsonc --allow-read --allow-net fileserver.ts
 # pass argument to overwrite default file path
 # cd ./Browser/Network
 # deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
