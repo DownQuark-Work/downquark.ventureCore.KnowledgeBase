@@ -24,7 +24,8 @@ export class StaticFilesResource extends Drash.Resource {
   //   .* - This means it will match anything, such as /_public/hello, /_public/very/deep/path
   //   \. - A literal ".", because as this is a files resource, the request url should have an extension: ".css"
   //   (jpg|png|svg|css|js) - Following the ".", the path should end in ONE of these values
-  paths = ["/favicon.ico", "/_public/.*\.(jpg|png|svg|css|js)"];
+  // paths = ["/favicon.ico", "/_public/.*\.(jpg|png|svg|css|js)"];
+  paths = ["/_public/.*\.(jpg|png|svg|css|js)"];
 
   public GET(request: Drash.Request, response: Drash.Response) {
     const path = new URL(request.url).pathname;
