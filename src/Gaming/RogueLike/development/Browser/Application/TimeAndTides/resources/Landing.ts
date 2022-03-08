@@ -15,7 +15,12 @@ export default class LandingResource extends Drash.Resource {
 
     if(request.queryParam('redir')) {
       // test with: http://0.0.0.0:1447/q/32?redir=mudpie
-      this.redirect("https://downquark.work", response, 301)
+      this.redirect(
+        'https://downquark.work',
+        response,
+        301,
+        { "X-DOWNQUARK-HEADER": "dq.work", },
+        )
     }
 
     const reqparam = request.pathParam("reqParam");
