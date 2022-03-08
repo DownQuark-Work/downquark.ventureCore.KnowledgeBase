@@ -20,7 +20,7 @@ $ curl --header "Content-Type: application/x-www-form-urlencoded" --request POST
 
 /*
 COOKIE VALIDATION
-$ curl --cookie qookie=chocolate http://localhost:1447
+$ curl --cookie qookie=chocolate --request POST  http://localhost:1447/bodyparse
 
 SEE `../Landing.ts` for examples of (required & optional) path param handling
 */
