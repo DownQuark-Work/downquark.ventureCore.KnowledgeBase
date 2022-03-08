@@ -5,13 +5,17 @@ const maze = {
   Grid:[[0]]
 }
 
-type CellStateType = 'CARVED' | 'CONSIDER' | 'CONCRETE' | 'CREATED'
+
 class Cell {
-  state:CellStateType
+  _state:number
   readonly column:number
   readonly row:number
-  constructor(row:number, column:number, state:CellStateType = 'CREATED'){
-    this.state = state
+  
+  get state() { return this._state }
+  set state(s:number) { this._state = s }
+  
+  constructor(row:number, column:number, state = SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CREATED){
+    this._state = state
     this.column = column
     this.row = row
   }
@@ -20,26 +24,26 @@ class Cell {
 class Grid {
   readonly amtColumn:number
   readonly amtRow:number
-  private _grid:Array<Array<Cell>>
+  #grid:Array<Array<Cell>>
   constructor(amtColumn:number, amtRow:number) {
     this.amtColumn = (amtColumn%2===0) ? amtColumn : amtColumn++ // columns and rows
     this.amtRow = (amtRow%2===0) ? amtRow : amtRow++             // must be odd
-    // this._grid = this.constructGrid(amtColumn,amtRow)
-    this._grid = [new Array(amtColumn+2).fill(null).map((_i,indx) => new Cell(0,indx,'CONCRETE'))] // +2 for edges
+    // this.#grid = this.constructGrid(amtColumn,amtRow)
+    this.#grid = [new Array(amtColumn+2).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))] // +2 for edges
     this.constructGrid()
-    // this._grid.push([new Array(amtColumn+2).fill(null).map(i => new Cell(this._grid.length-1,i,'CONCRETE'))]) // +2 for edges
+    // this.#grid.push([new Array(amtColumn+2).fill(null).map(i => new Cell(this.#grid.length-1,i,'CONCRETE'))]) // +2 for edges
   }
 
   constructGrid = ()=>{
     for(let curRow = 0; curRow < this.amtRow; curRow++) {
-      const c = [new Cell(curRow,0,'CONCRETE')]
+      const c = [new Cell(curRow,0,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
       for(let curCol = 0; curCol < this.amtColumn; curCol++) {
-        c.push(new Cell(curRow,curCol,curCol%2===0 ? 'CARVED' : 'CONCRETE'))
+        c.push(new Cell(curRow,curCol,curCol%2===0 ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))
         // c.push(curRow%2!==0 ? 0 : curCol%2===0 ? 1 : 0 )
       }
-      c.push(new Cell(curRow,this._grid[0].length,'CONCRETE'))
+      c.push(new Cell(curRow,this.#grid[0].length,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))
       console.log('c', c)
-      // this._grid[0].push(c) // MAKE SURE TO ADD THIS LINE: NEEDED
+      // this.#grid[0].push(c) // MAKE SURE TO ADD THIS LINE: NEEDED
     }
   }
 }
