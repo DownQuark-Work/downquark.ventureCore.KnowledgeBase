@@ -41,6 +41,9 @@ $ curl --header "Content-Type: application/x-www-form-urlencoded" --request POST
 
   // used for multipart form updates
   public GET(request: Drash.Request, response: Drash.Response): void {
+    // for query param example navigate to:
+      // http://0.0.0.0:1447/bodyparse?q=🤓
+    console.log('request.queryParam("name")', request.queryParam("q"))
     return response.html(
       `<!DOCTYPE html>
         <html>
