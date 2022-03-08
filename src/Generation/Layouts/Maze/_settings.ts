@@ -18,7 +18,7 @@ CELL_STATE[RENDER_MAZE_AS.PASSAGE] = {
 }
 /*
   CELL_STATE[RENDER_MAZE_AS.WALLED] values
-  correspond to WALL_BORDER_MAP array
+  correspond to the ACTIVE_WALLS array
   [0,0,0,0] =>  NO borders shown on tile
   [1,1,1,1] => ALL sides display border
   [0,1,1,0] => LEFT && RIGHT sides display border
@@ -31,12 +31,12 @@ CELL_STATE[RENDER_MAZE_AS.WALLED] = {
   RIGHT: 2, 
   TOP: 3,
 }
-const WALL_BORDER_MAP = [0,0,0,0]
+const ACTIVE_WALLS = [0,0,0,0]
 
 export const SETTINGS = {
   CELL_STATE,
   GRID_HEIGHT,
   GRID_WIDTH,
   RENDER_MAZE_AS,
-  WALL_BORDER_MAP
+  ACTIVE_WALLS
 }

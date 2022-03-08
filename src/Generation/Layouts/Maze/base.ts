@@ -1,8 +1,10 @@
 // deno run Layouts/Maze/base.ts 13 13
+// deno run Layouts/Maze/base.ts 13 13 RENDER_MAZE_AS.WALLED
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { SETTINGS } from './_settings.ts'
 const maze = {
-  Grid:[[0]]
+  Grid:{flatGrid:[[0]]},
+  Type: SETTINGS.RENDER_MAZE_AS.PASSAGE
 }
 
 class Cell {
@@ -13,7 +15,7 @@ class Cell {
   get state() { return this._state as any }
   set state(s:number) { this._state = s }
   
-  constructor(row:number, column:number, state = SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CREATED){
+  constructor(row:number, column:number, state:number|number[] = SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CREATED){
     this._state = state
     this.column = column
     this.row = row
@@ -28,8 +30,7 @@ class Grid {
 
   get flatGrid() { return this._flatGrid }
 
-  constructor(amtColumn:number, amtRow:number, mazeType:string) {
-    console.log('mazeType', mazeType)
+  constructor(amtColumn:number, amtRow:number) {
     this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
     this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
 
@@ -43,27 +44,30 @@ class Grid {
       const c = [],
             f = []
       for(let curCol = 0; curCol < this.amtColumn; curCol++) {
-        const cell = new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
-          ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
-          : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
+        const cell = maze.Type === SETTINGS.RENDER_MAZE_AS.WALLED
+          ? new Cell(curRow,curCol,SETTINGS.ACTIVE_WALLS)
+          : new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
+            ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
+            : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
         c.push(cell)
         f.push(cell.state)
       }
       this.#grid.push(c)
       this._flatGrid.push(f)
     }
-    console.log('this.#grid', this.#grid)
+    // console.log('this.#grid', this.#grid)
   }
 }
 
-const init = (rowAmt:number,colAmt:number,mazeType = SETTINGS.RENDER_MAZE_AS.PASSAGE) => {
-  const MazeGrid = new Grid(colAmt, rowAmt, mazeType)
-  maze.Grid = MazeGrid.flatGrid
+const init = (rowAmt:number,colAmt:number,mazeType:string) => {
+  if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) maze.Type = SETTINGS.RENDER_MAZE_AS.WALLED
+  // const MazeGrid = new Grid(colAmt, rowAmt)
+  maze.Grid = new Grid(colAmt, rowAmt)
   if (typeof Deno !== 'undefined') {
     // console.log('maze.Grid', maze.Grid)
-    // renderGrid(maze.Grid)
+    maze.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(maze.Grid.flatGrid) // will need a new CLI render method for walled maze
   }
 }
 
-(typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10)) // CLI
-export const setMazeProps = (c=0,r=0) => { init(r,c) } // Browser
+(typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10),Deno.args[2]) // CLI
+export const setMazeProps = (c=0,r=0,t='') => { init(r,c,t) } // Browser
