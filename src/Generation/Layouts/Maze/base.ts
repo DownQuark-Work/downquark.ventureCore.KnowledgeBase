@@ -6,11 +6,11 @@ const maze = {
 }
 
 class Cell {
-  _state:number
+  _state:number|number[]
   readonly column:number
   readonly row:number
   
-  get state() { return this._state }
+  get state() { return this._state as any }
   set state(s:number) { this._state = s }
   
   constructor(row:number, column:number, state = SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CREATED){
@@ -33,16 +33,16 @@ class Grid {
     this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
     this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
 
-    this.#grid = [new Array(this.amtColumn).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))]
-    this._flatGrid = [new Array(this.amtColumn).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
+    this.#grid = []
+    this._flatGrid = []
     this.constructGrid()
   }
 
   constructGrid = ()=>{
-    for(let curRow = 1; curRow < this.amtRow; curRow++) { // starting at index 1 because first row was added above
-      const c = [new Cell(curRow,0,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)] // 0 index will always be CONCRETE
-      const f = [SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE]
-      for(let curCol = 1; curCol < this.amtColumn; curCol++) {
+    for(let curRow = 0; curRow < this.amtRow; curRow++) { // starting at index 1 because first row was added above
+      const c = [],
+            f = []
+      for(let curCol = 0; curCol < this.amtColumn; curCol++) {
         const cell = new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
           ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
           : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
@@ -52,7 +52,7 @@ class Grid {
       this.#grid.push(c)
       this._flatGrid.push(f)
     }
-    // console.log('this.#grid', this.#grid)
+    console.log('this.#grid', this.#grid)
   }
 }
 
@@ -61,7 +61,7 @@ const init = (rowAmt:number,colAmt:number,mazeType = SETTINGS.RENDER_MAZE_AS.PAS
   maze.Grid = MazeGrid.flatGrid
   if (typeof Deno !== 'undefined') {
     // console.log('maze.Grid', maze.Grid)
-    renderGrid(maze.Grid)
+    // renderGrid(maze.Grid)
   }
 }
 
