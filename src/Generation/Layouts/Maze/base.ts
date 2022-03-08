@@ -24,27 +24,41 @@ class Cell {
 class Grid {
   readonly amtColumn:number
   readonly amtRow:number
-  #grid:Array<Array<Cell>>
+  _flatGrid:Array<number[]> = []
+  #grid:Array<any[]>
+
+  get flatGrid() { return this._flatGrid }
+
   constructor(amtColumn:number, amtRow:number) {
-    this.amtColumn = (amtColumn%2===0) ? amtColumn : amtColumn++ // columns and rows
-    this.amtRow = (amtRow%2===0) ? amtRow : amtRow++             // must be odd
-    // this.#grid = this.constructGrid(amtColumn,amtRow)
-    this.#grid = [new Array(amtColumn+2).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))] // +2 for edges
+    this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
+    this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
+    // console.log('this.amtColumn,amtColumn', this.amtColumn,amtColumn)
+    // console.log('this.amtRow', this.amtRow, amtRow)
+    // this.amtColumn += 2 // +2 for edges
+    this.#grid = [new Array(amtColumn).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))] // minus 1 for zero index
+    this._flatGrid = [new Array(amtColumn).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
+    // console.log('this.#grid', this.#grid)
     this.constructGrid()
-    // this.#grid.push([new Array(amtColumn+2).fill(null).map(i => new Cell(this.#grid.length-1,i,'CONCRETE'))]) // +2 for edges
   }
 
   constructGrid = ()=>{
-    for(let curRow = 0; curRow < this.amtRow; curRow++) {
-      const c = [new Cell(curRow,0,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
-      for(let curCol = 0; curCol < this.amtColumn; curCol++) {
-        c.push(new Cell(curRow,curCol,curCol%2===0 ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))
-        // c.push(curRow%2!==0 ? 0 : curCol%2===0 ? 1 : 0 )
+    for(let curRow = 1; curRow < this.amtRow; curRow++) { // starting at index 1 because first row was added above
+      const c = [new Cell(curRow,0,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)] // 0 index will always be CONCRETE
+      const f = [SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE]
+      for(let curCol = 1; curCol < this.amtColumn; curCol++) {
+        const cell = new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
+          ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
+          : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
+        c.push(cell)
+        f.push(cell.state)
       }
-      c.push(new Cell(curRow,this.#grid[0].length,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))
-      console.log('c', c)
-      // this.#grid[0].push(c) // MAKE SURE TO ADD THIS LINE: NEEDED
+      // c.push(new Cell(curRow,this.amtColumn,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)) // final index will always be CONCRETE
+      // f.push(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
+
+      this.#grid.push(c)
+      this._flatGrid.push(f)
     }
+    console.log('this.#grid', this.#grid)
   }
 }
 
@@ -52,20 +66,21 @@ const init = (rowAmt:number,colAmt:number) => {
   console.info('REPLACE BELOW WITH ABOVE')
   if (colAmt%2===0) colAmt++ // columns and rows
   if (rowAmt%2===0) rowAmt++ // must be odd
-  const Grid = [new Array(colAmt+2).fill(0)] // +2 for edges
-  for(let curRow = 0; curRow < rowAmt; curRow++) {
-    const c = [0]
-    for(let curCol = 0; curCol < colAmt; curCol++) {
-      c.push(curRow%2!==0 ? 0 : curCol%2===0 ? 1 : 0 )
-    }
-    c.push(0)
-    Grid.push(c)
-  }
-  Grid.push(new Array(colAmt+2).fill(0))
-  maze.Grid = Grid
-  console.info('REPLACE ABOVE WITH HIGH ABOVE')
-  console.log('maze.Grid', maze.Grid)
-  renderGrid(maze.Grid)
+  // const Grid = [new Array(colAmt+2).fill(0)] // +2 for edges
+  // for(let curRow = 0; curRow < rowAmt; curRow++) {
+  //   const c = [0]
+  //   for(let curCol = 0; curCol < colAmt; curCol++) {
+  //     c.push(curRow%2!==0 ? 0 : curCol%2===0 ? 1 : 0 )
+  //   }
+  //   c.push(0)
+  //   Grid.push(c)
+  // }
+  // Grid.push(new Array(colAmt+2).fill(0))
+  const MazeGrid = new Grid(colAmt, rowAmt)
+  maze.Grid = MazeGrid.flatGrid
+  // console.info('REPLACE ABOVE WITH HIGH ABOVE')
+  // console.log('maze.Grid', maze.Grid)
+  // renderGrid(maze.Grid)
 }
 
 (typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10)) // CLI
