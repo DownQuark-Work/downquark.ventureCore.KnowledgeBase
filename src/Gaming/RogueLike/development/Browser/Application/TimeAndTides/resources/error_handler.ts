@@ -22,6 +22,8 @@ export class InvalidReqParamsError extends Error {
 
 // Trigger with:
 // `$ curl -X POST -v http://localhost:1447/home`
+// Valid one for sanity:
+// `$ curl -X POST -v -H "Content-Type: application/json" -d '{"params":"hello"}' localhost:1447/home`
 export class InvalidPOSTReqParamsError extends Error {
   public code = 400;
   constructor(message?: string) {
