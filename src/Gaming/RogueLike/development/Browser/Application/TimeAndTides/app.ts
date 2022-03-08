@@ -4,10 +4,12 @@
 // $ curl -X DELETE http://localhost:1447
 import { Drash } from './deps.ts'
 
-import LandingResource from './resources/Landing.ts'
-import { StaticFilesResource } from './resources/_examples/static_files_resource.ts'
 import { DqErrorHandler } from './resources/error_handler.ts'
 
+import LandingResource from './resources/Landing.ts'
+
+import { BodyParsingResource } from './resources/_examples/requests.ts'
+import { StaticFilesResource } from './resources/_examples/static_files_resource.ts'
 import { PrefixedExampleResource as v1PrefixedExampleResource } from './resources/_examples/prefixed/v1/prefix_resource.ts';
 import { PrefixedExampleResource as v2PrefixedExampleResource } from './resources/_examples/prefixed/v2/prefix_resource.ts';
 
@@ -39,9 +41,10 @@ const server = new Drash.Server({
   port: 1447,
   protocol: "http",
   resources: [
-    StaticFilesResource,
-    LandingResource,
+    BodyParsingResource,
     HomeResource,
+    LandingResource,
+    StaticFilesResource,
     v1PrefixedExampleResource,
     v2PrefixedExampleResource,
   ],
