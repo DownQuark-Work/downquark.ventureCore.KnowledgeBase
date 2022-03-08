@@ -2,7 +2,10 @@
 // deno run Layouts/Maze/base.ts 13 13 RENDER_MAZE_AS.WALLED
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { SETTINGS } from './_settings.ts'
-const maze = {
+
+const _DEBUG = false
+
+const mazeReturnObject = {
   Grid:{flatGrid:[[0]]},
   Type: SETTINGS.RENDER_MAZE_AS.PASSAGE
 }
@@ -44,7 +47,7 @@ class Grid {
       const c = [],
             f = []
       for(let curCol = 0; curCol < this.amtColumn; curCol++) {
-        const cell = maze.Type === SETTINGS.RENDER_MAZE_AS.WALLED
+        const cell = mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED
           ? new Cell(curRow,curCol,SETTINGS.ACTIVE_WALLS)
           : new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
             ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
@@ -55,18 +58,17 @@ class Grid {
       this.#grid.push(c)
       this._flatGrid.push(f)
     }
-    // console.log('this.#grid', this.#grid)
+    _DEBUG && console.log('this.#grid', this.#grid)
   }
 }
 
 const init = (rowAmt:number,colAmt:number,mazeType:string) => {
-  if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) maze.Type = SETTINGS.RENDER_MAZE_AS.WALLED
-  // const MazeGrid = new Grid(colAmt, rowAmt)
-  maze.Grid = new Grid(colAmt, rowAmt)
-  if (typeof Deno !== 'undefined') {
-    // console.log('maze.Grid', maze.Grid)
-    maze.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(maze.Grid.flatGrid) // will need a new CLI render method for walled maze
-  }
+  if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) mazeReturnObject.Type = SETTINGS.RENDER_MAZE_AS.WALLED
+  mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
+    // return if running in Browser
+  if (typeof Deno === 'undefined') { console.log('mazeReturnObject', mazeReturnObject); return mazeReturnObject }
+  _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(mazeReturnObject.Grid.flatGrid) // will need a new CLI render method for walled maze
+  console.log(JSON.stringify(mazeReturnObject))
 }
 
 (typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10),Deno.args[2]) // CLI
