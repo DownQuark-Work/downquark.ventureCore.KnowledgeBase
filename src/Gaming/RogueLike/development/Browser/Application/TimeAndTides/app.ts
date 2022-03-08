@@ -11,6 +11,8 @@ import { DqErrorHandler } from './resources/error_handler.ts'
 import { PrefixedExampleResource as v1PrefixedExampleResource } from './resources/_examples/prefixed/v1/prefix_resource.ts';
 import { PrefixedExampleResource as v2PrefixedExampleResource } from './resources/_examples/prefixed/v2/prefix_resource.ts';
 
+import { RequestBodyValidationService } from './services/request_body_validation.ts'
+
 class HomeResource extends Drash.Resource {
   public paths = ["/home"];
 
@@ -18,6 +20,11 @@ class HomeResource extends Drash.Resource {
     return response.json({
       hello: "world",
       time: new Date(),
+    });
+  }
+  public POST(request: Drash.Request, response: Drash.Response): void {
+    return response.json({
+      message: `You made it to the HomeResource! - expect an error!`,
     });
   }
 }
@@ -37,6 +44,9 @@ const server = new Drash.Server({
     HomeResource,
     v1PrefixedExampleResource,
     v2PrefixedExampleResource,
+  ],
+  services: [
+    new RequestBodyValidationService(),
   ],
 });
 

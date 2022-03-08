@@ -7,6 +7,8 @@ import { Drash } from '../deps.ts';
 
 // Create your custom error. This MUST be an extension of Error.
 ////  --> Error will be thrown from ./Landing.ts
+// Trigger error by navigating to:
+// - http://0.0.0.0:1447/q/32?err=jordans
 export class InvalidReqParamsError extends Error {
   // It is a good idea to associate the HTTP status code in your custom error
   // so you can retrieve it as `error.code` in your error handler class
@@ -15,6 +17,15 @@ export class InvalidReqParamsError extends Error {
   constructor(message?: string) {
     // Use the message provided or default to a generic error message
     super(message ?? "Invalid request params received.");
+  }
+}
+
+// Trigger with:
+// `$ curl -X POST -v http://localhost:1447/home`
+export class InvalidPOSTReqParamsError extends Error {
+  public code = 400;
+  constructor(message?: string) {
+    super(message ?? "Invalid request params received in SERVICE on POST");
   }
 }
 
