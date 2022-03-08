@@ -28,12 +28,13 @@ class Grid {
 
   get flatGrid() { return this._flatGrid }
 
-  constructor(amtColumn:number, amtRow:number) {
+  constructor(amtColumn:number, amtRow:number, mazeType:string) {
+    console.log('mazeType', mazeType)
     this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
     this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
 
-    this.#grid = [new Array(amtColumn).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))]
-    this._flatGrid = [new Array(amtColumn).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
+    this.#grid = [new Array(this.amtColumn).fill(null).map((_i,indx) => new Cell(0,indx,SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE))]
+    this._flatGrid = [new Array(this.amtColumn).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)]
     this.constructGrid()
   }
 
@@ -51,16 +52,14 @@ class Grid {
       this.#grid.push(c)
       this._flatGrid.push(f)
     }
+    // console.log('this.#grid', this.#grid)
   }
 }
 
-const init = (rowAmt:number,colAmt:number) => {
-  if (colAmt%2===0) colAmt++ // columns and rows
-  if (rowAmt%2===0) rowAmt++ // must be odd
-  const MazeGrid = new Grid(colAmt, rowAmt)
+const init = (rowAmt:number,colAmt:number,mazeType = SETTINGS.RENDER_MAZE_AS.PASSAGE) => {
+  const MazeGrid = new Grid(colAmt, rowAmt, mazeType)
   maze.Grid = MazeGrid.flatGrid
   if (typeof Deno !== 'undefined') {
-    // console.log('this.#grid', this.#grid)
     // console.log('maze.Grid', maze.Grid)
     renderGrid(maze.Grid)
   }
