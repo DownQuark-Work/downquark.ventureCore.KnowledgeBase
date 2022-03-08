@@ -1,4 +1,5 @@
 import { Drash } from '../deps.ts';
+import { InvalidReqParamsError } from './error_handler.ts'
 
 export default class LandingResource extends Drash.Resource {
   public paths = [
@@ -13,7 +14,7 @@ export default class LandingResource extends Drash.Resource {
   public GET(request: Drash.Request, response: Drash.Response): void {
 
 
-    if(request.queryParam('redir')) {
+    if(request.queryParam('redir')) { // redirect example
       // test with: http://0.0.0.0:1447/q/32?redir=mudpie
       this.redirect(
         'https://downquark.work',
@@ -21,6 +22,11 @@ export default class LandingResource extends Drash.Resource {
         301,
         { "X-DOWNQUARK-HEADER": "dq.work", },
         )
+    }
+
+    if(request.queryParam('err')) { // custom error example
+      // test with: http://0.0.0.0:1447/q/32?err=jordans
+      throw new InvalidReqParamsError();
     }
 
     const reqparam = request.pathParam("reqParam");
