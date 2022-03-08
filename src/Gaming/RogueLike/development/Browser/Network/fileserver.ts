@@ -38,7 +38,6 @@ async function handleHttp(conn: Deno.Conn) {
       await requestEvent.respondWith(notFoundResponse);
       return;
     }
-
     // Build a readable stream so the file doesn't have to be fully loaded into
     // memory while we send it
     const readableStream = readableStreamFromReader(file);
