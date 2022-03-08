@@ -18,8 +18,20 @@ $ curl --header "Content-Type: application/x-www-form-urlencoded" --request POST
 --data 'username=deno&type=urlencoded' http://localhost:1447/bodyparse
 */
 
+/*
+COOKIE VALIDATION
+$ curl --cookie qookie=chocolate http://localhost:1447
+
+SEE `../Landing.ts` for examples of (required & optional) path param handling
+*/
+
   public POST(request: Drash.Request, response: Drash.Response): void {
     const parseType = request.bodyParam('type')
+    const qookieValue = request.getCookie("qookie");
+
+    if (qookieValue) {
+      console.log('qookieValue', qookieValue)
+    }
 
     if(parseType === 'multipartform') {
       // RUN With Writeability and the uploaded file will be copied into the `_public` directory
