@@ -43,7 +43,7 @@ class Grid {
   }
 
   constructGrid = ()=>{
-    for(let curRow = 0; curRow < this.amtRow; curRow++) { // starting at index 1 because first row was added above
+    for(let curRow = 0; curRow < this.amtRow; curRow++) {
       const c = [],
             f = []
       for(let curCol = 0; curCol < this.amtColumn; curCol++) {
@@ -67,7 +67,9 @@ const init = (rowAmt:number,colAmt:number,mazeType:string) => {
   mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
     // return if running in Browser
   if (typeof Deno === 'undefined') { console.log('mazeReturnObject', mazeReturnObject); return mazeReturnObject }
-  _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(mazeReturnObject.Grid.flatGrid) // will need a new CLI render method for walled maze
+    // will need a new CLI render method for walled maze
+  _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(mazeReturnObject.Grid.flatGrid)
+  // log as string if passing through Deno
   console.log(JSON.stringify(mazeReturnObject))
 }
 
