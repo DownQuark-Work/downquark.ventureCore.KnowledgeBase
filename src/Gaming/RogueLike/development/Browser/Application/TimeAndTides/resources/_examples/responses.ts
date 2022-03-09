@@ -5,7 +5,9 @@ export class ResponseResource extends Drash.Resource {
   public paths = ['/respond',];
 
   public GET(request: Drash.Request, response: Drash.Response): void {
+    console.log('request.url', request.url)
     const resType = request.queryParam("type")
+
     /**
      * CALLABLE BY VISITING (IN BROWSER)
      * http://0.0.0.0:1447/respond?type=download

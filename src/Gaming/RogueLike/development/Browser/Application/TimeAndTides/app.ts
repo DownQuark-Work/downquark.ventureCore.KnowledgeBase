@@ -15,7 +15,7 @@ import { PrefixedExampleResource as v2PrefixedExampleResource } from './resource
 import { ResponseResource } from './resources/_examples/responses.ts'
 import { WebSocketResource } from './resources/_examples/web_socket.ts'
 
-import { RequestBodyValidationService } from './services/request_body_validation.ts'
+// import { RequestBodyValidationService } from './services/request_body_validation.ts'
 
 class HomeResource extends Drash.Resource {
   public paths = ["/home"];
@@ -53,7 +53,7 @@ const server = new Drash.Server({
     WebSocketResource,
   ],
   services: [
-    new RequestBodyValidationService(),
+    // new RequestBodyValidationService(),
   ],
 });
 
