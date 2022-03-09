@@ -17,6 +17,8 @@ export class ResponseResource extends Drash.Resource {
      * http://0.0.0.0:1447/respond?type=send
      */
 
+    resType === 'text' && response.setCookie({ name: "qookie", value: "quark" });
+
     if(resType === 'send') { // set custom headers and content type
       const ts = Deno.readFileSync("./_public/tst.ts");
       const retTS = new TextDecoder("utf-8").decode(ts)
@@ -35,7 +37,7 @@ export class ResponseResource extends Drash.Resource {
       file: "./_public/tst.txt", // Relative to the current working directory that executed the entrypoint script
       html,
       json: { hello: "world" },
-      text: "Hello world",
+      text: "cookie 'qookie' was set",
       xml,
     }
     if(resType) {
@@ -43,30 +45,11 @@ export class ResponseResource extends Drash.Resource {
       return typeof response[rT] === 'function' ? (response[rT] as CallableFunction)(respContent[resType]) : null
     }
   }
+
+  public DELETE(request: Drash.Request, response: Drash.Response): void {
+    // $ curl --request DELETE  http://localhost:1447/respond 
+    response.setCookie({ name: "qookie", value: "eaten", });
+    response.deleteCookie("qookie");
+    return response.text("qookie cookie was set and deleted!");
+  }
 }
-
-  // public POST(request: Drash.Request, response: Drash.Response): void {
-  //   const parseType = request.bodyParam('type')
-  //   const qookieValue = request.getCookie("qookie");
-
-  //   if (qookieValue) {
-  //     console.log('qookieValue', qookieValue)
-  //   }
-
-  //   if(parseType === 'multipartform') {
-  //     // RUN With Writeability and the uploaded file will be copied into the `_public` directory
-  //       // deno run --allow-net --allow-read --allow-write app.ts
-  //     const file = request.bodyParam<Drash.Types.BodyFile>("file"); // "file" being the `name` of the input element
-  //     const name = request.bodyParam<string>("name");
-  //     console.log("Got name and file!", file, name);
-  //     if (!file) {
-  //       throw new Error("File is required!");
-  //     }
-  //     return Deno.writeFileSync(`_public/${file.filename}`, file.content);
-  //   }
-
-  //   const param = request.bodyParam("name");
-  //   // No param passed in? Get out.
-  //   if (!param) { throw new Drash.Errors.HttpError( 400, "This resource requires the `name` body param.",) }
-  //   return response.text(`You passed in the following body param: ${param} as ${parseType} data`);
-  // }
