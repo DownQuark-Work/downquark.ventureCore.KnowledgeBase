@@ -14,9 +14,15 @@ export class ResponseResource extends Drash.Resource {
      * http://0.0.0.0:1447/respond?type=json
      * http://0.0.0.0:1447/respond?type=text
      * http://0.0.0.0:1447/respond?type=xml
+     * http://0.0.0.0:1447/respond?type=send
      */
 
-    if(resType === 'download') {
+    if(resType === 'send') { // set custom headers and content type
+      const ts = Deno.readFileSync("./_public/tst.ts");
+      const retTS = new TextDecoder("utf-8").decode(ts)
+      return response.send<string>("application/typescript", retTS);
+    }
+    if(resType === 'download') { // handle as one off due to multiple args
       return response.download(
         "./_public/Left Leg.png", // Relative to the current working directory that executed the entrypoint script
         "image/png", // The content type of the file (used to set the Content-Type header on the response)
