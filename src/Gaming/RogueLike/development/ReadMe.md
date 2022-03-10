@@ -1,11 +1,11 @@
-# Qiuck Start
+d# Qiuck Start
 ```
-cd ./Browser/Network
-deno run -c ../../deno.jsonc --allow-read --allow-net fileserver.ts
-# pass argument to overwrite default file path
-# cd ./Browser/Network
-# deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
+cd ./_TimeAndTides/Browser/Network
+deno run --allow-net --allow-read --allow-write app.ts
 ```
+
+TODO: [INTEGRATE] _perlin noise_ generator deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
+
 
 # Structure
 ## Topo Level Folders Relate to Application Layers
