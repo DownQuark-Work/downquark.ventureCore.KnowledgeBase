@@ -14,7 +14,7 @@ export const srvRateLimit = new RateLimiterService({
 export const srvResponseTime = new ResponseTimeService()
 
 export const srvTengine = new TengineService({
-  views_path: "../../Application",
+  views_path: "../Application",
 });
 
 export class LoggingService extends Drash.Service {

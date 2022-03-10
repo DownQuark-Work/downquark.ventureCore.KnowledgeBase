@@ -16,9 +16,23 @@ export default class LandingResource extends Drash.Resource {
     response.headers.set("X-CSRF-TOKEN", csrf.token);
     // or set it in a cookie like so:
     //     response.setCookie({ name: "X-CSRF-TOKEN", value: csrf.token, });
+    const templateVariables = {
+      user: {
+        name: "🤓",
+        details: {
+          "Role": "Software Engineer",
+          "Phone": "(555) 555-5555",
+          "E-mail": "bat@example.com",
+        },
+      },
+    };
 
-    return response.json({ hello: 'GET - with no param \ maybe a regex match though?' });
+    const html = response.render("/index.html", templateVariables) as string;
+
+    response.html(html);
   }
+    // return response.json({ hello: 'GET - with no param \ maybe a regex match though?' });
+  // }
 
   public POST(request: Drash.Request, response: Drash.Response): void {
     const token = request.headers.get("X-CSRF-TOKEN");
