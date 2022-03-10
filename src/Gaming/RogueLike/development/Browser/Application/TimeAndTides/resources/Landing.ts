@@ -1,5 +1,8 @@
 import { Drash } from '../deps.ts';
+import { CSRFService } from '../deps.ts'
 import { InvalidReqParamsError } from './error_handler.ts'
+
+const csrf = new CSRFService(); // allows access to `csrf.token`
 
 export default class LandingResource extends Drash.Resource {
   public paths = [
@@ -11,7 +14,22 @@ export default class LandingResource extends Drash.Resource {
     // Paths that won't: /regex/bob, /regex/13
   ];
 
+   // Tell the resource what HTTP methods should have CSRF protection. In this
+  // case, we are telling the resource to protect the POST method. This means
+  // the POST method will require the CSRF token.
+  public services = {
+    POST: [csrf],
+  };
+
   public GET(request: Drash.Request, response: Drash.Response): void {
+    // Set the token on the response headers
+    response.headers.set("X-CSRF-TOKEN", csrf.token);
+    // or set it in a cookie like so:
+    //
+    //     response.setCookie({
+    //       name: "X-CSRF-TOKEN",
+    //       value: csrf.token,
+    //     });
 
 
     if(request.queryParam('redir')) { // redirect example
@@ -49,6 +67,14 @@ export default class LandingResource extends Drash.Resource {
   }
 
   public POST(request: Drash.Request, response: Drash.Response): void {
+    const token = request.headers.get("X-CSRF-TOKEN");
+    // or get the token from the cookie if it is set there
+    //
+    //     const token = request.getCookie("X-CSRF-TOKEN");
+
+    if (!token) {
+      console.log(`CSRF token is not set - this woud error in a real instance`)
+    }
     return response.json({ hello: 'POST' });
   }
 

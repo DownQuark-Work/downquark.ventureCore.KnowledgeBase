@@ -15,26 +15,8 @@ import { PrefixedExampleResource as v2PrefixedExampleResource } from './resource
 import { ResponseResource } from './resources/_examples/responses.ts'
 import { WebSocketResource } from './resources/_examples/web_socket.ts'
 
-// import { RequestBodyValidationService } from './services/request_body_validation.ts'
-
-class HomeResource extends Drash.Resource {
-  public paths = ["/home"];
-
-  public GET(request: Drash.Request, response: Drash.Response): void {
-    return response.json({
-      hello: "world",
-      time: new Date(),
-    });
-  }
-  public POST(request: Drash.Request, response: Drash.Response): void {
-    return response.json({
-      message: `You made it to the HomeResource! - expect an error!`,
-    });
-  }
-}
 
 // Create and run your server
-
 const server = new Drash.Server({
   // cert_file: "/path/to/cert/file.crt", // <--- See here (also notice key_file is present and protocol is "https")
   error_handler: DqErrorHandler,
@@ -44,7 +26,6 @@ const server = new Drash.Server({
   protocol: "http",
   resources: [
     BodyParsingResource,
-    HomeResource,
     LandingResource,
     ResponseResource,
     StaticFilesResource,
