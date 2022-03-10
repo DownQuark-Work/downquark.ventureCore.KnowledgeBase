@@ -2,7 +2,7 @@
 // $ curl -X POST http://localhost:1447 
 // $ curl -X PUT http://localhost:1447
 // $ curl -X DELETE http://localhost:1447
-import { Drash } from './deps.ts'
+import { Drash, PaladinService } from './deps.ts'
 
 import { DqErrorHandler } from './resources/error_handler.ts'
 
@@ -15,6 +15,7 @@ import { PrefixedExampleResource as v2PrefixedExampleResource } from './resource
 import { ResponseResource } from './resources/_examples/responses.ts'
 import { WebSocketResource } from './resources/_examples/web_socket.ts'
 
+import { srvRateLimit, srvResponseTime } from './services/boilerplate.ts'
 
 // Create and run your server
 const server = new Drash.Server({
@@ -34,7 +35,9 @@ const server = new Drash.Server({
     WebSocketResource,
   ],
   services: [
-    // new RequestBodyValidationService(),
+    new PaladinService(),
+    srvRateLimit,
+    srvResponseTime,
   ],
 });
 
