@@ -1,0 +1,8 @@
+<ul>
+  <% for (let field in user.details) { %>
+    <!-- Do not show the Phone field -->
+    <% if (field !== "Phone") { %>
+  <li><% field %>: <% user.details[field] %></li>
+    <% } %>
+  <% } %>
+</ul>

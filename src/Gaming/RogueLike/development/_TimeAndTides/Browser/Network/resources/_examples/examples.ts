@@ -1,12 +1,10 @@
-import { Drash } from '../deps.ts';
-import { CSRFService } from '../deps.ts'
-import { InvalidReqParamsError } from './error_handler.ts'
+import { Drash, CSRFService } from '../../deps.ts';
+import { InvalidReqParamsError } from '../error_handler.ts'
 
 const csrf = new CSRFService(); // allows access to `csrf.token`
 
-export default class LandingResource extends Drash.Resource {
+export class ExampleResource extends Drash.Resource {
   public paths = [
-    '/',
     '/q/:reqParam',
     '/z/:id/:name?/:age?/:city?',
     '/regex/([0-9]$)',

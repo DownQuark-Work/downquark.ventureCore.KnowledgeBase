@@ -6,7 +6,7 @@ import { Drash } from '../deps.ts';
 
 
 // Create your custom error. This MUST be an extension of Error.
-////  --> Error will be thrown from ./Landing.ts
+////  --> Error will be thrown from ./landing.ts
 // Trigger error by navigating to:
 // - http://0.0.0.0:1447/q/32?err=jordans
 export class InvalidReqParamsError extends Error {

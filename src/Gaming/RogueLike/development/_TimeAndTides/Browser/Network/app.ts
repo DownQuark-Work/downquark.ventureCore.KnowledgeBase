@@ -6,16 +6,17 @@ import { Drash, PaladinService } from './deps.ts'
 
 import { DqErrorHandler } from './resources/error_handler.ts'
 
-import LandingResource from './resources/Landing.ts'
+import LandingResource from './resources/landing.ts'
 
 import { BodyParsingResource } from './resources/_examples/requests.ts'
-import { StaticFilesResource } from './resources/_examples/static_files_resource.ts'
+import { ExampleResource } from './resources/_examples/examples.ts'
 import { PrefixedExampleResource as v1PrefixedExampleResource } from './resources/_examples/prefixed/v1/prefix_resource.ts';
 import { PrefixedExampleResource as v2PrefixedExampleResource } from './resources/_examples/prefixed/v2/prefix_resource.ts';
 import { ResponseResource } from './resources/_examples/responses.ts'
+import { StaticFilesResource } from './resources/_examples/static_files_resource.ts'
 import { WebSocketResource } from './resources/_examples/web_socket.ts'
 
-import { LoggingService, srvRateLimit, srvResponseTime } from './services/boilerplate.ts'
+import { LoggingService, srvRateLimit, srvResponseTime, srvTengine } from './services/boilerplate.ts'
 
 // Create and run your server
 const server = new Drash.Server({
@@ -27,6 +28,7 @@ const server = new Drash.Server({
   protocol: "http",
   resources: [
     BodyParsingResource,
+    ExampleResource,
     LandingResource,
     ResponseResource,
     StaticFilesResource,
@@ -39,6 +41,7 @@ const server = new Drash.Server({
     new PaladinService(),
     srvRateLimit,
     srvResponseTime,
+    srvTengine,
   ],
 });
 
