@@ -34,7 +34,7 @@ SEE `../Landing.ts` for examples of (required & optional) path param handling
     }
 
     if(parseType === 'multipartform') {
-      // RUN With Writeability and the uploaded file will be copied into the `_public` directory
+      // RUN With Writeability and the uploaded file will be copied into the `_assets` directory
         // deno run --allow-net --allow-read --allow-write app.ts
       const file = request.bodyParam<Drash.Types.BodyFile>("file"); // "file" being the `name` of the input element
       const name = request.bodyParam<string>("name");
@@ -42,7 +42,7 @@ SEE `../Landing.ts` for examples of (required & optional) path param handling
       if (!file) {
         throw new Error("File is required!");
       }
-      return Deno.writeFileSync(`_public/${file.filename}`, file.content);
+      return Deno.writeFileSync(`_assets/${file.filename}`, file.content);
     }
 
     const param = request.bodyParam("name");

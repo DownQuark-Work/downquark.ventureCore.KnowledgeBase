@@ -18,8 +18,8 @@ export class LoggingService extends Drash.Service {
   dt = new Date()
   // consoleLogger = new unilogger.ConsoleLogger({});
   fileLogger = new unilogger.FileLogger({ // NOTE: `file` is required here, it's the filename which logging will be sent to
-    file: `./_public/_logs/${this.dt.getFullYear()}${this.dt.getMonth()+1}.${this.dt.getDate()}.log`,
-    tag_string: "{name} | {env} |",
+    file: `./_assets/_logs/${this.dt.getFullYear()}${this.dt.getMonth()+1}.${this.dt.getDate()}.log`,
+    tag_string: "[ {name} | {env} ] ",
     tag_string_fns: {
       name() {
         return "T&T";
@@ -36,8 +36,8 @@ export class LoggingService extends Drash.Service {
     request: Drash.Request,
     response: Drash.Response,
   ): void {
-    console.log('requestBEFORE', request)
-    console.log('responseBEFORE', response)
+    // console.log('requestBEFORE', request)
+    // console.log('responseBEFORE', response)
     this.reqTmp = { ...request }
   }
 
@@ -46,8 +46,8 @@ export class LoggingService extends Drash.Service {
     request: Drash.Request,
     response: Drash.Response,
   ): void {
-    console.log('requestAFTER', request)
-    console.log('responseAFTER', response)
+    // console.log('requestAFTER', request)
+    // console.log('responseAFTER', response)
     if (response.status !== 200)
     {
       this.fileLogger.warn(JSON.stringify(this.reqTmp)) // log out what the user was doing when it broke

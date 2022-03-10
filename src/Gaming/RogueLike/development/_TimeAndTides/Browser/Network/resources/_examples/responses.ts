@@ -22,21 +22,21 @@ export class ResponseResource extends Drash.Resource {
     resType === 'text' && response.setCookie({ name: "qookie", value: "quark" });
 
     if(resType === 'send') { // set custom headers and content type
-      const ts = Deno.readFileSync("./_public/tst.ts");
+      const ts = Deno.readFileSync("./_assets/tst.ts");
       const retTS = new TextDecoder("utf-8").decode(ts)
       return response.send<string>("application/typescript", retTS);
     }
     if(resType === 'download') { // handle as one off due to multiple args
       return response.download(
-        "./_public/Left Leg.png", // Relative to the current working directory that executed the entrypoint script
+        "./_assets/Left Leg.png", // Relative to the current working directory that executed the entrypoint script
         "image/png", // The content type of the file (used to set the Content-Type header on the response)
       );    
     }
     
-    const html = Deno.readFileSync("./_public/tst.html");  // or return response.html("<div>Hello, world!</div>");
-    const xml = Deno.readFileSync("./_public/tst.xml");  // or return response.xml("<body>Hello, world!</body>");
+    const html = Deno.readFileSync("./_assets/tst.html");  // or return response.html("<div>Hello, world!</div>");
+    const xml = Deno.readFileSync("./_assets/tst.xml");  // or return response.xml("<body>Hello, world!</body>");
     const respContent:{[k:string]:any} = {
-      file: "./_public/tst.txt", // Relative to the current working directory that executed the entrypoint script
+      file: "./_assets/tst.txt", // Relative to the current working directory that executed the entrypoint script
       html,
       json: { hello: "world" },
       text: "cookie 'qookie' was set",

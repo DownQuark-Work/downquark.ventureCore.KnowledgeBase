@@ -1,7 +1,7 @@
-d# Qiuck Start
+# Qiuck Start
 ```
-cd ./_TimeAndTides/Browser/Network
-deno run --allow-net --allow-read --allow-write app.ts
+cd ./_TimeAndTides/Browser/Network \
+&& deno run --allow-net --allow-read --allow-write app.ts
 ```
 
 TODO: [INTEGRATE] _perlin noise_ generator deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
