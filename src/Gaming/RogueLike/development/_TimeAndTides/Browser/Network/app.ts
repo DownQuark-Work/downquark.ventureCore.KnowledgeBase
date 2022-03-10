@@ -4,39 +4,19 @@
 // $ curl -X DELETE http://localhost:1447
 import { Drash, PaladinService } from './deps.ts'
 
-import { DqErrorHandler } from './resources/error_handler.ts'
-
-import LandingResource from './resources/landing.ts'
-
-import { BodyParsingResource } from './resources/_examples/requests.ts'
-import { ExampleResource } from './resources/_examples/examples.ts'
-import { PrefixedExampleResource as v1PrefixedExampleResource } from './resources/_examples/prefixed/v1/prefix_resource.ts';
-import { PrefixedExampleResource as v2PrefixedExampleResource } from './resources/_examples/prefixed/v2/prefix_resource.ts';
-import { ResponseResource } from './resources/_examples/responses.ts'
-import { StaticFilesResource } from './resources/_examples/static_files_resource.ts'
-import { WebSocketResource } from './resources/_examples/web_socket.ts'
-
+import { resources, ErrorHandler } from './resources/resources.ts'
 import { LoggingService, srvRateLimit, srvResponseTime, srvTengine } from './services/boilerplate.ts'
 
 // Create and run your server
 const server = new Drash.Server({
   // cert_file: "/path/to/cert/file.crt", // <--- See here (also notice key_file is present and protocol is "https")
-  error_handler: DqErrorHandler,
+  error_handler: ErrorHandler,
   // key_file: "/path/to/cert/file.key",
   hostname: "0.0.0.0",
   port: 1447,
   protocol: "http",
-  resources: [
-    BodyParsingResource,
-    ExampleResource,
-    LandingResource,
-    ResponseResource,
-    StaticFilesResource,
-    v1PrefixedExampleResource,
-    v2PrefixedExampleResource,
-    WebSocketResource,
-  ],
-  services: [
+  resources, // destructured from above
+  services: [ // TODO: Destructure this in the same way
     new LoggingService(),
     new PaladinService(),
     srvRateLimit,

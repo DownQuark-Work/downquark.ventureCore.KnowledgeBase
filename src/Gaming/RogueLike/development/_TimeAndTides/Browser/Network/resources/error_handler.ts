@@ -34,7 +34,7 @@ export class InvalidPOSTReqParamsError extends Error {
 // Create your error handler to send JSON responses instead of Drash sending
 // an error with a stack trace
 
-export class DqErrorHandler extends Drash.ErrorHandler {
+export class ErrorHandler extends Drash.ErrorHandler {
   public catch(
     error: Error,
     request: Request,
