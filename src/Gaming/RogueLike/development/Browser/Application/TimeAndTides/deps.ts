@@ -7,3 +7,6 @@ export { PaladinService } from 'https://deno.land/x/drash@v2.5.4/src/services/pa
 export { RateLimiterService } from "https://deno.land/x/drash@v2.5.4/src/services/rate_limiter/rate_limiter.ts"
 export { ResponseTimeService } from 'https://deno.land/x/drash@v2.5.4/src/services/response_time/response_time.ts'
 export { TengineService } from 'https://deno.land/x/drash@v2.5.4/src/services/tengine/tengine.ts'
+
+// misc
+// https://deno.land/x/analogger@v0.2.0 // analyze log files when the time comes

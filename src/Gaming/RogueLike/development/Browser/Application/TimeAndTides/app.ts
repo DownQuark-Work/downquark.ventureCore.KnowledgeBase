@@ -15,7 +15,7 @@ import { PrefixedExampleResource as v2PrefixedExampleResource } from './resource
 import { ResponseResource } from './resources/_examples/responses.ts'
 import { WebSocketResource } from './resources/_examples/web_socket.ts'
 
-import { srvRateLimit, srvResponseTime } from './services/boilerplate.ts'
+import { LoggingService, srvRateLimit, srvResponseTime } from './services/boilerplate.ts'
 
 // Create and run your server
 const server = new Drash.Server({
@@ -35,6 +35,7 @@ const server = new Drash.Server({
     WebSocketResource,
   ],
   services: [
+    new LoggingService(),
     new PaladinService(),
     srvRateLimit,
     srvResponseTime,

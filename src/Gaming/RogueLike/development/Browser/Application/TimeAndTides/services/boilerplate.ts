@@ -1,3 +1,4 @@
+import { Drash } from '../deps.ts'
 import { unilogger } from '../deps.ts'
 import { CSRFService } from '../deps.ts'
 import { PaladinService } from '../deps.ts'
@@ -11,3 +12,47 @@ export const srvRateLimit = new RateLimiterService({
 })
 
 export const srvResponseTime = new ResponseTimeService()
+
+export class LoggingService extends Drash.Service {
+
+  dt = new Date()
+  // consoleLogger = new unilogger.ConsoleLogger({});
+  fileLogger = new unilogger.FileLogger({ // NOTE: `file` is required here, it's the filename which logging will be sent to
+    file: `./_public/_logs/${this.dt.getFullYear()}${this.dt.getMonth()+1}.${this.dt.getDate()}.log`,
+    tag_string: "{name} | {env} |",
+    tag_string_fns: {
+      name() {
+        return "T&T";
+      },
+      env() {
+        return "LOCAL";
+      },
+    },
+    level: "info"
+  });
+
+  reqTmp = {};
+  public runBeforeResource(
+    request: Drash.Request,
+    response: Drash.Response,
+  ): void {
+    console.log('requestBEFORE', request)
+    console.log('responseBEFORE', response)
+    this.reqTmp = { ...request }
+  }
+
+  // Run this service after the resource's HTTP method.
+  public runAfterResource(
+    request: Drash.Request,
+    response: Drash.Response,
+  ): void {
+    console.log('requestAFTER', request)
+    console.log('responseAFTER', response)
+    if (response.status !== 200)
+    {
+      this.fileLogger.warn(JSON.stringify(this.reqTmp)) // log out what the user was doing when it broke
+      this.fileLogger.error(JSON.stringify(response))
+    }
+    this.fileLogger.info(response.status +'  | ' + JSON.stringify(request.url))
+  }
+}
