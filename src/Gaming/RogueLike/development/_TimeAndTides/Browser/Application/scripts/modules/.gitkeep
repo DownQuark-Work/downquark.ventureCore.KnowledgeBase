@@ -15,3 +15,6 @@ Maze resource may have some overlap but wouldn't need it all
   - files separated by GET PUT PATCH etc?
 
 Bundle from this dir to ./_v1|2|etc
+
+
+deno bundle -c deno.jsonc ./ui/controls.generators.ts ../js/rogue/generate.dungeon.bundle.js
