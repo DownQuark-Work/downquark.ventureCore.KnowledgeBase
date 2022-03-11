@@ -1,6 +1,18 @@
 # Qiuck Start
 ```
-cd ./_TimeAndTides/Browser/Network \
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/_utils/corridor.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/corridor.ts
+
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/_utils/floodfill.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/floodfill.ts
+
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/CellularAutomata/cellular_automata.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/cellular_automata.ts
+
+cd ./_TimeAndTides/Browser/Network \ # network must be run from that dir for relative pathing
 && deno run --allow-net --allow-read --allow-write app.ts
 ```
 

@@ -1,0 +1,17 @@
+this will keep track of what scripts go to what resources and we will be able to bundle them as necesarry
+
+eg. Landing resource would need
+- ui controller
+- _deno/
+  - cell_auto
+  - floodfill
+  - corridor
+
+Maze resource may have some overlap but wouldn't need it all
+- this file is what would specify the exact files to bundle together to have a working app w/o extra bloat
+
+1 dir per resource
+- may be files per dir since bundles are a 1:1 match with files
+  - files separated by GET PUT PATCH etc?
+
+Bundle from this dir to ./_v1|2|etc
