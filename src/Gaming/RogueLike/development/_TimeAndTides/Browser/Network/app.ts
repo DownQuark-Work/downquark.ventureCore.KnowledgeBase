@@ -13,7 +13,7 @@ const server = new Drash.Server({
   error_handler: ErrorHandler,
   // key_file: "/path/to/cert/file.key",
   hostname: "0.0.0.0",
-  port: 1447,
+  port: 1313,
   protocol: "http",
   resources, // destructured from above
   services: [ // TODO: Destructure this in the same way
