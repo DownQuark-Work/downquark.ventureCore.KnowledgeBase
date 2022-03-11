@@ -16,12 +16,9 @@ const server = new Drash.Server({
   port: 1313,
   protocol: "http",
   resources, // destructured from above
-  services: [ // TODO: Destructure this in the same way
-    new LoggingService(),
-    new PaladinService(),
-    srvRateLimit,
-    srvResponseTime,
-    srvTengine,
+  services: [
+    new LoggingService(), new PaladinService(),
+    srvRateLimit, srvResponseTime, srvTengine,
   ],
 });
 
