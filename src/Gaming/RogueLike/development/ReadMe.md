@@ -1,6 +1,6 @@
 # Qiuck Start
 ```
-cd ./_TimeAndTides/Browser/Network \ # network must be run from that dir for relative pathing
+cd ./_TimeAndTides/Browser/Network \ # network must be run from that dir for relative pathing # `--location` maybe
 && deno run --allow-net --allow-read --allow-write app.ts
 ```
 
@@ -8,8 +8,8 @@ TODO: [INTEGRATE] _perlin noise_ generator deno run --allow-read --allow-net fil
 
 
 # Structure
-## Topo Level Folders Relate to Application Layers
-- Application (final files which are delivered)
+## Top Level Folders Relate to Application Layers
+- Application (Client side)
 - Network (deno server)
 - Persistence (dbs)
 - Protocol (chain)
