@@ -27,7 +27,7 @@ export default class LandingResource extends Drash.Resource {
       },
     };
 
-    const html = response.render("/index.html", templateVariables) as string;
+    const html = response.render("/views/screens/landing.html", templateVariables) as string;
 
     response.html(html);
   }
