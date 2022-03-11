@@ -1,7 +1,5 @@
 import { Drash } from '../deps.ts'
 import { unilogger } from '../deps.ts'
-import { CSRFService } from '../deps.ts'
-import { PaladinService } from '../deps.ts'
 import { RateLimiterService } from '../deps.ts'
 import { ResponseTimeService } from '../deps.ts'
 import { TengineService } from '../deps.ts'

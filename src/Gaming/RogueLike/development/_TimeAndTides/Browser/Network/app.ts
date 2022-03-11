@@ -2,10 +2,10 @@
 // $ curl -X POST http://localhost:1447 
 // $ curl -X PUT http://localhost:1447
 // $ curl -X DELETE http://localhost:1447
-import { Drash, PaladinService } from './deps.ts'
+import { Drash } from './deps.ts'
 
 import { resources, ErrorHandler } from './resources/resources.ts'
-import { LoggingService, srvRateLimit, srvResponseTime, srvTengine } from './services/boilerplate.ts'
+import { PaladinService, LoggingService, srvRateLimit, srvResponseTime, srvTengine } from './services/services.ts'
 
 // Create and run your server
 const server = new Drash.Server({
