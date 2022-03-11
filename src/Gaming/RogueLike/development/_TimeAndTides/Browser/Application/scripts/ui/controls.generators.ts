@@ -6,7 +6,7 @@ const createSeedHash = (s = null) => {
   const hashSeed = s || new Date().getTime().toString()
   window.location.hash = hashSeed
 }
-const setCellularAutomataArgs = () => {
+export const setCellularAutomataArgs = () => {
   document?.getElementById('generate-button')?.setAttribute('disabled','true')
   const generatorArgs: {[k:string]:number} = { gw: 0, gh: 0, sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
