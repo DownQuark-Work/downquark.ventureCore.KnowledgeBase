@@ -1,17 +1,5 @@
 # Qiuck Start
 ```
-deno bundle -c ../../../Generation/deno.jsonc \
-../../../Generation/_utils/corridor.ts \
-_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/corridor.ts
-
-deno bundle -c ../../../Generation/deno.jsonc \
-../../../Generation/_utils/floodfill.ts \
-_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/floodfill.ts
-
-deno bundle -c ../../../Generation/deno.jsonc \
-../../../Generation/CellularAutomata/cellular_automata.ts \
-_TimeAndTides/Browser/Application/scripts/_deno/generators/cellular_automata.ts
-
 cd ./_TimeAndTides/Browser/Network \ # network must be run from that dir for relative pathing
 && deno run --allow-net --allow-read --allow-write app.ts
 ```
@@ -76,3 +64,18 @@ https://i.pinimg.com/originals/54/66/2e/54662eecd5b6f182d923f3ac2c9db719.jpg
 https://www.deviantart.com/brainee1/art/Chart-of-the-72-Classes-195825849
 
 https://www.reddit.com/r/PixelArt/comments/q2tal2/underwater_pirate_pixelart_card_game_concept/?utm_medium=android_app&utm_source=share
+
+> DEPPRECATED
+```
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/_utils/corridor.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/corridor.ts
+
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/_utils/floodfill.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/_utils/floodfill.ts
+
+deno bundle -c ../../../Generation/deno.jsonc \
+../../../Generation/CellularAutomata/cellular_automata.ts \
+_TimeAndTides/Browser/Application/scripts/_deno/generators/cellular_automata.ts
+```

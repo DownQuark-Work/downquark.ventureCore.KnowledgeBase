@@ -1,6 +1,27 @@
 <% extends("/views/_shell.html") %>
 
-<div style="max-width: 640px; margin: 50px auto;">
-  <h1 class="text-5xl mb-5"><% user.name %></h1>
-  <% include_partial("/views/partials/user_details.html") %>
+<div>
+  <div id="game" style="position:relative"><p style="position:absolute; bottom:0">👇 Make a Dungeon Below</p></div>
+  <div id="grid-config">
+    <h4>Dungeon Settings</h4>
+    <p>
+      Width: <span contenteditable data-gen-attr="gw">75</span> 
+      Height: <span contenteditable data-gen-attr="gh">20</span> 
+      Seed: <span contenteditable data-gen-attr="sa"></span> 
+      Max Generations: <span contenteditable data-gen-attr="ir">5</span> 
+    </p>
+  </div>
+  <button id="generate-button">Generate Dungeon</button>
+  <button id="generate-random-button">Generate Random Seed</button>
+  <br/><br/>
+  <details>
+    <summary><strong>Interesting Seeds</strong></summary>
+    <ul>
+      <li>75 20 1369</li>
+      <li>75 20 1646636267457</li>
+      <li>25 50  1646636973453</li>
+    </ul>
+  </details>
 </div>
+</section>
+<script src="/_assets/js/_v1/landing-get.js"></script>
