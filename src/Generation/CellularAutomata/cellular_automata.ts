@@ -1,8 +1,8 @@
 // deno run -c deno.jsonc ./CellularAutomata/cellular_automata.ts 35 20 12 - specify config file for use with both DOM and CLI
 // deno bundle -c deno.jsonc ./CellularAutomata/cellular_automata.ts ../../src/Gaming/RogueLike/development/Browser/Application/rogue/js/rogue/cellular_automata.bundle.js
 import { SETTINGS } from './_settings.ts'
-import { PRNG } from '../_Seed/prng.ts'
 
+import {parseSeed,parsedVerifiedValue} from '../_utils/_seed.ts'
 import {renderGrid} from '../_utils/cli-view.ts'
 
 const _DEBUG = false
@@ -56,7 +56,6 @@ class Grid {
         this._gridmap[`${gX}|${gY}`] = cellInitValue
           ? new Cell(gX,gY,parseInt(cellInitValue,10)%2) // change modulo for differing amount of initial live cells
           : new Cell(gX,gY,0)
-        this.verifySeed += cellInitValue ? parseInt(cellInitValue,10) : 0
       }
     }
     this.comparisonGrid = [[]]
@@ -110,13 +109,8 @@ class Grid {
 
 const parseSeedArg = (seedArg:number) => {
   cellularAutomataReturnObject.seedArg = seedArg
-  const cellAmt = gridW * gridH
-  // deno-lint-ignore no-explicit-any
-  const seed = new (PRNG as any)(seedArg)
-  let seededStr = ''
-  while(seededStr.length < cellAmt) seededStr += String(seed.next(10,100)).replace(/[^0-9]/g,'')
-  seededStr = seededStr.slice(0,cellAmt)
-  return seededStr.split('')
+  const seed = parseSeed(seedArg, (gridW * gridH))
+  return seed
 }
 
 const cellularAutomataReturnObject: {
@@ -163,7 +157,7 @@ const onGridAndSeedInit = () => {
     }
     CellularAutomata = (SETTINGS.RETURN_ALL_STEPS) ? CellularAutomataSteps : CellularAutomata
     cellularAutomataReturnObject.CellularAutomata = CellularAutomata
-    cellularAutomataReturnObject.verifySeed = grd.verifySeed
+    cellularAutomataReturnObject.verifySeed = parsedVerifiedValue()
     cellularAutomataReturnObject.iterations_run = curIt
     typeof Deno !== 'undefined' && console.log(JSON.stringify(cellularAutomataReturnObject))
   }
