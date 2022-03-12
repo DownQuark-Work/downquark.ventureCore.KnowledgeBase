@@ -1,4 +1,5 @@
 .DS*
+*BAK
 
 # Compiled
 src/assets/styles/css
