@@ -3,7 +3,7 @@
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { SETTINGS } from './_settings.ts'
 
-const _DEBUG = false
+const _DEBUG = 0
 
 const mazeReturnObject = {
   Grid:{flatGrid:[[0]]},
