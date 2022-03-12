@@ -4,17 +4,18 @@ import {parseSeed, parsedVerifiedValue} from '../../_utils/_seed.ts'
 let backtrackerReturnObject = {},
     parsedMazeSeed
 
-const generateBacktracker = (fGrid:string[][]) => {
-  console.log('fGrid', fGrid)
-  console.log('backtracker', backtrackerReturnObject)
-  console.log(':n')
+const generateBacktracker = (Maze:string[][]) => {
+  // console.log('backtracker', backtrackerReturnObject)
+  console.log('Maze', Maze)
+  console.log('make all mutations needed to the `Maze` object .. the fun part is back')
+  //Create Egress
+  // Walk the path - Do the thing
+  // Return the Maze
 }
 
 const instantiate = (base:any) => {
   const { _flatGrid } = base.Grid
   delete base.Grid._flatGrid
-  console.log('base', base)
-  // const Seed = parseSeed(base.Grid.seed,(base.Grid.amtColumn*base.Grid.amtRow))
   parsedMazeSeed = parseSeed(base.Seed,(base.Grid.amtColumn*base.Grid.amtRow))
   backtrackerReturnObject = {
     ...base,
