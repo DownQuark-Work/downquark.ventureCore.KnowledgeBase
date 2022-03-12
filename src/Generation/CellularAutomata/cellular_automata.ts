@@ -2,7 +2,7 @@
 // deno bundle -c deno.jsonc ./CellularAutomata/cellular_automata.ts ../../src/Gaming/RogueLike/development/Browser/Application/rogue/js/rogue/cellular_automata.bundle.js
 import { SETTINGS } from './_settings.ts'
 
-import {parseSeed,parsedVerifiedValue} from '../_utils/_seed.ts'
+import {parseSeed, parsedVerifiedValue} from '../_utils/_seed.ts'
 import {renderGrid} from '../_utils/cli-view.ts'
 
 const _DEBUG = false

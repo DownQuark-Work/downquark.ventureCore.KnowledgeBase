@@ -1,17 +1,15 @@
-// deno run Layouts/Maze/_base.ts 13 13
-// deno run Layouts/Maze/_base.ts 13 13 RENDER_MAZE_AS.WALLED
-import { parse } from "https://deno.land/std@0.120.0/flags/mod.ts";
-
-import {renderGrid} from '../../_utils/cli-view.ts'
+// deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313
+// deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42
 import { SETTINGS } from './_settings.ts'
+import {renderGrid} from '../../_utils/cli-view.ts'
+import { parse } from "../../_utils/_deps.ts";
 
 const _DEBUG = 0
 
 const mazeReturnObject = {
   Grid:{flatGrid:[[0]]},
   Type: SETTINGS.RENDER_MAZE_AS.PASSAGE,
-  Seed: null,
-  SeedVerified: null,
+  Seed: 0,
 }
 
 class Cell {
@@ -66,7 +64,8 @@ class Grid {
   }
 }
 
-const init = (rowAmt:number,colAmt:number,mazeType:string) => {
+const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new Date().getTime()) => {
+  mazeReturnObject.Seed = seedArg
   if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) mazeReturnObject.Type = SETTINGS.RENDER_MAZE_AS.WALLED
   mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
     // return if running in Browser
@@ -79,6 +78,6 @@ const init = (rowAmt:number,colAmt:number,mazeType:string) => {
 
 if (typeof Deno !== 'undefined') { // CLI
   const parsedArgs = parse(Deno.args)
-  init(parsedArgs.c,parsedArgs.r,parsedArgs.t||'') 
+  init(parsedArgs.c,parsedArgs.r,parsedArgs.t||'',parsedArgs.s) 
 }
-export const setMazeProps = (c=0,r=0,t='') => { init(r,c,t) } // Browser
+export const setMazeProps = (c=0,r=0,t='',s=0) => { init(r,c,t,s) } // Browser
