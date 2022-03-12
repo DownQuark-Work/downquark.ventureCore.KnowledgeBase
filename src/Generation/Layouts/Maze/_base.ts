@@ -1,5 +1,7 @@
 // deno run Layouts/Maze/_base.ts 13 13
 // deno run Layouts/Maze/_base.ts 13 13 RENDER_MAZE_AS.WALLED
+import { parse } from "https://deno.land/std@0.120.0/flags/mod.ts";
+
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { SETTINGS } from './_settings.ts'
 
@@ -7,7 +9,9 @@ const _DEBUG = 0
 
 const mazeReturnObject = {
   Grid:{flatGrid:[[0]]},
-  Type: SETTINGS.RENDER_MAZE_AS.PASSAGE
+  Type: SETTINGS.RENDER_MAZE_AS.PASSAGE,
+  Seed: null,
+  SeedVerified: null,
 }
 
 class Cell {
@@ -73,5 +77,8 @@ const init = (rowAmt:number,colAmt:number,mazeType:string) => {
   console.log(JSON.stringify(mazeReturnObject))
 }
 
-(typeof Deno !== 'undefined') && init(parseInt(Deno.args[0],10),parseInt(Deno.args[1],10),Deno.args[2]) // CLI
+if (typeof Deno !== 'undefined') { // CLI
+  const parsedArgs = parse(Deno.args)
+  init(parsedArgs.c,parsedArgs.r,parsedArgs.t||'') 
+}
 export const setMazeProps = (c=0,r=0,t='') => { init(r,c,t) } // Browser
