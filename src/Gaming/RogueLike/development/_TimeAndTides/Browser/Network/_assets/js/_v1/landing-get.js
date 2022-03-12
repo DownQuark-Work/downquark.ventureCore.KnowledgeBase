@@ -272,6 +272,18 @@ PRNG.prototype.next = function(a, b) {
         return this._seed / 2147483647 * (b - a) + a;
     }
 };
+let verifiedSeed = 0;
+const parseSeed = (preParsedSeed, seedLength)=>{
+    const seed = new PRNG(preParsedSeed);
+    let seededStr = '';
+    while(seededStr.length < seedLength)seededStr += String(seed.next(10, 100)).replace(/[^0-9]/g, '');
+    const seededArr = seededStr.slice(0, seedLength).split('');
+    verifiedSeed = seededArr.reduce((a, c)=>a + parseInt(c, 10)
+    , 0);
+    return seededArr;
+};
+const parsedVerifiedValue = ()=>verifiedSeed
+;
 class Cell {
     _amtDied = 0;
     _amtLived = 0;
@@ -314,7 +326,6 @@ class Grid {
             for(let gY = 0; gY < this.h; gY++){
                 const cellInitValue = _seed[0] ? _seed.shift() : Math.round(Math.random()).toString();
                 this._gridmap[`${gX}|${gY}`] = cellInitValue ? new Cell(gX, gY, parseInt(cellInitValue, 10) % 2) : new Cell(gX, gY, 0);
-                this.verifySeed += cellInitValue ? parseInt(cellInitValue, 10) : 0;
             }
         }
         this.comparisonGrid = [
@@ -379,12 +390,8 @@ class Grid {
 }
 const parseSeedArg = (seedArg1)=>{
     cellularAutomataReturnObject.seedArg = seedArg1;
-    const cellAmt = gridW * gridH;
-    const seed = new PRNG(seedArg1);
-    let seededStr = '';
-    while(seededStr.length < cellAmt)seededStr += String(seed.next(10, 100)).replace(/[^0-9]/g, '');
-    seededStr = seededStr.slice(0, cellAmt);
-    return seededStr.split('');
+    const seed = parseSeed(seedArg1, gridW * gridH);
+    return seed;
 };
 const cellularAutomataReturnObject = {};
 let curIt = 0;
@@ -414,7 +421,7 @@ const onGridAndSeedInit = ()=>{
         }
         CellularAutomata = SETTINGS.RETURN_ALL_STEPS ? CellularAutomataSteps : CellularAutomata;
         cellularAutomataReturnObject.CellularAutomata = CellularAutomata;
-        cellularAutomataReturnObject.verifySeed = grd.verifySeed;
+        cellularAutomataReturnObject.verifySeed = parsedVerifiedValue();
         cellularAutomataReturnObject.iterations_run = curIt;
         typeof Deno !== 'undefined' && console.log(JSON.stringify(cellularAutomataReturnObject));
     }
