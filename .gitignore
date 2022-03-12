@@ -9,6 +9,7 @@ validators/flow/flow-typed/stubs/
 
 # Logs
 *.log*
+*process_output*
 
 # Modules
 node_modules/

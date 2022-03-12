@@ -1,4 +1,4 @@
-import {initCellularAutomata, applyFloodFill, createCorridors} from '../../_deno.ts'
+import {initCellularAutomata, applyFloodFill, createCorridors} from '../../_modules/_deno.ts'
 
 export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}, cb?:()=>void) => void = ({gw, gh, sa, ir}, cb = ()=>{}) => {
   const dungeonAutomata = initCellularAutomata({gw, gh, sa, ir})

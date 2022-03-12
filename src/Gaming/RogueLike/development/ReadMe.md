@@ -1,8 +1,5 @@
 # Qiuck Start
-```
-cd ./_TimeAndTides/Browser/Network \ # network must be run from that dir for relative pathing # `--location` maybe
-&& deno run --allow-net --allow-read --allow-write app.ts
-```
+> See `ReadMe.md` within ./_TimeAndTides/_resources
 
 TODO: [INTEGRATE] _perlin noise_ generator deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
 
