@@ -382,8 +382,8 @@ const parseSeedArg = (seedArg1)=>{
     const cellAmt = gridW * gridH;
     const seed = new PRNG(seedArg1);
     let seededStr = '';
-    while(seededStr.replace(/[^0-9]/g, '').length < cellAmt)seededStr += seed.next(10, 100);
-    seededStr = seededStr.replace(/[^0-9]/g, '').slice(0, cellAmt);
+    while(seededStr.length < cellAmt)seededStr += String(seed.next(10, 100)).replace(/[^0-9]/g, '');
+    seededStr = seededStr.slice(0, cellAmt);
     return seededStr.split('');
 };
 const cellularAutomataReturnObject = {};

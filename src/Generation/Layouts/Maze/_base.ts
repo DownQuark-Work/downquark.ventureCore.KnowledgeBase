@@ -1,5 +1,5 @@
-// deno run Layouts/Maze/base.ts 13 13
-// deno run Layouts/Maze/base.ts 13 13 RENDER_MAZE_AS.WALLED
+// deno run Layouts/Maze/_base.ts 13 13
+// deno run Layouts/Maze/_base.ts 13 13 RENDER_MAZE_AS.WALLED
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { SETTINGS } from './_settings.ts'
 
