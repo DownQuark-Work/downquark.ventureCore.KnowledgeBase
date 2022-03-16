@@ -14,6 +14,11 @@ let backtrackerReturnObject = {
     parsedMazeSeed:number[],
     seedPointer = 0,
     Maze:number[][]
+const stepUp = () => {
+  if (++seedPointer < parsedMazeSeed.length) return seedPointer
+  seedPointer = 0
+  return seedPointer
+}
 
 const createEgress = () => {
   const colAmt = backtrackerReturnObject.Grid.amtColumn,
@@ -32,15 +37,15 @@ const createEgress = () => {
         }
 
   while( parsedMazeSeed[seedPointer] > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
-  { seedPointer++ }
+  { stepUp() }
 
   const entWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4]
-  seedPointer++
+  stepUp()
   let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parsedMazeSeed[seedPointer]/denomRow) : Math.floor(parsedMazeSeed[seedPointer]/denomCol) // charAt matches LEFT || RIGHT
   if (entLoc%2==0){ Math.max(entLoc--,1) } // location must be odd and positive
-  seedPointer++
+  stepUp()
   const exWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] === entWall ? CELL_DIRECTIONS_MAP[(parsedMazeSeed[seedPointer]+1)%4] : CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] // ensures not the entrance wall
-  seedPointer++
+  stepUp()
   const exitConstraints = (
       exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
       && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
