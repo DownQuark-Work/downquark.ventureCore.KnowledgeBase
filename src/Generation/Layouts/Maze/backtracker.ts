@@ -58,21 +58,47 @@ const createEgress = () => {
     backtrackerReturnObject.Egress = {Enter:entPt, Exit:exPt}
     Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
-    console.log('backtrackerReturnObject', backtrackerReturnObject)
-    renderGridPassage(Maze)
 }
 
-const carveMaze = (pt:number[]) => {
-  console.log('carveMaze, pt', pt)
+const _pathAcitve = []
+const carveMaze = (pt:number[],offset=2) => {
+  const _considerations:number[][] = []
+  if(offset !== 1){ // leave Entrance tile as-is
+    Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+  }
+  _pathAcitve.push(pt)
+  const surroundingPts = {
+    d:[pt[0]+offset,pt[1]],
+    l:[pt[0],pt[1]-offset],
+    r:[pt[0],pt[1]+offset],
+    u:[pt[0]-offset,pt[1]]
+  }
+  const d = surroundingPts.d[0] < backtrackerReturnObject.Grid.amtRow ? Maze[pt[0]+offset][pt[1]] : null
+  const l = surroundingPts.l[1] >= 0 ? Maze[pt[0]][pt[1]-offset] : null
+  const r = surroundingPts.r[1] < backtrackerReturnObject.Grid.amtColumn ? Maze[pt[0]][pt[1]+offset] : null
+  const u = surroundingPts.u[0] >= 0 ? Maze[pt[0]-offset][pt[1]] : null
 
+  console.log('surroundingPts', surroundingPts)
+  console.log('u,d,l,r', u,d,l,r)
+
+  d && _considerations.push(surroundingPts.d)
+  l && _considerations.push(surroundingPts.l)
+  r && _considerations.push(surroundingPts.r)
+  u && _considerations.push(surroundingPts.u)
+
+  console.log('_considerations', _considerations)
+  _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
+
+  // console.log('Maze', Maze)
+  renderGridPassage(Maze)
+  console.log('carveMaze, pt', pt)
+  if(_pathAcitve.length == 1){ carveMaze(_considerations[0]) }
 }
 
 const generateBacktracker = (_maze:number[][]) => {
   Maze = _maze
-  console.log('Maze', Maze)
-  console.log('make all mutations needed to the `Maze` object .. the fun part is back')
   createEgress()
-  carveMaze(backtrackerReturnObject.Egress.Enter) // Walk the path - Do the thing
+  carveMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
   // Return the Maze
 }
 
