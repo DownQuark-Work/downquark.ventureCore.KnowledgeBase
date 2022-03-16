@@ -78,6 +78,6 @@ const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new D
 
 if (typeof Deno !== 'undefined') { // CLI
   const parsedArgs = parse(Deno.args)
-  init(parsedArgs.c,parsedArgs.r,parsedArgs.t||'',parsedArgs.s) 
+  init(parsedArgs.r,parsedArgs.c,parsedArgs.t||'',parsedArgs.s) 
 }
 export const setMazeProps = (c=0,r=0,t='',s=0) => { init(r,c,t,s) } // Browser

@@ -36,7 +36,8 @@ const createEgress = () => {
 
   const entWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4]
   seedPointer++
-  const entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parsedMazeSeed[seedPointer]/denomRow) : Math.floor(parsedMazeSeed[seedPointer]/denomCol) // charAt matches LEFT || RIGHT
+  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parsedMazeSeed[seedPointer]/denomRow) : Math.floor(parsedMazeSeed[seedPointer]/denomCol) // charAt matches LEFT || RIGHT
+  if (entLoc%2==0){ Math.max(entLoc--,1) } // location must be odd and positive
   seedPointer++
   const exWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] === entWall ? CELL_DIRECTIONS_MAP[(parsedMazeSeed[seedPointer]+1)%4] : CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] // ensures not the entrance wall
   seedPointer++
@@ -47,22 +48,23 @@ const createEgress = () => {
     ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
     : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
 
-  const exLoc = (exitConstraints < 0)
+  let exLoc = (exitConstraints < 0)
     ? Math.floor(parsedMazeSeed[seedPointer]/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
     : Math.floor(parsedMazeSeed[seedPointer]/exitConstraints)
-
-  const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
-  const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
-  backtrackerReturnObject.Egress = {Enter:entPt, Exit:exPt}
-  Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
-  Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
-  // console.log('backtrackerReturnObject', backtrackerReturnObject)
-  renderGridPassage(Maze)
-  
+    if (exLoc%2==0){ Math.max(exLoc--,1) } // location must be odd and positive
+    
+    const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
+    const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
+    backtrackerReturnObject.Egress = {Enter:entPt, Exit:exPt}
+    Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
+    Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
+    console.log('backtrackerReturnObject', backtrackerReturnObject)
+    renderGridPassage(Maze)
 }
 
-const carveMaze = () => {
-  
+const carveMaze = (pt:number[]) => {
+  console.log('carveMaze, pt', pt)
+
 }
 
 const generateBacktracker = (_maze:number[][]) => {
@@ -70,8 +72,7 @@ const generateBacktracker = (_maze:number[][]) => {
   console.log('Maze', Maze)
   console.log('make all mutations needed to the `Maze` object .. the fun part is back')
   createEgress()
-  carveMaze()
-  // Walk the path - Do the thing
+  carveMaze(backtrackerReturnObject.Egress.Enter) // Walk the path - Do the thing
   // Return the Maze
 }
 
