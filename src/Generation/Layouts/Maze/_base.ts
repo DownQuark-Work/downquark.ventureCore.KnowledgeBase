@@ -51,8 +51,8 @@ class Grid {
       for(let curCol = 0; curCol < this.amtColumn; curCol++) {
         const cell = mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED
           ? new Cell(curRow,curCol,SETTINGS.ACTIVE_WALLS)
-          : new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
-            ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
+          : new Cell(curRow,curCol,curRow%2===0 ? SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED : curCol%2!==0
+            ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].UNCARVED
             : SETTINGS.CELL_STATE.COMMON.CREATED)
         c.push(cell)
         f.push(cell.state)

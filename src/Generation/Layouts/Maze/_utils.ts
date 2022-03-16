@@ -14,6 +14,7 @@ export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
         switch(i)
         {
           case CELL_STATE[RENDER_MAZE_AS.PASSAGE].CARVED:
+          case CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED:
             return '🀫'
           case CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH:
             return '◘'

@@ -16,19 +16,21 @@ export const RENDER_MAZE_AS = {
 
 export const CELL_STATE:{[k:string]: {[k:string]: number}} = {
   COMMON: {
-    CURRENT: -5,
-    CREATED: -2,
-    CONSIDER: -1,
+    NON_CONSIDERED: 0,
+    CONSIDER: -1.1,
+    CREATED: -1.2,
+    CURRENT: -1.3,
   },
   EGGRESS: {
-    ENTER: -3,
-    EXIT: -4,
+    ENTER: -2.1,
+    EXIT: -2.2,
   },
 }
 CELL_STATE[RENDER_MAZE_AS.PASSAGE] = {
   CONCRETE: 0,
-  CARVED: 1,
-  IN_PATH: 2
+  UNCARVED: 1.0,
+  CARVED: 1.1,
+  IN_PATH: 2.1,
 }
 /*
   CELL_STATE[RENDER_MAZE_AS.WALLED] values
