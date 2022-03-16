@@ -6,7 +6,7 @@ type RenderGridOptionsType = {
 
 const renderDefaultGrid = (Grid:Array<number[]|string[]>) => {
   Grid.forEach((row: number[]|string[]) => {
-    const graphics = row.map(i => i.toString() === '#' ? '#' : /⊡|^1$/g.test(i.toString()) ? '🀫' : ' ')
+    const graphics = row.map(i => i.toString() === '#' ? '#' : /⊡|^[^0]+$/g.test(i.toString()) ? '🀫' : ' ')
     const gRow = ['|', ...graphics, '|']
     console.log(...gRow)
   })

@@ -53,7 +53,7 @@ class Grid {
           ? new Cell(curRow,curCol,SETTINGS.ACTIVE_WALLS)
           : new Cell(curRow,curCol,curRow%2===0 ? 0 : curCol%2!==0
             ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED
-            : SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CONCRETE)
+            : SETTINGS.CELL_STATE.COMMON.CREATED)
         c.push(cell)
         f.push(cell.state)
       }
