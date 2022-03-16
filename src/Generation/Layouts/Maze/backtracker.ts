@@ -81,15 +81,15 @@ const carveMaze = (pt:number[],offset=2) => {
   console.log('surroundingPts', surroundingPts)
   console.log('u,d,l,r', u,d,l,r)
 
-  d && _considerations.push(surroundingPts.d)
-  l && _considerations.push(surroundingPts.l)
-  r && _considerations.push(surroundingPts.r)
-  u && _considerations.push(surroundingPts.u)
+  d === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.d)
+  l === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.l)
+  r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.r)
+  u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.u)
 
   console.log('_considerations', _considerations)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
 
-  // console.log('Maze', Maze)
+  console.log('Maze', Maze)
   renderGridPassage(Maze)
   console.log('carveMaze, pt', pt)
   if(_pathAcitve.length == 1){ carveMaze(_considerations[0]) }
