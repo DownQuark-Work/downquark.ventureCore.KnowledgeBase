@@ -147,9 +147,7 @@ const generateBacktracker = (_maze:number[][]) => {
 }
 
 let _considerations:Array<number[]> = []
-let loops = 0
 const carvePrimMaze = (pt:number[],offset=2) => {
-  loops++
   stepUp()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
@@ -161,47 +159,33 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   _considerations = [..._curConsiderations, ..._considerations] // _curConsiderations first
 
   SHOW_ANIMATION && renderGridPassage(Maze)
-  // console.log('_considerations', _considerations)
-  if(new Date()){
-    // if(_considerations.length){
-    // console.log('carvedArray', carvedArray)
-    // can ONLY carveTo a _tmpConsider (slice it from there AND THEN merge remaining to _considerations)
-    const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
-    const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0] // works bc _curCon is prepended
-    // const carveTo = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0] // _considerations[Math.round(parseedSeedPointer/_considerDenom)]
-    if(offset-1) {
-      const carveThroughPt = pt[0] === carveTo[0] 
-      ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
-      : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
-      Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
-      // console.log('carveFromThroughTo', pt,carveThroughPt,carveTo)
-    }
-  
-    setTimeout(()=>{
-      Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
-      Maze[carveTo[0]][carveTo[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
-      SHOW_ANIMATION && console.clear()
-      // console.log('TO _considerations', _considerations)
-      let carveNext
-      if(offset-1) {
-      // slice value for next iteration FROM _considerations
-      const _considerDenom = 10 /_considerations.length
-      // console.log('_considerDenom', _considerDenom)
-      // console.log('Math.round(parseedSeedPointer/_considerDenom)', Math.floor(parseedSeedPointer/_considerDenom))
-      carveNext = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0]
-      // console.log('carveNext', carveNext)
-      }
-      else carveNext = carveTo // handle first case
-      // if(loops === 30) return
-      if(carveNext) carvePrimMaze(carveNext)
-      else {
-        SHOW_ANIMATION && console.clear()
-        SHOW_ANIMATION && renderGridPassage(Maze)
-        backtrackerReturnObject.Maze = Maze
-        console.log(JSON.stringify(backtrackerReturnObject))
-      }
-    },SHOW_ANIMATION)
+  const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
+  const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0]
+  if(offset-1) {
+    const carveThroughPt = pt[0] === carveTo[0] 
+    ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
+    : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
+    Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
   }
+
+  setTimeout(()=>{
+    Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+    Maze[carveTo[0]][carveTo[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+    SHOW_ANIMATION && console.clear()
+    let carveNext
+    if(offset-1) {
+    const _considerDenom = 10 /_considerations.length
+    carveNext = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0]
+    }
+    else carveNext = carveTo // handle first case
+    if(carveNext) carvePrimMaze(carveNext)
+    else {
+      SHOW_ANIMATION && console.clear()
+      SHOW_ANIMATION && renderGridPassage(Maze)
+      backtrackerReturnObject.Maze = Maze
+      console.log(JSON.stringify(backtrackerReturnObject))
+    }
+  },SHOW_ANIMATION)
 }
 const generatePrim = (_maze:number[][]) => {
   Maze = _maze
