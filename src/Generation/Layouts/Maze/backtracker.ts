@@ -162,7 +162,8 @@ const carvePrimMaze = (pt:number[],offset=2) => {
 
   SHOW_ANIMATION && renderGridPassage(Maze)
   // console.log('_considerations', _considerations)
-  if(_considerations.length){
+  if(new Date()){
+    // if(_considerations.length){
     // console.log('carvedArray', carvedArray)
     // can ONLY carveTo a _tmpConsider (slice it from there AND THEN merge remaining to _considerations)
     const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
@@ -192,14 +193,14 @@ const carvePrimMaze = (pt:number[],offset=2) => {
       }
       else carveNext = carveTo // handle first case
       // if(loops === 30) return
-      carvePrimMaze(carveNext)
+      if(carveNext) carvePrimMaze(carveNext)
+      else {
+        SHOW_ANIMATION && console.clear()
+        SHOW_ANIMATION && renderGridPassage(Maze)
+        backtrackerReturnObject.Maze = Maze
+        console.log(JSON.stringify(backtrackerReturnObject))
+      }
     },SHOW_ANIMATION)
-  }
-  else {
-    SHOW_ANIMATION && console.clear()
-    SHOW_ANIMATION && renderGridPassage(Maze)
-    backtrackerReturnObject.Maze = Maze
-    console.log(JSON.stringify(backtrackerReturnObject))
   }
 }
 const generatePrim = (_maze:number[][]) => {
