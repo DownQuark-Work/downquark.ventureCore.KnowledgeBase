@@ -67,6 +67,7 @@ const createEgress = () => {
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
 }
 
+let carvedArray:Array<number[]> = []
 const getConsiderations = (pt:number[]):Array<number[]> => {
   const offset = Math.min(_pathAcitve.length,2)
   const surroundingPts = {
@@ -85,6 +86,12 @@ const getConsiderations = (pt:number[]):Array<number[]> => {
   l === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.l)
   r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.r)
   u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.u)
+
+  carvedArray = []
+  d === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH && carvedArray.push(surroundingPts.d)
+  l === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH && carvedArray.push(surroundingPts.l)
+  r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH && carvedArray.push(surroundingPts.r)
+  u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH && carvedArray.push(surroundingPts.u)
   
   return considerArr
 }
@@ -149,37 +156,48 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     _pathAcitve.length === 1 && _pathAcitve.push(pt) // this line and below are
   } else { _pathAcitve.push(pt) } // needed for getConsiderations method's offset
   
-  const _tmpConsider:number[][] = getConsiderations(pt)
-  _tmpConsider.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
-  _considerations = [..._considerations, ..._tmpConsider]
+  const _curConsiderations:number[][] = getConsiderations(pt)
+  _curConsiderations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
+  _considerations = [..._curConsiderations, ..._considerations] // _curConsiderations first
 
   SHOW_ANIMATION && renderGridPassage(Maze)
-  console.log('_considerations', _considerations)
+  // console.log('_considerations', _considerations)
   if(_considerations.length){
-    const _considerDenom = 10 /_considerations.length
+    // console.log('carvedArray', carvedArray)
     // can ONLY carveTo a _tmpConsider (slice it from there AND THEN merge remaining to _considerations)
-    console.log('_considerDenom', _considerDenom)
-    console.log('Math.round(parseedSeedPointer/_considerDenom)', Math.floor(parseedSeedPointer/_considerDenom))
-    const carveTo = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0] // _considerations[Math.round(parseedSeedPointer/_considerDenom)]
-    console.log('carveTo', carveTo)
+    const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
+    const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0] // works bc _curCon is prepended
+    // const carveTo = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0] // _considerations[Math.round(parseedSeedPointer/_considerDenom)]
     if(offset-1) {
       const carveThroughPt = pt[0] === carveTo[0] 
       ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
       : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
       Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+      // console.log('carveFromThroughTo', pt,carveThroughPt,carveTo)
     }
   
     setTimeout(()=>{
       Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
-      // SHOW_ANIMATION && console.clear()
-      console.log('TO _considerations', _considerations)
-
-      if(loops === 10) return
+      Maze[carveTo[0]][carveTo[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+      SHOW_ANIMATION && console.clear()
+      // console.log('TO _considerations', _considerations)
+      let carveNext
+      if(offset-1) {
       // slice value for next iteration FROM _considerations
-      carvePrimMaze(carveTo)
+      const _considerDenom = 10 /_considerations.length
+      // console.log('_considerDenom', _considerDenom)
+      // console.log('Math.round(parseedSeedPointer/_considerDenom)', Math.floor(parseedSeedPointer/_considerDenom))
+      carveNext = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0]
+      // console.log('carveNext', carveNext)
+      }
+      else carveNext = carveTo // handle first case
+      // if(loops === 30) return
+      carvePrimMaze(carveNext)
     },SHOW_ANIMATION)
   }
   else {
+    SHOW_ANIMATION && console.clear()
+    SHOW_ANIMATION && renderGridPassage(Maze)
     backtrackerReturnObject.Maze = Maze
     console.log(JSON.stringify(backtrackerReturnObject))
   }
