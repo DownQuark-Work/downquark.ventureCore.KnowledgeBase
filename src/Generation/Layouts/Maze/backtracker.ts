@@ -90,6 +90,7 @@ const getConsiderations = (pt:number[]) => {
 }
 
 const _pathAcitve:Array<number[]> = []
+const _considerationQueue:Array<number[]> = []
 const carveMaze = (pt:number[],offset=2) => {
   stepUp()
   if(offset - 1){ // leave Entrance tile as-is
