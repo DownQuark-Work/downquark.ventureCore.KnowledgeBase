@@ -97,8 +97,7 @@ const carveMaze = (pt:number[],offset=2) => {
   stepUp()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
-  }
-  _pathAcitve.push(pt)
+  } else { _pathAcitve.push(pt) } // initial path point
   
   const _considerations:number[][] = getConsiderations(pt)
   console.log('_considerations', _considerations, parseedSeedPointer%_considerations.length,':',_pathAcitve.length)
@@ -107,6 +106,7 @@ const carveMaze = (pt:number[],offset=2) => {
   renderGridPassage(Maze)
   if(_considerations.length){
     const carveTo = _considerations[parseedSeedPointer%_considerations.length]
+    _pathAcitve.push(carveTo) // only push if continuing forward
     if(offset-1) {
       const carveThroughPt = pt[0] === carveTo[0] 
       ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
@@ -120,7 +120,22 @@ const carveMaze = (pt:number[],offset=2) => {
       SHOW_ANIMATION && console.clear()
       carveMaze(_considerations[parseedSeedPointer%_considerations.length])
     },SHOW_ANIMATION)
-  } else console.log('_pathAcitve',_pathAcitve, Maze)
+  }
+  else if (_pathAcitve.length) {
+    setTimeout(()=>{
+      Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+      console.log('_pathAcitve.length1', _pathAcitve.length)
+      let bkTrk:number[] = _pathAcitve.pop() || [0,0]
+      while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
+      { bkTrk = _pathAcitve.pop() || [0,0] }
+      console.log('_pathAcitve.length2', _pathAcitve.length)
+      console.log('bkTrk', bkTrk)
+      SHOW_ANIMATION && console.clear()
+      bkTrk && carveMaze(bkTrk)
+      // carveMaze((_pathAcitve.pop() as number[]))
+    },SHOW_ANIMATION)
+  }
+  else console.log('_pathAcitve',_pathAcitve, Maze)
 }
 
 const generateBacktracker = (_maze:number[][]) => {
