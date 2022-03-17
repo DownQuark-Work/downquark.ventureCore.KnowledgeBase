@@ -1,7 +1,7 @@
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313)
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -t RENDER_MAZE_AS.WALLED -s 42)
 import {parseSeed, parsedVerifiedValue} from '../../_utils/_seed.ts'
-import {CELL_DIRECTIONS_MAP, CELL_STATE} from './_settings.ts'
+import {CELL_DIRECTIONS_MAP, CELL_STATE, SHOW_ANIMATION} from './_settings.ts'
 import {renderGridPassage} from './_utils.ts'
 
 let backtrackerReturnObject = {
@@ -69,9 +69,10 @@ const createEgress = () => {
 
 const _pathAcitve = []
 const carveMaze = (pt:number[],offset=2) => {
+  stepUp()
   const _considerations:number[][] = []
-  if(offset !== 1){ // leave Entrance tile as-is
-    Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+  if(offset - 1){ // leave Entrance tile as-is
+    Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
   }
   _pathAcitve.push(pt)
   const surroundingPts = {
@@ -93,13 +94,27 @@ const carveMaze = (pt:number[],offset=2) => {
   r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.r)
   u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.u)
 
-  console.log('_considerations', _considerations)
+  console.log('_considerations', _considerations, parseedSeedPointer%_considerations.length)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
 
-  console.log('Maze', Maze)
+  // console.log('Maze', Maze)
   renderGridPassage(Maze)
-  console.log('carveMaze, pt', pt)
-  if(_pathAcitve.length == 1){ carveMaze(_considerations[0]) }
+  if(_pathAcitve.length < 5){
+    const carveTo = _considerations[parseedSeedPointer%_considerations.length]
+    if(offset-1) {
+      const carveThroughPt = pt[0] === carveTo[0] 
+      ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
+      : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
+      Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+    }
+  
+    setTimeout(()=>{
+      _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED })
+      Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+      SHOW_ANIMATION && console.clear()
+      carveMaze(_considerations[parseedSeedPointer%_considerations.length])
+    },SHOW_ANIMATION)
+  }
 }
 
 const generateBacktracker = (_maze:number[][]) => {
