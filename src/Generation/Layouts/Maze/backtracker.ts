@@ -67,14 +67,8 @@ const createEgress = () => {
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
 }
 
-const _pathAcitve:Array<number[]> = []
-const carveMaze = (pt:number[],offset=2) => {
-  stepUp()
-  const _considerations:number[][] = []
-  if(offset - 1){ // leave Entrance tile as-is
-    Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
-  }
-  _pathAcitve.push(pt)
+const getConsiderations = (pt:number[]) => {
+  const offset = Math.min(_pathAcitve.length,2)
   const surroundingPts = {
     d:[pt[0]+offset,pt[1]],
     l:[pt[0],pt[1]-offset],
@@ -88,16 +82,28 @@ const carveMaze = (pt:number[],offset=2) => {
 
   console.log('surroundingPts', surroundingPts)
   console.log('u,d,l,r', u,d,l,r)
+  
+  const considerArr = []
+  d === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.d)
+  l === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.l)
+  r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.r)
+  u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.u)
+  
+  return considerArr
+}
 
-  d === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.d)
-  l === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.l)
-  r === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.r)
-  u === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && _considerations.push(surroundingPts.u)
-
+const _pathAcitve:Array<number[]> = []
+const carveMaze = (pt:number[],offset=2) => {
+  stepUp()
+  if(offset - 1){ // leave Entrance tile as-is
+    Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
+  }
+  _pathAcitve.push(pt)
+  
+  const _considerations:number[][] = getConsiderations(pt)
   console.log('_considerations', _considerations, parseedSeedPointer%_considerations.length,':',_pathAcitve.length)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
 
-  // console.log('Maze', Maze)
   renderGridPassage(Maze)
   if(_considerations.length){
     const carveTo = _considerations[parseedSeedPointer%_considerations.length]
@@ -114,7 +120,7 @@ const carveMaze = (pt:number[],offset=2) => {
       SHOW_ANIMATION && console.clear()
       carveMaze(_considerations[parseedSeedPointer%_considerations.length])
     },SHOW_ANIMATION)
-  } else console.log('_pathAcitve',_pathAcitve)
+  } else console.log('_pathAcitve',_pathAcitve, Maze)
 }
 
 const generateBacktracker = (_maze:number[][]) => {
