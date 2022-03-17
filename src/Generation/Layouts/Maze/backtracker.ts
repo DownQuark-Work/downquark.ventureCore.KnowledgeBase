@@ -7,6 +7,7 @@ import {renderGridPassage} from './_utils.ts'
 let backtrackerReturnObject = {
       Egress:{Enter:[0,0],Exit:[0,0]},
       Grid: { amtColumn: 0, amtRow: 0 },
+      Maze: [[0]],
       Type: "RENDER_MAZE_AS.PASSAGE",
       Seed: 0,
       SeedVerification: 0
@@ -62,7 +63,6 @@ const createEgress = () => {
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
     const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
     backtrackerReturnObject.Egress = {Enter:entPt, Exit:exPt}
-    // console.log('backtrackerReturnObject.Egress', backtrackerReturnObject.Egress)
     Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
 }
@@ -79,9 +79,6 @@ const getConsiderations = (pt:number[]) => {
   const l = surroundingPts.l[1] >= 0 ? Maze[pt[0]][pt[1]-offset] : null
   const r = surroundingPts.r[1] < backtrackerReturnObject.Grid.amtColumn ? Maze[pt[0]][pt[1]+offset] : null
   const u = surroundingPts.u[0] >= 0 ? Maze[pt[0]-offset][pt[1]] : null
-
-  console.log('surroundingPts', surroundingPts)
-  console.log('u,d,l,r', u,d,l,r)
   
   const considerArr = []
   d === CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED && considerArr.push(surroundingPts.d)
@@ -100,10 +97,9 @@ const carveMaze = (pt:number[],offset=2) => {
   } else { _pathAcitve.push(pt) } // initial path point
   
   const _considerations:number[][] = getConsiderations(pt)
-  console.log('_considerations', _considerations, parseedSeedPointer%_considerations.length,':',_pathAcitve.length)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
 
-  renderGridPassage(Maze)
+  SHOW_ANIMATION && renderGridPassage(Maze)
   if(_considerations.length){
     const carveTo = _considerations[parseedSeedPointer%_considerations.length]
     _pathAcitve.push(carveTo) // only push if continuing forward
@@ -124,25 +120,23 @@ const carveMaze = (pt:number[],offset=2) => {
   else if (_pathAcitve.length) {
     setTimeout(()=>{
       Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
-      console.log('_pathAcitve.length1', _pathAcitve.length)
       let bkTrk:number[] = _pathAcitve.pop() || [0,0]
       while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
       { bkTrk = _pathAcitve.pop() || [0,0] }
-      console.log('_pathAcitve.length2', _pathAcitve.length)
-      console.log('bkTrk', bkTrk)
       SHOW_ANIMATION && console.clear()
       bkTrk && carveMaze(bkTrk)
-      // carveMaze((_pathAcitve.pop() as number[]))
     },SHOW_ANIMATION)
   }
-  else console.log('_pathAcitve',_pathAcitve, Maze)
+  else {
+    backtrackerReturnObject.Maze = Maze
+    console.log(JSON.stringify(backtrackerReturnObject))
+  }
 }
 
 const generateBacktracker = (_maze:number[][]) => {
   Maze = _maze
   createEgress()
   carveMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
-  // Return the Maze
 }
 
 const instantiate = (base:any) => {
@@ -151,13 +145,11 @@ const instantiate = (base:any) => {
   delete base.Grid._flatGrid
   const strParsedSeed = parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
   parsedMazeSeed = strParsedSeed.map(str => parseInt(str,10))
-  // parsedMazeSeed = [8,8,8,8,9,9,9,8,9, ...parsedMazeSeed]
   stepUp() // needed to instantiate seed parsing
   backtrackerReturnObject = {
     ...base,
     SeedVerification: parsedVerifiedValue()
   }
-  console.log('ret', backtrackerReturnObject, parsedMazeSeed)
   
   generateBacktracker(_flatGrid)
 }
