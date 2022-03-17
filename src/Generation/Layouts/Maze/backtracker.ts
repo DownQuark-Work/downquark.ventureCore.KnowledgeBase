@@ -67,7 +67,7 @@ const createEgress = () => {
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
 }
 
-const getConsiderations = (pt:number[]) => {
+const getConsiderations = (pt:number[]):Array<number[]> => {
   const offset = Math.min(_pathAcitve.length,2)
   const surroundingPts = {
     d:[pt[0]+offset,pt[1]],
@@ -139,6 +139,57 @@ const generateBacktracker = (_maze:number[][]) => {
   carveBacktrackMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
 }
 
+let _considerations:Array<number[]> = []
+let loops = 0
+const carvePrimMaze = (pt:number[],offset=2) => {
+  loops++
+  stepUp()
+  if(offset - 1){ // leave Entrance tile as-is
+    Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
+    _pathAcitve.length === 1 && _pathAcitve.push(pt) // this line and below are
+  } else { _pathAcitve.push(pt) } // needed for getConsiderations method's offset
+  
+  const _tmpConsider:number[][] = getConsiderations(pt)
+  _tmpConsider.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
+  _considerations = [..._considerations, ..._tmpConsider]
+
+  SHOW_ANIMATION && renderGridPassage(Maze)
+  console.log('_considerations', _considerations)
+  if(_considerations.length){
+    const _considerDenom = 10 /_considerations.length
+    // can ONLY carveTo a _tmpConsider (slice it from there AND THEN merge remaining to _considerations)
+    console.log('_considerDenom', _considerDenom)
+    console.log('Math.round(parseedSeedPointer/_considerDenom)', Math.floor(parseedSeedPointer/_considerDenom))
+    const carveTo = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0] // _considerations[Math.round(parseedSeedPointer/_considerDenom)]
+    console.log('carveTo', carveTo)
+    if(offset-1) {
+      const carveThroughPt = pt[0] === carveTo[0] 
+      ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
+      : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
+      Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+    }
+  
+    setTimeout(()=>{
+      Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
+      // SHOW_ANIMATION && console.clear()
+      console.log('TO _considerations', _considerations)
+
+      if(loops === 10) return
+      // slice value for next iteration FROM _considerations
+      carvePrimMaze(carveTo)
+    },SHOW_ANIMATION)
+  }
+  else {
+    backtrackerReturnObject.Maze = Maze
+    console.log(JSON.stringify(backtrackerReturnObject))
+  }
+}
+const generatePrim = (_maze:number[][]) => {
+  Maze = _maze
+  createEgress()
+  carvePrimMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
+}
+
 const instantiate = (base:any) => {
   seedPointer = 0
   const { _flatGrid } = base.Grid
@@ -151,7 +202,9 @@ const instantiate = (base:any) => {
     SeedVerification: parsedVerifiedValue()
   }
   
-  generateBacktracker(_flatGrid)
+  if (new Date().getTime() < 0) generateBacktracker(_flatGrid)
+  if (new Date().getTime() < 0) generatePrim(_flatGrid)
+  generatePrim(_flatGrid)
 }
 
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
