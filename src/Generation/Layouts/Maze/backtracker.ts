@@ -1,5 +1,5 @@
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313)
-// deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -t RENDER_MAZE_AS.WALLED -s 42)
+// deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -t RENDER_MAZE_AS.WALLED -s 42)
 import {parseSeed, parsedVerifiedValue} from '../../_utils/_seed.ts'
 import {CELL_DIRECTIONS_MAP, CELL_STATE} from './_settings.ts'
 import {renderGridPassage} from './_utils.ts'
@@ -13,11 +13,12 @@ let backtrackerReturnObject = {
     },
     parsedMazeSeed:number[],
     seedPointer = 0,
+    parseedSeedPointer = 0,
     Maze:number[][]
+    
 const stepUp = () => {
-  if (++seedPointer < parsedMazeSeed.length) return seedPointer
-  seedPointer = 0
-  return seedPointer
+  if(++seedPointer >= parsedMazeSeed.length) seedPointer = 0
+  parseedSeedPointer = parsedMazeSeed[seedPointer]
 }
 
 const createEgress = () => {
@@ -36,15 +37,15 @@ const createEgress = () => {
           TOP: 0,
         }
 
-  while( parsedMazeSeed[seedPointer] > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
+  while( parseedSeedPointer > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
   { stepUp() }
 
-  const entWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4]
+  const entWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4]
   stepUp()
-  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parsedMazeSeed[seedPointer]/denomRow) : Math.floor(parsedMazeSeed[seedPointer]/denomCol) // charAt matches LEFT || RIGHT
-  if (entLoc%2==0){ Math.max(entLoc--,1) } // location must be odd and positive
+  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parseedSeedPointer/denomRow) : Math.floor(parseedSeedPointer/denomCol) // charAt matches LEFT || RIGHT
+  if (entLoc%2==0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
   stepUp()
-  const exWall = CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] === entWall ? CELL_DIRECTIONS_MAP[(parsedMazeSeed[seedPointer]+1)%4] : CELL_DIRECTIONS_MAP[parsedMazeSeed[seedPointer]%4] // ensures not the entrance wall
+  const exWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4] === entWall ? CELL_DIRECTIONS_MAP[(parseedSeedPointer+1)%4] : CELL_DIRECTIONS_MAP[parseedSeedPointer%4] // ensures not the entrance wall
   stepUp()
   const exitConstraints = (
       exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
@@ -54,13 +55,14 @@ const createEgress = () => {
     : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
 
   let exLoc = (exitConstraints < 0)
-    ? Math.floor(parsedMazeSeed[seedPointer]/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-    : Math.floor(parsedMazeSeed[seedPointer]/exitConstraints)
+    ? Math.floor(parseedSeedPointer/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
+    : Math.floor(parseedSeedPointer/exitConstraints)
     if (exLoc%2==0){ Math.max(exLoc--,1) } // location must be odd and positive
     
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
     const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
     backtrackerReturnObject.Egress = {Enter:entPt, Exit:exPt}
+    // console.log('backtrackerReturnObject.Egress', backtrackerReturnObject.Egress)
     Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
     Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
 }
@@ -108,11 +110,13 @@ const generateBacktracker = (_maze:number[][]) => {
 }
 
 const instantiate = (base:any) => {
-  seedPointer = 3
+  seedPointer = 0
   const { _flatGrid } = base.Grid
   delete base.Grid._flatGrid
   const strParsedSeed = parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
   parsedMazeSeed = strParsedSeed.map(str => parseInt(str,10))
+  // parsedMazeSeed = [8,8,8,8,9,9,9,8,9, ...parsedMazeSeed]
+  stepUp() // needed to instantiate seed parsing
   backtrackerReturnObject = {
     ...base,
     SeedVerification: parsedVerifiedValue()
