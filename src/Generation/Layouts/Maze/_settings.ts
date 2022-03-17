@@ -1,4 +1,4 @@
-export const SHOW_ANIMATION = 0
+export const SHOW_ANIMATION = 300 // 0
 
 const GRID_HEIGHT = 13
 const GRID_WIDTH = 13
