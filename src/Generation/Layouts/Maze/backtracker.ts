@@ -90,8 +90,7 @@ const getConsiderations = (pt:number[]) => {
 }
 
 const _pathAcitve:Array<number[]> = []
-const _considerationQueue:Array<number[]> = []
-const carveMaze = (pt:number[],offset=2) => {
+const carveBacktrackMaze = (pt:number[],offset=2) => {
   stepUp()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
@@ -115,7 +114,7 @@ const carveMaze = (pt:number[],offset=2) => {
       _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].UNCARVED })
       Maze[pt[0]][pt[1]] = CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH
       SHOW_ANIMATION && console.clear()
-      carveMaze(_considerations[parseedSeedPointer%_considerations.length])
+      carveBacktrackMaze(_considerations[parseedSeedPointer%_considerations.length])
     },SHOW_ANIMATION)
   }
   else if (_pathAcitve.length) {
@@ -125,7 +124,7 @@ const carveMaze = (pt:number[],offset=2) => {
       while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
       { bkTrk = _pathAcitve.pop() || [0,0] }
       SHOW_ANIMATION && console.clear()
-      bkTrk && carveMaze(bkTrk)
+      bkTrk && carveBacktrackMaze(bkTrk)
     },SHOW_ANIMATION)
   }
   else {
@@ -137,7 +136,7 @@ const carveMaze = (pt:number[],offset=2) => {
 const generateBacktracker = (_maze:number[][]) => {
   Maze = _maze
   createEgress()
-  carveMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
+  carveBacktrackMaze(backtrackerReturnObject.Egress.Enter,1) // Walk the path - Do the thing
 }
 
 const instantiate = (base:any) => {
