@@ -8,6 +8,7 @@ import {renderGridPassage} from './_utils.ts'
 
 let mazeGeneratorReturnObject = {
       Algorithm: RENDER_MAZE_AS.BACKTRACKER,
+      AnimationDuration: 0,
       Egress:{Enter:[0,0],Exit:[0,0]},
       Grid: { amtColumn: 0, amtRow: 0 },
       Maze: [[0]],
@@ -15,6 +16,7 @@ let mazeGeneratorReturnObject = {
       Seed: 0,
       SeedVerification: 0
     },
+    _ANIMATION_DURATION = 0,
     parsedMazeSeed:number[],
     seedPointer = 0,
     parseedSeedPointer = 0,
@@ -109,7 +111,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
   const _considerations:number[][] = getConsiderations(pt)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
 
-  SHOW_ANIMATION && renderGridPassage(Maze)
+  _ANIMATION_DURATION && renderGridPassage(Maze)
   if(_considerations.length){
     const carveTo = _considerations[parseedSeedPointer%_considerations.length]
     _pathAcitve.push(carveTo) // only push if continuing forward
@@ -123,9 +125,9 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
     setTimeout(()=>{
       _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED })
       Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-      SHOW_ANIMATION && console.clear()
+      _ANIMATION_DURATION && console.clear()
       carveBacktrackMaze(_considerations[parseedSeedPointer%_considerations.length])
-    },SHOW_ANIMATION)
+    },_ANIMATION_DURATION)
   }
   else if (_pathAcitve.length) {
     setTimeout(()=>{
@@ -133,9 +135,9 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
       let bkTrk:number[] = _pathAcitve.pop() || [0,0]
       while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
       { bkTrk = _pathAcitve.pop() || [0,0] }
-      SHOW_ANIMATION && console.clear()
+      _ANIMATION_DURATION && console.clear()
       bkTrk && carveBacktrackMaze(bkTrk)
-    },SHOW_ANIMATION)
+    },_ANIMATION_DURATION)
   }
   else {
     mazeGeneratorReturnObject.Maze = Maze
@@ -161,7 +163,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   _curConsiderations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
   _considerations = [..._curConsiderations, ..._considerations] // _curConsiderations first
 
-  SHOW_ANIMATION && renderGridPassage(Maze)
+  _ANIMATION_DURATION && renderGridPassage(Maze)
   const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
   const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0]
   if(offset-1) {
@@ -174,7 +176,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   setTimeout(()=>{
     Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
     Maze[carveTo[0]][carveTo[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-    SHOW_ANIMATION && console.clear()
+    _ANIMATION_DURATION && console.clear()
     let carveNext
     if(offset-1) {
     const _considerDenom = 10 /_considerations.length
@@ -183,12 +185,12 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     else carveNext = carveTo // handle first case
     if(carveNext) carvePrimMaze(carveNext)
     else {
-      SHOW_ANIMATION && console.clear()
-      SHOW_ANIMATION && renderGridPassage(Maze)
+      _ANIMATION_DURATION && console.clear()
+      _ANIMATION_DURATION && renderGridPassage(Maze)
       mazeGeneratorReturnObject.Maze = Maze
       console.log(JSON.stringify(mazeGeneratorReturnObject))
     }
-  },SHOW_ANIMATION)
+  },_ANIMATION_DURATION)
 }
 const generatePrim = (_maze:number[][]) => {
   Maze = _maze
@@ -207,6 +209,7 @@ const instantiate = (base:any) => {
     ...base,
     SeedVerification: parsedVerifiedValue()
   }
+  _ANIMATION_DURATION = [mazeGeneratorReturnObject.AnimationDuration?.valueOf(), SHOW_ANIMATION].sort().pop() || 0
   
   mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.PRIM
     ? generatePrim(_flatGrid)

@@ -1,4 +1,4 @@
-export const SHOW_ANIMATION = 200 // 300 // 0
+export const SHOW_ANIMATION = 0 // override, must be set by developer so no limit on what it can be
 
 const GRID_HEIGHT = 13
 const GRID_WIDTH = 13
