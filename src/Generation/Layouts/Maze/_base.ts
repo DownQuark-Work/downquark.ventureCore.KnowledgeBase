@@ -67,9 +67,8 @@ class Grid {
   }
 }
 
-const init = (rowAmt:number,colAmt:number,mazeType:string,algorithm:string,seedArg:number = new Date().getTime()) => {
+const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new Date().getTime()) => {
   mazeReturnObject.Seed = seedArg
-  mazeReturnObject.Algorithm = algorithm
   if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) mazeReturnObject.Type = SETTINGS.RENDER_MAZE_AS.WALLED
   mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
     // return if running in Browser
@@ -100,4 +99,4 @@ if (typeof Deno !== 'undefined') { // CLI
 
   init(row,col,walled && SETTINGS.RENDER_MAZE_AS.WALLED,seed) 
 }
-export const setMazeProps = (c=0,r=0,t='',a='',s=0) => { init(r,c,t,a,s) } // Browser
+export const setMazeProps = (c=0,r=0,t='',a='',s=0) => { init(r,c,t,s) } // Browser
