@@ -106,6 +106,13 @@ const getConsiderations = (pt:number[]):Array<number[]> => {
   return considerArr
 }
 
+const carveThrough = (pt:number[],carveTo:number[]) => {
+  const carveThroughPt = pt[0] === carveTo[0] 
+      ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
+      : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
+      Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
+}
+
 const _pathAcitve:Array<number[]> = []
 const carveBacktrackMaze = (pt:number[],offset=2) => {
   stepUp()
@@ -120,12 +127,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
   if(_considerations.length){
     const carveTo = _considerations[parseedSeedPointer%_considerations.length]
     _pathAcitve.push(carveTo) // only push if continuing forward
-    if(offset-1) {
-      const carveThroughPt = pt[0] === carveTo[0] 
-      ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
-      : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
-      Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-    }
+    if(offset-1) { carveThrough(pt,carveTo) }
   
     setTimeout(()=>{
       _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED })
@@ -165,12 +167,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   _ANIMATION_DURATION && renderGridPassage(Maze)
   const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
   const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0]
-  if(offset-1) {
-    const carveThroughPt = pt[0] === carveTo[0] 
-    ? pt[1] > carveTo[1] ? [pt[0],pt[1]-1] : [pt[0],pt[1]+1]
-    : pt[0] > carveTo[0] ? [pt[0]-1,pt[1]] : [pt[0]+1,pt[1]]
-    Maze[carveThroughPt[0]][carveThroughPt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-  }
+  if(offset-1) { carveThrough(pt,carveTo) }
 
   setTimeout(()=>{
     Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
