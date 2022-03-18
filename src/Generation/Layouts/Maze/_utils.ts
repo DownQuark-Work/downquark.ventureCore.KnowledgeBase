@@ -1,6 +1,6 @@
 import {CELL_STATE, RENDER_MAZE_AS} from './_settings.ts'
 
-const _DEBUG = 1
+const _DEBUG = 0
 export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
   !_DEBUG && console.clear()
   const topBorder:'_'[] = [...Array(Grid[0].length+2).fill('_')],

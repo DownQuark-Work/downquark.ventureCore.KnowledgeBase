@@ -1,6 +1,7 @@
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225)
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 1313 --walled)
 // deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 42 --anim)
+// fun seed: deno run Layouts/Maze/backtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1 --anim --prikm) 
 
 import {parseSeed, parsedVerifiedValue} from '../../_utils/_seed.ts'
 import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
@@ -27,6 +28,11 @@ const stepUp = () => {
   parseedSeedPointer = parsedMazeSeed[seedPointer]
 }
 
+const markEggress = () => {
+  const {Enter,Exit} =  mazeGeneratorReturnObject.Egress
+  Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER
+  Maze[Exit[0]][Exit[1]] = CELL_STATE.EGGRESS.EXIT
+}
 const createEgress = () => {
   const colAmt = mazeGeneratorReturnObject.Grid.amtColumn,
         rowAmt = mazeGeneratorReturnObject.Grid.amtRow,
@@ -68,8 +74,7 @@ const createEgress = () => {
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
     const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
     mazeGeneratorReturnObject.Egress = {Enter:entPt, Exit:exPt}
-    Maze[entPt[0]][entPt[1]] = CELL_STATE.EGGRESS.ENTER
-    Maze[exPt[0]][exPt[1]] = CELL_STATE.EGGRESS.EXIT
+    markEggress()
 }
 
 let carvedArray:Array<number[]> = []
@@ -125,7 +130,6 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
     setTimeout(()=>{
       _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED })
       Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-      _ANIMATION_DURATION && console.clear()
       carveBacktrackMaze(_considerations[parseedSeedPointer%_considerations.length])
     },_ANIMATION_DURATION)
   }
@@ -135,11 +139,12 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
       let bkTrk:number[] = _pathAcitve.pop() || [0,0]
       while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
       { bkTrk = _pathAcitve.pop() || [0,0] }
-      _ANIMATION_DURATION && console.clear()
       bkTrk && carveBacktrackMaze(bkTrk)
     },_ANIMATION_DURATION)
   }
   else {
+    if(_ANIMATION_DURATION) // updates terminal with final frame
+    { markEggress(); renderGridPassage(Maze) }
     mazeGeneratorReturnObject.Maze = Maze
     console.log(JSON.stringify(mazeGeneratorReturnObject))
   }
@@ -176,7 +181,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   setTimeout(()=>{
     Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
     Maze[carveTo[0]][carveTo[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-    _ANIMATION_DURATION && console.clear()
+    // _ANIMATION_DURATION && console.clear()
     let carveNext
     if(offset-1) {
     const _considerDenom = 10 /_considerations.length
@@ -185,8 +190,8 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     else carveNext = carveTo // handle first case
     if(carveNext) carvePrimMaze(carveNext)
     else {
-      _ANIMATION_DURATION && console.clear()
-      _ANIMATION_DURATION && renderGridPassage(Maze)
+      if(_ANIMATION_DURATION) // updates terminal with final frame
+    { markEggress(); renderGridPassage(Maze) }
       mazeGeneratorReturnObject.Maze = Maze
       console.log(JSON.stringify(mazeGeneratorReturnObject))
     }
