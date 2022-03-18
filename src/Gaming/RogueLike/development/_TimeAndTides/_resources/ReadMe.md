@@ -8,3 +8,6 @@ The `_modules` directory will manage the mapping of scripts to resources - All b
 ## Start the Server
 Running the script with no arguments will start the server
 `$ deno run --allow-run --allow-write --allow-read _run.ts`
+
+### Future Integrations
+- https://github.com/bugout-dev
