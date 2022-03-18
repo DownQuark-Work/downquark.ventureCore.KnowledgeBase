@@ -196,10 +196,10 @@ const generateMaze = (_maze:number[][]) => {
     : carveBacktrackMaze(mazeGeneratorReturnObject.Egress.Enter,1)
 }
 
-const instantiate = (base:any) => {
+const instantiate = (base:typeof mazeGeneratorReturnObject) => {
   seedPointer = 0
-  const { _flatGrid } = base.Grid
-  delete base.Grid._flatGrid
+  const { _flatGrid } = (base.Grid as { amtColumn: number, amtRow: number, _flatGrid:number[][]})
+  delete (base.Grid as { amtColumn: number, amtRow: number, _flatGrid?:number[][]})._flatGrid
   const strParsedSeed = parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
   parsedMazeSeed = strParsedSeed.map(str => parseInt(str,10))
   stepUp() // needed to instantiate seed parsing
@@ -212,4 +212,4 @@ const instantiate = (base:any) => {
 }
 
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
-export const setMazeProps = (base:any) => { instantiate(base) } // Browser
+export const setMazeProps = (base:typeof mazeGeneratorReturnObject) => { instantiate(base) } // Browser
