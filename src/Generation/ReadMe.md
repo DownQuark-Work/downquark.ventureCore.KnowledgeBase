@@ -4,6 +4,11 @@ https://procgen.space/resources
  Dungeon / Room: https://gamedevelopment.tutsplus.com/tutorials/create-a-procedurally-generated-dungeon-cave-system--gamedev-10099
       - http://roguebasin.com/?title=Basic_BSP_Dungeon_generation
 
+
+https://www.redblobgames
+http://devmag.org.za/2009/05/03/poisson-disk-sampling/
+https://www.emanueleferonato.com/2009/08/28/color-differences-algorithm/
+
 In a different direction - use this to generate mock data for testing/etc
 - could be seeded or random for separate tests
   - Maybe add a bit of chaos and return 0 state or multitudes more info than expected
