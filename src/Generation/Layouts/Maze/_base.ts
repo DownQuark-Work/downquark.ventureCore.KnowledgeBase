@@ -1,5 +1,6 @@
-// deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313
-// deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42
+// deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --anim 225
+// deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225
+// deno run Layouts/Maze/_base.ts -r 13 -c13 -t -walled -s 42
 import { SETTINGS } from './_settings.ts'
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { parse } from "../../_utils/_deps.ts";
@@ -7,6 +8,8 @@ import { parse } from "../../_utils/_deps.ts";
 const _DEBUG = 0
 
 const mazeReturnObject = {
+  Algorithm: SETTINGS.RENDER_MAZE_AS.BACKTRACKER,
+  AnimationDuration: 0,
   Grid:{flatGrid:[[0]]},
   Type: SETTINGS.RENDER_MAZE_AS.PASSAGE,
   Seed: 0,
@@ -64,8 +67,9 @@ class Grid {
   }
 }
 
-const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new Date().getTime()) => {
+const init = (rowAmt:number,colAmt:number,mazeType:string,algorithm:string,seedArg:number = new Date().getTime()) => {
   mazeReturnObject.Seed = seedArg
+  mazeReturnObject.Algorithm = algorithm
   if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) mazeReturnObject.Type = SETTINGS.RENDER_MAZE_AS.WALLED
   mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
     // return if running in Browser
@@ -78,6 +82,22 @@ const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new D
 
 if (typeof Deno !== 'undefined') { // CLI
   const parsedArgs = parse(Deno.args)
-  init(parsedArgs.r,parsedArgs.c,parsedArgs.t||'',parsedArgs.s) 
+  const {
+    r: row = 13,
+    c: col = 17,
+    s: seed = new Date().getTime(),
+    anim = 0,
+    prim = false, // defaults to backtracker
+    walled = false, // defaults to PASSAGE
+  } = parsedArgs
+
+  mazeReturnObject.AnimationDuration = anim
+    ? typeof anim === 'number' ? Math.min(Math.max(100,anim),500) : 225
+    : 0
+  mazeReturnObject.Algorithm = prim
+    ? SETTINGS.RENDER_MAZE_AS.PRIM
+    : SETTINGS.RENDER_MAZE_AS.BACKTRACKER
+
+  init(row,col,walled && SETTINGS.RENDER_MAZE_AS.WALLED,seed) 
 }
-export const setMazeProps = (c=0,r=0,t='',s=0) => { init(r,c,t,s) } // Browser
+export const setMazeProps = (c=0,r=0,t='',a='',s=0) => { init(r,c,t,a,s) } // Browser

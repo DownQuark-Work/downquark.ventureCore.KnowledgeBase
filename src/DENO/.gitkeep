@@ -1,4 +1,39 @@
 brew install deno
+
+> parseArgs
+```
+# deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42 --fullword -b now too --and-another unmarked one 42
+
+import { parse } from "https://deno.land/std@0.120.0/flags/mod.ts"
+const parsedArgs = parse(Deno.args)
+console.log('parsedArgs', parsedArgs)
+
+/** outputs:
+  parsedArgs {
+    _: [ "too", "one", 42 ],
+    r: 13,
+    c: 13,
+    t: "RENDER_MAZE_AS.WALLED",
+    s: 42,
+    fullword: true,
+    b: "now",
+    "and-another": "unmarked"
+  }
+*/
+
+// Stop parsing early, after `--` everything is added to generic array
+# deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42 --fullword -b now -- too --and-another unmarked one 42
+parsedArgs {
+  _: [ "too", "--and-another", "unmarked", "one", "42" ],
+  r: 13,
+  c: 13,
+  t: "RENDER_MAZE_AS.WALLED",
+  s: 42,
+  fullword: true,
+  b: "now"
+
+```
+
 https://deno.land/manual
 - https://deno.land/manual@v1.17.1/examples
 https://deno.com/deploy/docs
