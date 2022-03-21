@@ -4,7 +4,7 @@
 // fun seed: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1 --anim --prikm) 
 // larger: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
 
-import {parseSeed, parsedVerifiedValue, seedPointer as xsp} from '../../_utils/_seed.ts'
+import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
 import {renderGridPassage} from './_utils.ts'
 
@@ -19,16 +19,7 @@ let mazeGeneratorReturnObject = {
       SeedVerification: 0
     },
     _ANIMATION_DURATION = 0,
-    parsedMazeSeed:number[],
-    seedPointer = 0,
-    parseedSeedPointer = 0,
     Maze:number[][]
-
-const seedStep = () => {
-  if(++seedPointer >= parsedMazeSeed.length) seedPointer = 0
-  parseedSeedPointer = parsedMazeSeed[seedPointer]
-  console.log('seedPointer,parseedSeedPointer', xsp(), parseedSeedPointer)
-}
 
 const markEggress = () => {
   const {Enter,Exit} =  mazeGeneratorReturnObject.Egress
@@ -51,16 +42,16 @@ const createEgress = () => {
           TOP: 0,
         }
 
-  while( parseedSeedPointer > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
-  { seedStep() }
+  while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
+  { seedPointer.inc() }
 
-  const entWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4]
-  seedStep()
-  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parseedSeedPointer/denomRow) : Math.floor(parseedSeedPointer/denomCol) // charAt matches LEFT || RIGHT
+  const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
+  seedPointer.inc()
+  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
   if (entLoc%2==0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
-  seedStep()
-  const exWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4] === entWall ? CELL_DIRECTIONS_MAP[(parseedSeedPointer+1)%4] : CELL_DIRECTIONS_MAP[parseedSeedPointer%4] // ensures not the entrance wall
-  seedStep()
+  seedPointer.inc()
+  const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
+  seedPointer.inc()
   const exitConstraints = (
       exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
       && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
@@ -69,8 +60,8 @@ const createEgress = () => {
     : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
 
   let exLoc = (exitConstraints < 0)
-    ? Math.floor(parseedSeedPointer/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-    : Math.floor(parseedSeedPointer/exitConstraints)
+    ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
+    : Math.floor(seedPointer()/exitConstraints)
     if (exLoc%2==0){ Math.max(exLoc--,1) } // location must be odd and positive
     
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
@@ -117,7 +108,7 @@ const carveThrough = (pt:number[],carveTo:number[]) => {
 
 const _pathAcitve:Array<number[]> = []
 const carveBacktrackMaze = (pt:number[],offset=2) => {
-  seedStep()
+  seedPointer.inc()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
   } else { _pathAcitve.push(pt) } // initial path point
@@ -127,14 +118,14 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
 
   _ANIMATION_DURATION && renderGridPassage(Maze)
   if(_considerations.length){
-    const carveTo = _considerations[parseedSeedPointer%_considerations.length]
+    const carveTo = _considerations[seedPointer()%_considerations.length]
     _pathAcitve.push(carveTo) // only push if continuing forward
     if(offset-1) { carveThrough(pt,carveTo) }
   
     setTimeout(()=>{
       _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED })
       Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-      carveBacktrackMaze(_considerations[parseedSeedPointer%_considerations.length])
+      carveBacktrackMaze(_considerations[seedPointer()%_considerations.length])
     },_ANIMATION_DURATION)
   }
   else if (_pathAcitve.length) {
@@ -156,7 +147,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
 
 let _considerations:Array<number[]> = []
 const carvePrimMaze = (pt:number[],offset=2) => {
-  seedStep()
+  seedPointer.inc()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
     _pathAcitve.length === 1 && _pathAcitve.push(pt) // this line and below are
@@ -167,7 +158,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
   _considerations = [..._curConsiderations, ..._considerations] // _curConsiderations first
 
   _ANIMATION_DURATION && renderGridPassage(Maze)
-  const carveToIndex = carvedArray.length ? parseedSeedPointer%carvedArray.length : parseedSeedPointer%_curConsiderations.length
+  const carveToIndex = carvedArray.length ? seedPointer()%carvedArray.length : seedPointer()%_curConsiderations.length
   const carveTo = carvedArray.length ? carvedArray[carveToIndex] : _considerations.splice(carveToIndex,1)[0]
   if(offset-1) { carveThrough(pt,carveTo) }
 
@@ -177,7 +168,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     let carveNext
     if(offset-1) {
     const _considerDenom = 10 /_considerations.length
-    carveNext = _considerations.splice(Math.floor(parseedSeedPointer/_considerDenom),1)[0]
+    carveNext = _considerations.splice(Math.floor(seedPointer()/_considerDenom),1)[0]
     }
     else carveNext = carveTo // handle first case
     if(carveNext) carvePrimMaze(carveNext)
@@ -199,12 +190,11 @@ const generateMaze = (_maze:number[][]) => {
 }
 
 const instantiate = (base:typeof mazeGeneratorReturnObject) => {
-  seedPointer = 0
+  seedPointer(0)
   const { _flatGrid } = (base.Grid as { amtColumn: number, amtRow: number, _flatGrid:number[][]})
   delete (base.Grid as { amtColumn: number, amtRow: number, _flatGrid?:number[][]})._flatGrid
-  const strParsedSeed = parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
-  parsedMazeSeed = strParsedSeed.map(str => parseInt(str,10))
-  seedStep() // needed to instantiate seed parsing
+  parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
+  seedPointer.inc() // needed to instantiate seed parsing
   mazeGeneratorReturnObject = {
     ...base,
     SeedVerification: parsedVerifiedValue()
@@ -213,6 +203,5 @@ const instantiate = (base:typeof mazeGeneratorReturnObject) => {
   generateMaze(_flatGrid)
 }
 
-// (typeof Deno !== 'undefined') && console.log(JSON.parse(Deno.args[0])) // CLI
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
 export const setMazeProps = (base:typeof mazeGeneratorReturnObject) => { instantiate(base) } // Browser

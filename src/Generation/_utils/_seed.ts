@@ -2,7 +2,6 @@ import { PRNG } from '../_PRNG/prng.ts'
 
 let verifiedSeed = 0, seededArr = [], parsedSeed:number[] = []
 export const parseSeed = (preParsedSeed:number, seedLength:number) => {
-  // console.log('preParsedSeed', preParsedSeed,seedLength)
   // deno-lint-ignore no-explicit-any
   const seed = new (PRNG as any)(preParsedSeed)
   let seededStr = ''
@@ -16,7 +15,10 @@ export const parseSeed = (preParsedSeed:number, seedLength:number) => {
 export const parsedVerifiedValue = () => verifiedSeed
 
 let curSeedPointer = 0
-export const seedPointer = () => {
-  if(++curSeedPointer >= parsedSeed.length) curSeedPointer = 0
+export const seedPointer = (setter?:number) => {
+  if(setter) { curSeedPointer = setter }
   return parsedSeed[curSeedPointer]
+}
+seedPointer.inc = () => {
+  if(++curSeedPointer >= parsedSeed.length) curSeedPointer = 0
 }
