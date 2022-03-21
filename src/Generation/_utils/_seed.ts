@@ -14,11 +14,13 @@ export const parseSeed = (preParsedSeed:number, seedLength:number) => {
 }
 export const parsedVerifiedValue = () => verifiedSeed
 
-let curSeedPointer = 0
+// let curSeedPointer = 0
 export const seedPointer = (setter?:number) => {
-  if(setter) { curSeedPointer = setter }
-  return parsedSeed[curSeedPointer]
+  if(setter) { seedPointer.pointerValue = setter }
+  return parsedSeed[seedPointer.pointerValue]
 }
 seedPointer.inc = () => {
-  if(++curSeedPointer >= parsedSeed.length) curSeedPointer = 0
+  if(++seedPointer.pointerValue >= parsedSeed.length) seedPointer.pointerValue = 0
+  return parsedSeed[seedPointer.pointerValue]
 }
+seedPointer.pointerValue = 0

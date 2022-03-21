@@ -1,6 +1,7 @@
 // deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --anim 225
 // deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225
 // deno run Layouts/Maze/_base.ts -r 13 -c13 -t -walled -s 42
+// deno run Layouts/Maze/_base.ts -r 17 -c 17 -s 1313 --sdwndr --anim 100
 import { SETTINGS } from './_settings.ts'
 import {renderGrid} from '../../_utils/cli-view.ts'
 import { parse } from "../../_utils/_deps.ts";
@@ -39,8 +40,16 @@ class Grid {
   get flatGrid() { return this._flatGrid }
 
   constructor(amtColumn:number, amtRow:number) {
-    this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
-    this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
+    if(mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.SIDEWINDER)
+    {
+      this.amtColumn = amtColumn                       // no restraints
+      this.amtRow = (amtRow%2===0) ? amtRow : amtRow+1 // must be even
+    }
+    else
+    {
+      this.amtColumn = (amtColumn%2===0) ? amtColumn+1 : amtColumn // columns and rows
+      this.amtRow = (amtRow%2===0) ? amtRow+1 : amtRow             // must be odd
+    }
 
     this.#grid = []
     this._flatGrid = []
@@ -70,13 +79,13 @@ class Grid {
 
   createGridFlood = () => {
     const initFill = mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED ? [0,0,0,0] : SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
-    const arr = Array.from(Array(this.amtColumn), () => new Array(this.amtRow).fill(initFill));
+    const arr = Array.from(Array(this.amtRow), () => new Array(this.amtColumn).fill(initFill));
     if (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) {
       initFill === SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
-      ? arr[0] = new Array(this.amtRow).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED)
-      : arr[0] = new Array(this.amtRow).fill([0,1,1,1])
+      ? arr[0] = new Array(this.amtColumn).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].IN_PATH)
+      : arr[0] = new Array(this.amtColumn).fill([0,1,1,1])
       arr[0][0] = SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
-      arr[0][this.amtRow-1] = SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
+      arr[0][this.amtColumn-1] = SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
     }
     this._flatGrid = arr
   }

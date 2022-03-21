@@ -1,8 +1,5 @@
-// deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225)
-// deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 1313 --walled)
-// deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 42 --anim)
-// fun seed: deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1 --anim --prikm) 
-// larger: deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
+// deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 17 -c 17 -s 13 --anim 100 --sdwndr)
+// deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 17 -c 17 -s 1369 --anim 100 --sdwndr)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
@@ -48,7 +45,7 @@ const createEgress = () => {
   const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
   seedPointer.inc()
   let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-  if (entLoc%2==0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
+  if (entLoc%2!==0){ entLoc = Math.max(entLoc--,1) } // location must be even and positive
   seedPointer.inc()
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
   seedPointer.inc()
@@ -62,7 +59,7 @@ const createEgress = () => {
   let exLoc = (exitConstraints < 0)
     ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
     : Math.floor(seedPointer()/exitConstraints)
-    if (exLoc%2==0){ Math.max(exLoc--,1) } // location must be odd and positive
+    if (exLoc%2!==0){ Math.max(exLoc--,1) } // location must be even and positive
     
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
     const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
@@ -70,11 +67,55 @@ const createEgress = () => {
     markEggress()
 }
 
-const _pathAcitve:Array<number[]> = []
+const updateInitialRow = () => {
+  Maze[0] = new Array(Maze[0].length).fill(CELL_STATE.COMMON.NON_CONSIDERED)
+}
+
+let _pathAcitve:Array<number[]> = [] // initial point
+const carveNorth = () => {
+  let carveCol = _pathAcitve[seedPointer.inc() % _pathAcitve.length][1]
+  const carveRow = _pathAcitve[0][0]-1
+  
+  if(_pathAcitve.length > 1) { // only look if other options are available - ensures paths will always be accessible
+    while(carveCol > _pathAcitve[0][1] && Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) carveCol--
+    if(Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) { // no carvable path found - check other direction
+      while(carveCol < _pathAcitve[_pathAcitve.length-1][1] && Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) carveCol++
+    }
+  }
+
+  Maze[carveRow][carveCol] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
+  _pathAcitve = [] // reset
+}
+const carveSidewinderMaze = (pt:number[]) => {
+  if(pt[0]+1 >= mazeGeneratorReturnObject.Grid.amtRow) {
+    updateInitialRow()
+    createEgress()
+    _ANIMATION_DURATION && renderGridPassage(Maze)
+    mazeGeneratorReturnObject.Maze = Maze
+    console.log(JSON.stringify(mazeGeneratorReturnObject)) // CLI
+    return mazeGeneratorReturnObject // BROWSER
+  }
+  Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
+  _pathAcitve.push(pt)
+  _ANIMATION_DURATION && renderGridPassage(Maze)
+
+  setTimeout(()=>{
+    Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
+    if(pt[1]+2 === mazeGeneratorReturnObject.Grid.amtColumn || !(seedPointer.inc()%4)) {
+      carveNorth()
+      pt[1]+4 >= mazeGeneratorReturnObject.Grid.amtColumn // End of row -> `+4` ensures no hanging routes
+        ? carveSidewinderMaze([pt[0]+2,1]) // next row
+        : carveSidewinderMaze([pt[0],pt[1]+2]) // skip tile and continue
+    }
+    else {
+      carveSidewinderMaze([pt[0],pt[1]+1])
+    }
+  },_ANIMATION_DURATION)
+}
+
 const generateMaze = (_maze:number[][]) => {
   Maze = _maze
-  // createEgress()
-  renderGridPassage(Maze)
+  carveSidewinderMaze([2,1]) // initial sidewinder position
 }
 
 const instantiate = (base:typeof mazeGeneratorReturnObject) => {
