@@ -25,50 +25,49 @@ const markEggress = () => {
 }
 const createEgress = () => {
   const colAmt = mazeGeneratorReturnObject.Grid.amtColumn,
-        rowAmt = mazeGeneratorReturnObject.Grid.amtRow,
-        restraintColAmt = colAmt - Math.floor(colAmt/2.1),
-        restraintRowAmt = rowAmt - Math.floor(rowAmt/2.1),
-        denomCol = 10 / colAmt,
-        denomRow = 10 / rowAmt,
-        denomRestraintCol = 10 / restraintColAmt,
-        denomRestraintRow = 10 / restraintRowAmt,
-        mazeBounds:{[k:string]:number} = {
-          BOTTOM: rowAmt-1,
-          LEFT: 0,
-          RIGHT: colAmt-1,
-          TOP: 0,
-        }
+        rowAmt = mazeGeneratorReturnObject.Grid.amtRow
 
   while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
   { seedPointer.inc() }
 
   const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
   seedPointer.inc()
-  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-  if (entLoc%2!==0){ entLoc = Math.max(entLoc--,1) } // location must be even and positive
-  seedPointer.inc()
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
+  // let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
+  // if (entLoc%2!==0){ entLoc = Math.max(entLoc--,1) } // location must be even and positive
   seedPointer.inc()
-  const exitConstraints = (
-      exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
-      && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
-    )
-    ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
-    : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
+  seedPointer.inc()
 
-  let exLoc = (exitConstraints < 0)
-    ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-    : Math.floor(seedPointer()/exitConstraints)
-    if (exLoc%2!==0){ Math.max(exLoc--,1) } // location must be even and positive
+  // const exitConstraints = (
+  //     exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
+  //     && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
+  //   )
+  //   ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
+  //   : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
+
+  // let exLoc = (exitConstraints < 0)
+  //   ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
+  //   : Math.floor(seedPointer()/exitConstraints)
+  //   if (exLoc%2!==0){ Math.max(exLoc--,1) } // location must be even and positive
     
-    const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
-    const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
-    mazeGeneratorReturnObject.Egress = {Enter:entPt, Exit:exPt}
+  //   const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
+  //   const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
+  console.log('entWall, exWall', entWall, exWall)
+    mazeGeneratorReturnObject.Egress = {Enter:[0,3], Exit:[8,0]}
+    // mazeGeneratorReturnObject.Egress = {Enter:entPt, Exit:exPt}
     markEggress()
 }
 
 const updateInitialRow = () => {
   Maze[0] = new Array(Maze[0].length).fill(CELL_STATE.COMMON.NON_CONSIDERED)
+  Maze[2].forEach((c,i) => {
+    if(i && i < mazeGeneratorReturnObject.Grid.amtColumn-1 && c === CELL_STATE.COMMON.NON_CONSIDERED) {
+      if (i-1 > 0) { Maze[1][i-1] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH }
+      Maze[1][i] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
+      if (i+1 < mazeGeneratorReturnObject.Grid.amtColumn-1) { Maze[1][i+1] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH }
+    }
+  })
+  seedPointer.inc()
 }
 
 let _pathAcitve:Array<number[]> = [] // initial point
@@ -80,6 +79,9 @@ const carveNorth = () => {
     while(carveCol > _pathAcitve[0][1] && Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) carveCol--
     if(Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) { // no carvable path found - check other direction
       while(carveCol < _pathAcitve[_pathAcitve.length-1][1] && Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) carveCol++
+      if(Maze[carveRow-1][carveCol] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) { // no carvable path found in either direction
+        Maze[carveRow+1][_pathAcitve[0][1]-1] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH // - attach to lefthand point to ensure no floating routes
+      }
     }
   }
 
@@ -90,9 +92,9 @@ const carveSidewinderMaze = (pt:number[]) => {
   if(pt[0]+1 >= mazeGeneratorReturnObject.Grid.amtRow) {
     updateInitialRow()
     createEgress()
-    _ANIMATION_DURATION && renderGridPassage(Maze)
     mazeGeneratorReturnObject.Maze = Maze
     console.log(JSON.stringify(mazeGeneratorReturnObject)) // CLI
+    _ANIMATION_DURATION && renderGridPassage(Maze)
     return mazeGeneratorReturnObject // BROWSER
   }
   Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
