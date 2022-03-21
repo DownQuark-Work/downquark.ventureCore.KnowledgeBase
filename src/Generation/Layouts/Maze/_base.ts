@@ -75,6 +75,8 @@ class Grid {
       initFill === SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
       ? arr[0] = new Array(this.amtRow).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED)
       : arr[0] = new Array(this.amtRow).fill([0,1,1,1])
+      arr[0][0] = SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
+      arr[0][this.amtRow-1] = SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
     }
     this._flatGrid = arr
   }
