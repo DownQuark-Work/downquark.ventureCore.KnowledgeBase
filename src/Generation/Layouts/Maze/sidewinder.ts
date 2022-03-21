@@ -25,7 +25,42 @@ const markEggress = () => {
 }
 const createEgress = () => {
   const colAmt = mazeGeneratorReturnObject.Grid.amtColumn,
-        rowAmt = mazeGeneratorReturnObject.Grid.amtRow
+        rowAmt = mazeGeneratorReturnObject.Grid.amtRow,
+        denomCol = 10 / (colAmt-2), // -2 for borders
+        denomRow = 10 / (rowAmt-2)
+
+  const getLocation = (wall:string) => {
+    seedPointer.inc()
+    
+    const initialLoc = (wall.charAt(wall.length-1) === 'T')
+          ? Math.min(Math.max(Math.round(seedPointer()/denomCol) + 1,1), colAmt-1)
+          : Math.min(Math.max(Math.round(seedPointer()/denomRow) + 1,1), rowAmt-1)
+    let colCheck = colAmt - 2,
+        rowCheck = 1
+    switch(wall) {
+      case 'LEFT': 
+        colCheck = 1
+        /* falls through */
+      case 'RIGHT':
+        rowCheck = initialLoc
+        while(rowCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck--
+        if(!rowCheck) {
+          while(rowCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck++
+        }
+        return [rowCheck, colCheck === 1 ? 0 : colAmt - 1]
+      case 'BOTTOM':
+        rowCheck = rowAmt - 2
+        /* falls through */
+      case 'TOP':
+      default:
+        colCheck = initialLoc
+        while(colCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck--
+        if(!colCheck) {
+          while(colCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck++
+        }
+        return [rowCheck === 1 ? 0 : rowAmt - 1, colCheck]
+    }
+  }
 
   while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
   { seedPointer.inc() }
@@ -33,27 +68,18 @@ const createEgress = () => {
   const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
   seedPointer.inc()
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
-  // let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-  // if (entLoc%2!==0){ entLoc = Math.max(entLoc--,1) } // location must be even and positive
   seedPointer.inc()
-  seedPointer.inc()
+  const entLoc = getLocation(entWall)
+  const exLoc = getLocation(exWall)
 
-  // const exitConstraints = (
-  //     exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
-  //     && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
-  //   )
-  //   ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
-  //   : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
-
-  // let exLoc = (exitConstraints < 0)
-  //   ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-  //   : Math.floor(seedPointer()/exitConstraints)
-  //   if (exLoc%2!==0){ Math.max(exLoc--,1) } // location must be even and positive
-    
-  //   const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
-  //   const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
+  // renderGridPassage(Maze)
+  console.log('denomCol,denomRow', denomCol,denomRow)
   console.log('entWall, exWall', entWall, exWall)
-    mazeGeneratorReturnObject.Egress = {Enter:[0,3], Exit:[8,0]}
+  console.log('entLoc', entLoc, exLoc)
+  mazeGeneratorReturnObject.Egress = {Enter:[0,3], Exit:[8,0]}
+  Maze[entLoc[0]][entLoc[1]] = CELL_STATE.EGGRESS.ENTER
+  Maze[exLoc[0]][exLoc[1]] = CELL_STATE.EGGRESS.EXIT
+  renderGridPassage(Maze)
     // mazeGeneratorReturnObject.Egress = {Enter:entPt, Exit:exPt}
     markEggress()
 }
@@ -94,7 +120,6 @@ const carveSidewinderMaze = (pt:number[]) => {
     createEgress()
     mazeGeneratorReturnObject.Maze = Maze
     console.log(JSON.stringify(mazeGeneratorReturnObject)) // CLI
-    _ANIMATION_DURATION && renderGridPassage(Maze)
     return mazeGeneratorReturnObject // BROWSER
   }
   Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
