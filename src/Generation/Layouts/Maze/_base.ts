@@ -80,7 +80,6 @@ class Grid {
   }
 
   constructGrid = () => {
-    console.log('mazeReturnObject.Algorithm', mazeReturnObject.Algorithm)
     switch (mazeReturnObject.Algorithm)
     {
       case SETTINGS.RENDER_MAZE_AS.SIDEWINDER:

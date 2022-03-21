@@ -4,7 +4,7 @@
 // fun seed: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1 --anim --prikm) 
 // larger: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
 
-import {parseSeed, parsedVerifiedValue} from '../../_utils/_seed.ts'
+import {parseSeed, parsedVerifiedValue, seedPointer as xsp} from '../../_utils/_seed.ts'
 import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
 import {renderGridPassage} from './_utils.ts'
 
@@ -23,10 +23,11 @@ let mazeGeneratorReturnObject = {
     seedPointer = 0,
     parseedSeedPointer = 0,
     Maze:number[][]
-    
-const stepUp = () => {
+
+const seedStep = () => {
   if(++seedPointer >= parsedMazeSeed.length) seedPointer = 0
   parseedSeedPointer = parsedMazeSeed[seedPointer]
+  console.log('seedPointer,parseedSeedPointer', xsp(), parseedSeedPointer)
 }
 
 const markEggress = () => {
@@ -51,15 +52,15 @@ const createEgress = () => {
         }
 
   while( parseedSeedPointer > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
-  { stepUp() }
+  { seedStep() }
 
   const entWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4]
-  stepUp()
+  seedStep()
   let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(parseedSeedPointer/denomRow) : Math.floor(parseedSeedPointer/denomCol) // charAt matches LEFT || RIGHT
   if (entLoc%2==0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
-  stepUp()
+  seedStep()
   const exWall = CELL_DIRECTIONS_MAP[parseedSeedPointer%4] === entWall ? CELL_DIRECTIONS_MAP[(parseedSeedPointer+1)%4] : CELL_DIRECTIONS_MAP[parseedSeedPointer%4] // ensures not the entrance wall
-  stepUp()
+  seedStep()
   const exitConstraints = (
       exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
       && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
@@ -116,7 +117,7 @@ const carveThrough = (pt:number[],carveTo:number[]) => {
 
 const _pathAcitve:Array<number[]> = []
 const carveBacktrackMaze = (pt:number[],offset=2) => {
-  stepUp()
+  seedStep()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
   } else { _pathAcitve.push(pt) } // initial path point
@@ -155,7 +156,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
 
 let _considerations:Array<number[]> = []
 const carvePrimMaze = (pt:number[],offset=2) => {
-  stepUp()
+  seedStep()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
     _pathAcitve.length === 1 && _pathAcitve.push(pt) // this line and below are
@@ -203,7 +204,7 @@ const instantiate = (base:typeof mazeGeneratorReturnObject) => {
   delete (base.Grid as { amtColumn: number, amtRow: number, _flatGrid?:number[][]})._flatGrid
   const strParsedSeed = parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
   parsedMazeSeed = strParsedSeed.map(str => parseInt(str,10))
-  stepUp() // needed to instantiate seed parsing
+  seedStep() // needed to instantiate seed parsing
   mazeGeneratorReturnObject = {
     ...base,
     SeedVerification: parsedVerifiedValue()
@@ -212,5 +213,6 @@ const instantiate = (base:typeof mazeGeneratorReturnObject) => {
   generateMaze(_flatGrid)
 }
 
+// (typeof Deno !== 'undefined') && console.log(JSON.parse(Deno.args[0])) // CLI
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
 export const setMazeProps = (base:typeof mazeGeneratorReturnObject) => { instantiate(base) } // Browser
