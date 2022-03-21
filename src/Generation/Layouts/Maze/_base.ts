@@ -47,21 +47,47 @@ class Grid {
     this.constructGrid()
   }
 
-  constructGrid = ()=>{
-    for(let curRow = 0; curRow < this.amtRow; curRow++) {
-      const c = [],
-            f = []
-      for(let curCol = 0; curCol < this.amtColumn; curCol++) {
-        const cell = mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED
+  constructCell = (curRow:number,curCol:number) => {
+    return mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED
           ? new Cell(curRow,curCol,SETTINGS.ACTIVE_WALLS)
           : new Cell(curRow,curCol,curRow%2===0 ? SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED : curCol%2!==0
             ? SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].UNCARVED
             : SETTINGS.CELL_STATE.COMMON.CREATED)
+  }
+
+  createGridLoop = () => {
+    for(let curRow = 0; curRow < this.amtRow; curRow++) {
+      const c = [], f = []
+      for(let curCol = 0; curCol < this.amtColumn; curCol++) {
+        const cell = this.constructCell(curRow,curCol)
         c.push(cell)
         f.push(cell.state)
       }
       this.#grid.push(c)
       this._flatGrid.push(f)
+    }
+  }
+
+  createGridFlood = () => {
+    const initFill = mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.WALLED ? [0,0,0,0] : SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
+    const arr = Array.from(Array(this.amtColumn), () => new Array(this.amtRow).fill(initFill));
+    if (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) {
+      initFill === SETTINGS.CELL_STATE.COMMON.NON_CONSIDERED
+      ? arr[0] = new Array(this.amtRow).fill(SETTINGS.CELL_STATE[SETTINGS.RENDER_MAZE_AS.PASSAGE].CARVED)
+      : arr[0] = new Array(this.amtRow).fill([0,1,1,1])
+    }
+    this._flatGrid = arr
+  }
+
+  constructGrid = () => {
+    console.log('mazeReturnObject.Algorithm', mazeReturnObject.Algorithm)
+    switch (mazeReturnObject.Algorithm)
+    {
+      case SETTINGS.RENDER_MAZE_AS.SIDEWINDER:
+        this.createGridFlood()
+        break;
+      default :
+        this.createGridLoop()
     }
     _DEBUG && console.log('this.#grid', this.#grid)
   }
@@ -74,9 +100,12 @@ const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new D
     // return if running in Browser
   if (typeof Deno === 'undefined') { console.log('mazeReturnObject', mazeReturnObject); return mazeReturnObject }
     // will need a new CLI render method for walled maze
-  _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && renderGrid(mazeReturnObject.Grid.flatGrid)
+  _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE
+    &&  (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.BACKTRACKER || mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.PRIM)
+    && renderGrid(mazeReturnObject.Grid.flatGrid) // TODO(@mlnck): Handle this _only_ in separate Maze files (primtracker, sidewinder, etc)
   // log as string if passing through Deno
   console.log(JSON.stringify(mazeReturnObject))
+  _DEBUG && console.log('DEBUG :: Maze/_base.ts is in DEBUG mode - this may cause errors')
 }
 
 if (typeof Deno !== 'undefined') { // CLI
@@ -86,16 +115,18 @@ if (typeof Deno !== 'undefined') { // CLI
     c: col = 17,
     s: seed = new Date().getTime(),
     anim = 0,
-    prim = false, // defaults to backtracker
+    prim = false, // defaults to BACKTRACKER
+    sdwndr = false,
     walled = false, // defaults to PASSAGE
   } = parsedArgs
 
   mazeReturnObject.AnimationDuration = anim
     ? typeof anim === 'number' ? Math.min(Math.max(100,anim),500) : 225
     : 0
-  mazeReturnObject.Algorithm = prim
-    ? SETTINGS.RENDER_MAZE_AS.PRIM
-    : SETTINGS.RENDER_MAZE_AS.BACKTRACKER
+  
+    mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER
+    if (prim) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM }
+    if (sdwndr) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER }
 
   init(row,col,walled && SETTINGS.RENDER_MAZE_AS.WALLED,seed) 
 }
