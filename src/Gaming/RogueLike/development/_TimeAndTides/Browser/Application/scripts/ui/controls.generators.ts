@@ -1,12 +1,14 @@
 // deno bundle -c deno.jsonc ./ui/controls.generators.ts ../js/rogue/generate.dungeon.bundle.js
 // nethack is 63x18 || 73x19
 import {generateDungeon} from '../ecsx/entity/dungeon.ts'
+import {generateMaze} from '../ecsx/entity/maze.ts'
 
 const createSeedHash = (s = null) => {
   const hashSeed = s || new Date().getTime().toString()
   window.location.hash = hashSeed
 }
 export const setCellularAutomataArgs = () => {
+  console.log('generateMaze()', generateMaze())
   document?.getElementById('generate-button')?.setAttribute('disabled','true')
   const generatorArgs: {[k:string]:number} = { gw: 0, gh: 0, sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)

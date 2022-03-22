@@ -198,4 +198,4 @@ const instantiate = (base:typeof mazeGeneratorReturnObject) => {
 }
 
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
-export const setMazeProps = (base:typeof mazeGeneratorReturnObject) => { instantiate(base) } // Browser
+export const generatePrimTracker = (base:typeof mazeGeneratorReturnObject) => { instantiate(base) } // Browser
