@@ -3,6 +3,11 @@ https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap
   - <SEARCH FOR> "Consider extending" <-- paragraph of ideas
   https://weblog.jamisbuck.org/2011/1/12/maze-generation-recursive-division-algorithm.html
 
+TODO: cell shape types:
+theta - circle
+delta - hex
+triangle
+
 https://joeiddon.github.io/projects/javascript/maze_generation
 - backtracker (above) \[less dead ends]
 - prim (above) \[more dead ends]
