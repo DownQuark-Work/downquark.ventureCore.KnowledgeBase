@@ -36,7 +36,7 @@ export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
   console.log(...bottomBorder)
 }
 
-export const createEgressUtil:(_:{Grid:{amtColumn:number,amtRow:number}, seedPointer:any, }) => {Enter:number[],Exit:number[]} = ({Grid, seedPointer}) => {
+export const createEgressUtil:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, seedPointer:any, }) => {Enter:number[],Exit:number[]} = (RenderType, {Grid, seedPointer}) => {
   const colAmt = Grid.amtColumn,
         rowAmt = Grid.amtRow,
         restraintColAmt = colAmt - Math.floor(colAmt/2.1),
@@ -60,28 +60,31 @@ export const createEgressUtil:(_:{Grid:{amtColumn:number,amtRow:number}, seedPoi
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
   seedPointer.inc()
 
-  // primtracker
-  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-  if (entLoc%2===0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
-  seedPointer.inc()
+  if(RenderType === RENDER_MAZE_AS.BACKTRACKER || RenderType === RENDER_MAZE_AS.PRIM) { // START primtracker
+    let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
+    if (entLoc%2===0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
+    seedPointer.inc()
 
-  const exitConstraints = (
-    exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
-    && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
-  )
-  ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
-  : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
+    const exitConstraints = (
+      exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
+      && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
+    )
+    ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
+    : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
 
-let exLoc = (exitConstraints < 0)
-  ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-  : Math.floor(seedPointer()/exitConstraints)
-  if (exLoc%2===0){ Math.max(exLoc--,1) } // location must be odd and positive
-  
-  const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
-  const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
-  // end primtracker
+  let exLoc = (exitConstraints < 0)
+    ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
+    : Math.floor(seedPointer()/exitConstraints)
+    if (exLoc%2===0){ Math.max(exLoc--,1) } // location must be odd and positive
+    
+    const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
+    const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
+    return {Enter:entPt, Exit:exPt}
+  }
+  // END primtracker
   
   // console.log('UTIL: entWall, exWall', entWall, exWall)
   // console.log('UTIL:', entPt, exPt)
-  return {Enter:entPt, Exit:exPt}
+  
+  return {Enter:[0,0], Exit:[0,0]}
 }

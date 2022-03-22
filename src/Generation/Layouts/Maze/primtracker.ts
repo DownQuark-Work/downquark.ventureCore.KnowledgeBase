@@ -140,7 +140,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
 
 const generateMaze = (_maze:number[][]) => {
   Maze = _maze
-  mazeGeneratorReturnObject.Egress = createEgressUtil({Grid:mazeGeneratorReturnObject.Grid, seedPointer})
+  mazeGeneratorReturnObject.Egress = createEgressUtil(mazeGeneratorReturnObject.Algorithm, {Grid:mazeGeneratorReturnObject.Grid, seedPointer})
   markEggress()
   mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.PRIM
     ? carvePrimMaze(mazeGeneratorReturnObject.Egress.Enter,1)
