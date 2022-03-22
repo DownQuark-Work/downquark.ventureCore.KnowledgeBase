@@ -8,8 +8,8 @@ const createSeedHash = (s = null) => {
   window.location.hash = hashSeed
 }
 export const setCellularAutomataArgs = () => {
-  // console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
-  console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
+  console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
+  // console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
   document?.getElementById('generate-button')?.setAttribute('disabled','true')
   const generatorArgs: {[k:string]:number} = { gw: 0, gh: 0, sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
