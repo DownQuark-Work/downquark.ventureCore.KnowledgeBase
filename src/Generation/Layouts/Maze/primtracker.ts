@@ -8,6 +8,7 @@
 // - deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 0 --anim 225)
 //  -> entrance on wrong tile
 // - deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 42 --anim --hak)
+// - deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 16 -s 42 --anim 150 --hak)
 // carveThrough array in odd spot
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
@@ -128,6 +129,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
           })
           markEggress() // updates terminal with final frame
           mazeGeneratorReturnObject.Maze = Maze
+          _ANIMATION_DURATION && renderGridPassage(Maze)
           console.log(JSON.stringify(mazeGeneratorReturnObject))
           return
         }
