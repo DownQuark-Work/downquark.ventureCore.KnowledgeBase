@@ -836,6 +836,7 @@ const init = (rowAmt, colAmt, mazeType, seedArg1 = new Date().getTime())=>{
     0 && mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE && (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.BACKTRACKER || mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.PRIM) && renderGrid(mazeReturnObject.Grid.flatGrid);
     console.log(JSON.stringify(mazeReturnObject));
     0 && console.log('DEBUG :: Maze/_base.ts is in DEBUG mode - this may cause errors');
+    return mazeReturnObject;
 };
 if (typeof Deno !== 'undefined') {
     const parsedArgs = parse(Deno.args);
@@ -853,8 +854,18 @@ if (typeof Deno !== 'undefined') {
     }
     init(row, col, walled && SETTINGS.RENDER_MAZE_AS.WALLED, seed);
 }
-const setMazeProps = (c = 0, r = 0, t = '', a = '', s = 0)=>{
-    init(r, c, t, s);
+const setMazeProps = (c = 0, r = 0, s = 0, a = '', t = '')=>{
+    mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER;
+    if (a === SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL;
+    }
+    if (a === SETTINGS.RENDER_MAZE_AS.PRIM) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM;
+    }
+    if (a === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER;
+    }
+    return init(r, c, t, s);
 };
 const renderGridPassage = (Grid5)=>{
     !0 && console.clear();
@@ -1379,19 +1390,30 @@ const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     if (dungeonMap) dungeonMap.innerHTML = dungeonMapString;
     cb && cb();
 };
-const generateMaze2 = ()=>{
+const generateMaze2 = ({ gw , gh , seedArg: seedArg2 , mazeType , algorithm  }, cb = ()=>{})=>{
     console.log('{setMazeProps, generatePrimTracker, generateSidewinder}', {
         setMazeProps,
         generatePrimTracker,
         generateSidewinder
     });
+    const mazeBase = setMazeProps(gw, gh, seedArg2, algorithm, mazeType);
+    console.log('-> setMazeProps(gw,gh)', mazeBase);
+    if (algorithm === 'RENDER_MAZE.WITH_SIDEWINDER') {
+        console.log('generateSidewinder', generateSidewinder(mazeBase));
+    } else {
+        console.log('generatePrimTracker', generatePrimTracker(mazeBase));
+    }
 };
 const createSeedHash = (s = null)=>{
     const hashSeed = s || new Date().getTime().toString();
     window.location.hash = hashSeed;
 };
 const setCellularAutomataArgs = ()=>{
-    console.log('generateMaze()', generateMaze2());
+    console.log('generateMaze({gw:12, gh:8})', generateMaze2({
+        gw: 12,
+        gh: 8,
+        algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
+    }));
     document?.getElementById('generate-button')?.setAttribute('disabled', 'true');
     const generatorArgs = {
         gw: 0,

@@ -114,8 +114,9 @@ const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new D
     &&  (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.BACKTRACKER || mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.PRIM)
     && renderGrid(mazeReturnObject.Grid.flatGrid) // TODO(@mlnck): Handle this _only_ in separate Maze files (primtracker, sidewinder, etc)
   // log as string if passing through Deno
-  console.log(JSON.stringify(mazeReturnObject))
+  console.log(JSON.stringify(mazeReturnObject)) // CLI
   _DEBUG && console.log('DEBUG :: Maze/_base.ts is in DEBUG mode - this may cause errors')
+  return mazeReturnObject
 }
 
 if (typeof Deno !== 'undefined') { // CLI
@@ -142,4 +143,11 @@ if (typeof Deno !== 'undefined') { // CLI
 
   init(row,col,walled && SETTINGS.RENDER_MAZE_AS.WALLED,seed) 
 }
-export const setMazeProps = (c=0,r=0,t='',a='',s=0) => { init(r,c,t,s) } // Browser
+export const setMazeProps = (c=0,r=0,s=0,a='',t='') => {
+  mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER
+    if (a === SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL }
+    if (a === SETTINGS.RENDER_MAZE_AS.PRIM) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM }
+    if (a === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER }
+
+  return init(r,c,t,s)
+} // Browser
