@@ -21,6 +21,9 @@ let mazeGeneratorReturnObject = {
     _ANIMATION_DURATION = 0,
     Maze:number[][]
 
+const huntPtArr:number[][] = [],
+      huntPtMap:{[k:string]:number[][]}  = {}
+
 const markEggress = () => {
   const {Enter,Exit} =  mazeGeneratorReturnObject.Egress
   Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER
@@ -88,10 +91,43 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
   else if (_pathAcitve.length) {
     setTimeout(()=>{
       Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
-      let bkTrk:number[] = _pathAcitve.pop() || [0,0]
-      while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
-      { bkTrk = _pathAcitve.pop() || [0,0] }
-      bkTrk && carveBacktrackMaze(bkTrk)
+      if(mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.HUNT_AND_KILL)
+      {
+        let hunted = false
+        for(let row = 0; row < Maze.length; row++) {
+          if(hunted) break
+          for(let col = 0; col < Maze[row].length; col++) {
+            if(Maze[row][col] === CELL_STATE[RENDER_MAZE_AS.PASSAGE].UNCARVED) {
+              huntPtMap[`${row}|${col}`] = getConsiderations([row,col])
+              huntPtArr.push([row,col])
+              hunted = true
+              break
+            }
+          }
+        }
+        if(!hunted) { // all top level carving completed
+          huntPtArr.forEach(huntd => {
+            getConsiderations(huntd)
+            let vCString = JSON.stringify(carvedArray)
+            huntPtMap[`${huntd[0]}|${huntd[1]}`].forEach(hnt => {
+              vCString = vCString.replace(JSON.stringify(hnt), '').replace(',,',',').replace('[,','[').replace(',]',']')
+            })
+            const _validConsiderations = JSON.parse(vCString)
+            carveThrough(huntd,_validConsiderations[seedPointer.inc()%_validConsiderations.length])
+            markEggress() // updates terminal with final frame
+            _ANIMATION_DURATION && renderGridPassage(Maze)
+            mazeGeneratorReturnObject.Maze = Maze
+            console.log(JSON.stringify(mazeGeneratorReturnObject))
+          })
+          return
+        }
+        carveBacktrackMaze(huntPtArr[huntPtArr.length-1])
+      } else {
+        let bkTrk:number[] = _pathAcitve.pop() || [0,0]
+        while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
+        { bkTrk = _pathAcitve.pop() || [0,0] }
+        bkTrk && carveBacktrackMaze(bkTrk)
+      }
     },_ANIMATION_DURATION)
   }
   else {

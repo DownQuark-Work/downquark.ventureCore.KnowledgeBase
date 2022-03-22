@@ -60,7 +60,10 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, M
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
   seedPointer.inc()
 
-  if(RenderType === RENDER_MAZE_AS.BACKTRACKER || RenderType === RENDER_MAZE_AS.PRIM) { // START primtracker
+  if(
+    RenderType === RENDER_MAZE_AS.BACKTRACKER
+    || RenderType === RENDER_MAZE_AS.HUNT_AND_KILL
+    || RenderType === RENDER_MAZE_AS.PRIM) { // START primtracker
     let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
     if (entLoc%2===0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
     seedPointer.inc()

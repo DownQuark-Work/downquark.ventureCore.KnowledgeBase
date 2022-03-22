@@ -125,7 +125,8 @@ if (typeof Deno !== 'undefined') { // CLI
     c: col = 17,
     s: seed = new Date().getTime(),
     anim = 0,
-    prim = false, // defaults to BACKTRACKER
+    hak = false, // defaults to BACKTRACKER
+    prim = false,
     sdwndr = false,
     walled = false, // defaults to PASSAGE
   } = parsedArgs
@@ -135,6 +136,7 @@ if (typeof Deno !== 'undefined') { // CLI
     : 0
   
     mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER
+    if (hak) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL }
     if (prim) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM }
     if (sdwndr) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER }
 
