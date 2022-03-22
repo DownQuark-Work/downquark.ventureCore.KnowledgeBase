@@ -5,8 +5,8 @@
 // larger: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
-import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
-import {renderGridPassage} from './_utils.ts'
+import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
+import {createEgressUtil, renderGridPassage} from './_utils.ts'
 
 let mazeGeneratorReturnObject = {
       Algorithm: RENDER_MAZE_AS.BACKTRACKER,
@@ -25,49 +25,6 @@ const markEggress = () => {
   const {Enter,Exit} =  mazeGeneratorReturnObject.Egress
   Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER
   Maze[Exit[0]][Exit[1]] = CELL_STATE.EGGRESS.EXIT
-}
-const createEgress = () => {
-  const colAmt = mazeGeneratorReturnObject.Grid.amtColumn,
-        rowAmt = mazeGeneratorReturnObject.Grid.amtRow,
-        restraintColAmt = colAmt - Math.floor(colAmt/2.1),
-        restraintRowAmt = rowAmt - Math.floor(rowAmt/2.1),
-        denomCol = 10 / colAmt,
-        denomRow = 10 / rowAmt,
-        denomRestraintCol = 10 / restraintColAmt,
-        denomRestraintRow = 10 / restraintRowAmt,
-        mazeBounds:{[k:string]:number} = {
-          BOTTOM: rowAmt-1,
-          LEFT: 0,
-          RIGHT: colAmt-1,
-          TOP: 0,
-        }
-
-  while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
-  { seedPointer.inc() }
-
-  const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
-  seedPointer.inc()
-  let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-  if (entLoc%2==0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
-  seedPointer.inc()
-  const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
-  seedPointer.inc()
-  const exitConstraints = (
-      exWall.charAt(exWall.length-1) !== entWall.charAt(entWall.length-1) // lefT righT
-      && exWall.charAt(1) !== entWall.charAt(1) // tOp bOttom
-    )
-    ? exWall.charAt(exWall.length-1) === 'T' ? -denomRestraintRow : -denomRestraintCol
-    : exWall.charAt(exWall.length-1) === 'T' ? denomRow : denomCol
-
-  let exLoc = (exitConstraints < 0)
-    ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
-    : Math.floor(seedPointer()/exitConstraints)
-    if (exLoc%2==0){ Math.max(exLoc--,1) } // location must be odd and positive
-    
-    const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
-    const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
-    mazeGeneratorReturnObject.Egress = {Enter:entPt, Exit:exPt}
-    markEggress()
 }
 
 let carvedArray:Array<number[]> = []
@@ -138,8 +95,8 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
     },_ANIMATION_DURATION)
   }
   else {
-    if(_ANIMATION_DURATION) // updates terminal with final frame
-    { markEggress(); renderGridPassage(Maze) }
+    markEggress() // updates terminal with final frame
+    if(_ANIMATION_DURATION) renderGridPassage(Maze)
     mazeGeneratorReturnObject.Maze = Maze
     console.log(JSON.stringify(mazeGeneratorReturnObject))
   }
@@ -167,14 +124,14 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     Maze[carveTo[0]][carveTo[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
     let carveNext
     if(offset-1) {
-    const _considerDenom = 10 /_considerations.length
-    carveNext = _considerations.splice(Math.floor(seedPointer()/_considerDenom),1)[0]
+      const _considerDenom = 10 /_considerations.length
+      carveNext = _considerations.splice(Math.floor(seedPointer()/_considerDenom),1)[0]
     }
     else carveNext = carveTo // handle first case
     if(carveNext) carvePrimMaze(carveNext)
     else {
-      if(_ANIMATION_DURATION) // updates terminal with final frame
-    { markEggress(); renderGridPassage(Maze) }
+      markEggress() // updates terminal with final frame
+      if(_ANIMATION_DURATION) renderGridPassage(Maze)
       mazeGeneratorReturnObject.Maze = Maze
       console.log(JSON.stringify(mazeGeneratorReturnObject))
     }
@@ -183,7 +140,8 @@ const carvePrimMaze = (pt:number[],offset=2) => {
 
 const generateMaze = (_maze:number[][]) => {
   Maze = _maze
-  createEgress()
+  mazeGeneratorReturnObject.Egress = createEgressUtil({Grid:mazeGeneratorReturnObject.Grid, seedPointer})
+  markEggress()
   mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.PRIM
     ? carvePrimMaze(mazeGeneratorReturnObject.Egress.Enter,1)
     : carveBacktrackMaze(mazeGeneratorReturnObject.Egress.Enter,1)
