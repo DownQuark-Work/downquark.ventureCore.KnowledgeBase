@@ -23,7 +23,7 @@ const markEggress = () => {
   const {Enter,Exit} =  mazeGeneratorReturnObject.Egress
   Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER
   Maze[Exit[0]][Exit[1]] = CELL_STATE.EGGRESS.EXIT
-  renderGridPassage(Maze)
+  _ANIMATION_DURATION && renderGridPassage(Maze)
 }
 
 const updateInitialRow = () => {
