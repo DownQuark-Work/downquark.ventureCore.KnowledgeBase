@@ -1,6 +1,7 @@
 // deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 17 -c 17 -s 13 --anim 100 --sdwndr)
 // deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 17 -c 17 -s 1369 --anim 100 --sdwndr)
 // LARGER: deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 30 -c 25 -s 1369 --sdwndr) 
+// LARGER: deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 20 -c 35 -s 1313 --sdwndr)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'

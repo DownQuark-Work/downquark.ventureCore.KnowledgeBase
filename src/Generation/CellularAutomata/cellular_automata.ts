@@ -1,4 +1,5 @@
 // deno run -c deno.jsonc ./CellularAutomata/cellular_automata.ts 35 20 12 - specify config file for use with both DOM and CLI
+// deno run -c deno.jsonc ./CellularAutomata/cellular_automata.ts 35 20 12 -1 - animate CLI w negative arg
 // deno bundle -c deno.jsonc ./CellularAutomata/cellular_automata.ts ../../src/Gaming/RogueLike/development/Browser/Application/rogue/js/rogue/cellular_automata.bundle.js
 import { SETTINGS } from './_settings.ts'
 
