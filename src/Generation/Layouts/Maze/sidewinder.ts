@@ -3,8 +3,8 @@
 // LARGER: deno run Layouts/Maze/sidewinder.ts $(deno run Layouts/Maze/_base.ts -r 30 -c 25 -s 1369 --sdwndr) 
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
-import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
-import {renderGridPassage} from './_utils.ts'
+import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
+import {createEgress, renderGridPassage} from './_utils.ts'
 
 let mazeGeneratorReturnObject = {
       Algorithm: RENDER_MAZE_AS.BACKTRACKER,
@@ -24,55 +24,6 @@ const markEggress = () => {
   Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER
   Maze[Exit[0]][Exit[1]] = CELL_STATE.EGGRESS.EXIT
   renderGridPassage(Maze)
-}
-const createEgress = () => {
-  const colAmt = mazeGeneratorReturnObject.Grid.amtColumn,
-        rowAmt = mazeGeneratorReturnObject.Grid.amtRow,
-        denomCol = 10 / (colAmt-2), // -2 for borders
-        denomRow = 10 / (rowAmt-2)
-
-  const getLocation = (wall:string) => {
-    seedPointer.inc()
-    
-    const initialLoc = (wall.charAt(wall.length-1) === 'T')
-          ? Math.min(Math.max(Math.round(seedPointer()/denomCol) + 1,1), colAmt-1)
-          : Math.min(Math.max(Math.round(seedPointer()/denomRow) + 1,1), rowAmt-1)
-    let colCheck = colAmt - 2,
-        rowCheck = 1
-    switch(wall) {
-      case 'LEFT': 
-        colCheck = 1
-        /* falls through */
-      case 'RIGHT':
-        rowCheck = initialLoc
-        while(rowCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck--
-        if(!rowCheck) {
-          while(rowCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck++
-        }
-        return [rowCheck, colCheck === 1 ? 0 : colAmt - 1]
-      case 'BOTTOM':
-        rowCheck = rowAmt - 2
-        /* falls through */
-      case 'TOP':
-      default:
-        colCheck = initialLoc
-        while(colCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck--
-        if(!colCheck) {
-          while(colCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck++
-        }
-        return [rowCheck === 1 ? 0 : rowAmt - 1, colCheck]
-    }
-  }
-
-  while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
-  { seedPointer.inc() }
-
-  const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
-  seedPointer.inc()
-  const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall
-
-  mazeGeneratorReturnObject.Egress = {Enter:getLocation(entWall), Exit:getLocation(exWall)}
-  markEggress()
 }
 
 const updateInitialRow = () => {
@@ -110,7 +61,8 @@ const carveNorth = () => {
 const carveSidewinderMaze = (pt:number[]) => {
   if(pt[0]+1 >= mazeGeneratorReturnObject.Grid.amtRow) {
     updateInitialRow()
-    createEgress()
+    mazeGeneratorReturnObject.Egress = createEgress(mazeGeneratorReturnObject.Algorithm, {Grid:mazeGeneratorReturnObject.Grid, Maze, seedPointer})
+    markEggress()
     mazeGeneratorReturnObject.Maze = Maze
     console.log(JSON.stringify(mazeGeneratorReturnObject)) // CLI
     return mazeGeneratorReturnObject // BROWSER

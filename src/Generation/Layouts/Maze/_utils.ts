@@ -36,7 +36,7 @@ export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
   console.log(...bottomBorder)
 }
 
-export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, seedPointer:any, }) => {Enter:number[],Exit:number[]} = (RenderType, {Grid, seedPointer}) => {
+export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, Maze?:Array<number[]>, seedPointer:any, }) => {Enter:number[],Exit:number[]} = (RenderType, {Grid, Maze=[[0]], seedPointer}) => {
   const colAmt = Grid.amtColumn,
         rowAmt = Grid.amtRow,
         restraintColAmt = colAmt - Math.floor(colAmt/2.1),
@@ -84,8 +84,43 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, s
   // END primtracker
   
   if(RenderType === RENDER_MAZE_AS.SIDEWINDER) { // START sidewinder
+    const getLocation = (wall:string) => {
+      seedPointer.inc()
+      
+      const initialLoc = (wall.charAt(wall.length-1) === 'T')
+            ? Math.min(Math.max(Math.round(seedPointer()/denomCol) + 1,1), colAmt-1)
+            : Math.min(Math.max(Math.round(seedPointer()/denomRow) + 1,1), rowAmt-1)
+      let colCheck = colAmt - 2,
+          rowCheck = 1
+      switch(wall) {
+        case 'LEFT': 
+          colCheck = 1
+          /* falls through */
+        case 'RIGHT':
+          rowCheck = initialLoc
+          while(rowCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck--
+          if(!rowCheck) {
+            while(rowCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) rowCheck++
+          }
+          return [rowCheck, colCheck === 1 ? 0 : colAmt - 1]
+        case 'BOTTOM':
+          rowCheck = rowAmt - 2
+          /* falls through */
+        case 'TOP':
+        default:
+          colCheck = initialLoc
+          while(colCheck && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck--
+          if(!colCheck) {
+            while(colCheck < rowAmt - 1 && Maze[rowCheck][colCheck] !== CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH) colCheck++
+          }
+          return [rowCheck === 1 ? 0 : rowAmt - 1, colCheck]
+      }
+    }
+    return {Enter:getLocation(entWall), Exit:getLocation(exWall)}
   }
-  // console.log('UTIL: entWall, exWall', entWall, exWall)
+   // END sidewinder
+  
+   // console.log('UTIL: entWall, exWall', entWall, exWall)
   // console.log('UTIL:', entPt, exPt)
   
   return {Enter:[0,0], Exit:[0,0]}
