@@ -4,6 +4,12 @@
 // fun seed: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 1 --anim --prikm) 
 // larger: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
 
+// resolve these bugs and I think we're good
+// - deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 13 -s 0 --anim 225)
+//  -> entrance on wrong tile
+// - deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 13 -c 17 -s 42 --anim --hak)
+// carveThrough array in odd spot
+
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
 import {createEgress, renderGridPassage} from './_utils.ts'
@@ -105,20 +111,24 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
             }
           }
         }
-        if(!hunted) { // all top level carving completed
-          huntPtArr.forEach(huntd => {
+        if(!hunted)
+        { // all top level carving completed
+          huntPtArr.forEach(huntd => 
+          {
             getConsiderations(huntd)
             let vCString = JSON.stringify(carvedArray)
             huntPtMap[`${huntd[0]}|${huntd[1]}`].forEach(hnt => {
               vCString = vCString.replace(JSON.stringify(hnt), '').replace(',,',',').replace('[,','[').replace(',]',']')
             })
             const _validConsiderations = JSON.parse(vCString)
-            carveThrough(huntd,_validConsiderations[seedPointer.inc()%_validConsiderations.length])
-            markEggress() // updates terminal with final frame
+            console.log('huntd,_validConsiderations', huntd,_validConsiderations)
+            if(_validConsiderations.length) carveThrough(huntd,_validConsiderations[seedPointer.inc()%_validConsiderations.length])
+            else console.log('valid hanging issue to fix',huntd)
             _ANIMATION_DURATION && renderGridPassage(Maze)
-            mazeGeneratorReturnObject.Maze = Maze
-            console.log(JSON.stringify(mazeGeneratorReturnObject))
           })
+          markEggress() // updates terminal with final frame
+          mazeGeneratorReturnObject.Maze = Maze
+          console.log(JSON.stringify(mazeGeneratorReturnObject))
           return
         }
         carveBacktrackMaze(huntPtArr[huntPtArr.length-1])

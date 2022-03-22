@@ -65,7 +65,7 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, M
     || RenderType === RENDER_MAZE_AS.HUNT_AND_KILL
     || RenderType === RENDER_MAZE_AS.PRIM) { // START primtracker
     let entLoc = (entWall.charAt(entWall.length-1) === 'T') ? Math.floor(seedPointer()/denomRow) : Math.floor(seedPointer()/denomCol) // charAt matches LEFT || RIGHT
-    if (entLoc%2===0){ entLoc = Math.max(entLoc--,1) } // location must be odd and positive
+    if (entLoc%2===0){ entLoc = Math.max(entLoc - 1,1) } // location must be odd and positive
     seedPointer.inc()
 
     const exitConstraints = (
@@ -78,7 +78,7 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, M
   let exLoc = (exitConstraints < 0)
     ? Math.floor(seedPointer()/Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt,restraintRowAmt)/2))
     : Math.floor(seedPointer()/exitConstraints)
-    if (exLoc%2===0){ Math.max(exLoc--,1) } // location must be odd and positive
+    if (exLoc%2===0){ exLoc = Math.max(exLoc - 1,1) } // location must be odd and positive
     
     const entPt = (entWall.charAt(entWall.length-1) === 'T') ? [entLoc,mazeBounds[entWall]] : [mazeBounds[entWall],entLoc]
     const exPt = (exWall.charAt(exWall.length-1) === 'T') ? [exLoc,mazeBounds[exWall]] : [mazeBounds[exWall],exLoc]
