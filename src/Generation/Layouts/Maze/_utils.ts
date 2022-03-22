@@ -36,7 +36,7 @@ export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
   console.log(...bottomBorder)
 }
 
-export const createEgressUtil:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, seedPointer:any, }) => {Enter:number[],Exit:number[]} = (RenderType, {Grid, seedPointer}) => {
+export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, seedPointer:any, }) => {Enter:number[],Exit:number[]} = (RenderType, {Grid, seedPointer}) => {
   const colAmt = Grid.amtColumn,
         rowAmt = Grid.amtRow,
         restraintColAmt = colAmt - Math.floor(colAmt/2.1),
@@ -83,6 +83,8 @@ export const createEgressUtil:(_:string,__:{Grid:{amtColumn:number,amtRow:number
   }
   // END primtracker
   
+  if(RenderType === RENDER_MAZE_AS.SIDEWINDER) { // START sidewinder
+  }
   // console.log('UTIL: entWall, exWall', entWall, exWall)
   // console.log('UTIL:', entPt, exPt)
   

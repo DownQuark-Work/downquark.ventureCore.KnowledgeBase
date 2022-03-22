@@ -6,7 +6,7 @@
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
-import {createEgressUtil, renderGridPassage} from './_utils.ts'
+import {createEgress, renderGridPassage} from './_utils.ts'
 
 let mazeGeneratorReturnObject = {
       Algorithm: RENDER_MAZE_AS.BACKTRACKER,
@@ -140,7 +140,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
 
 const generateMaze = (_maze:number[][]) => {
   Maze = _maze
-  mazeGeneratorReturnObject.Egress = createEgressUtil(mazeGeneratorReturnObject.Algorithm, {Grid:mazeGeneratorReturnObject.Grid, seedPointer})
+  mazeGeneratorReturnObject.Egress = createEgress(mazeGeneratorReturnObject.Algorithm, {Grid:mazeGeneratorReturnObject.Grid, seedPointer})
   markEggress()
   mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.PRIM
     ? carvePrimMaze(mazeGeneratorReturnObject.Egress.Enter,1)
