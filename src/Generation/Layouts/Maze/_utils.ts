@@ -89,7 +89,6 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, M
   if(RenderType === RENDER_MAZE_AS.SIDEWINDER) { // START sidewinder
     const getLocation = (wall:string) => {
       seedPointer.inc()
-      
       const initialLoc = (wall.charAt(wall.length-1) === 'T')
             ? Math.min(Math.max(Math.round(seedPointer()/denomCol) + 1,1), colAmt-1)
             : Math.min(Math.max(Math.round(seedPointer()/denomRow) + 1,1), rowAmt-1)

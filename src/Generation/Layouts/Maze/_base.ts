@@ -108,7 +108,7 @@ const init = (rowAmt:number,colAmt:number,mazeType:string,seedArg:number = new D
   if (mazeType === SETTINGS.RENDER_MAZE_AS.WALLED) mazeReturnObject.Type = SETTINGS.RENDER_MAZE_AS.WALLED
   mazeReturnObject.Grid = new Grid(colAmt, rowAmt)
     // return if running in Browser
-  if (typeof Deno === 'undefined') { console.log('mazeReturnObject', mazeReturnObject); return mazeReturnObject }
+  if (typeof Deno === 'undefined') return mazeReturnObject
     // will need a new CLI render method for walled maze
   _DEBUG &&  mazeReturnObject.Type === SETTINGS.RENDER_MAZE_AS.PASSAGE
     &&  (mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.BACKTRACKER || mazeReturnObject.Algorithm === SETTINGS.RENDER_MAZE_AS.PRIM)
