@@ -127,8 +127,6 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
         while (bkTrk[0] === pt[0] && bkTrk[1] === pt[1])
         { bkTrk = _pathAcitve.pop() || [0,0] }
         bkTrk && carveBacktrackMaze(bkTrk)
-        // console.log('DEBUG - undo below')
-        // bkTrk && carvePrimMaze(bkTrk)
       }
     },_ANIMATION_DURATION)
   }
@@ -167,8 +165,6 @@ const carvePrimMaze = (pt:number[],offset=2) => {
     }
     else carveNext = carveTo // handle first case
     if(carveNext) carvePrimMaze(carveNext)
-    // console.log('DEBUG - undo below')
-    // if(carveNext) carveBacktrackMaze(carveNext)
     else {
       markEggress() // updates terminal with final frame
       if(_ANIMATION_DURATION) renderGridPassage(Maze)
