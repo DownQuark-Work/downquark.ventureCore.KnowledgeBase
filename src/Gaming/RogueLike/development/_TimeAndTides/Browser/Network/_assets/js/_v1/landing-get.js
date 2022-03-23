@@ -922,13 +922,13 @@ const createEgress = (RenderType, { Grid: Grid6 , Maze: Maze2 = [
     if (RenderType === RENDER_MAZE_AS.BACKTRACKER || RenderType === RENDER_MAZE_AS.HUNT_AND_KILL || RenderType === RENDER_MAZE_AS.PRIM) {
         let entLoc = entWall.charAt(entWall.length - 1) === 'T' ? Math.floor(seedPointer1() / denomRow) : Math.floor(seedPointer1() / denomCol);
         if (entLoc % 2 === 0) {
-            entLoc = Math.max(entLoc--, 1);
+            entLoc = Math.max(entLoc - 1, 1);
         }
         seedPointer1.inc();
         const exitConstraints = exWall.charAt(exWall.length - 1) !== entWall.charAt(entWall.length - 1) && exWall.charAt(1) !== entWall.charAt(1) ? exWall.charAt(exWall.length - 1) === 'T' ? -denomRestraintRow : -denomRestraintCol : exWall.charAt(exWall.length - 1) === 'T' ? denomRow : denomCol;
         let exLoc = exitConstraints < 0 ? Math.floor(seedPointer1() / Math.abs(exitConstraints) + Math.floor(Math.min(restraintColAmt, restraintRowAmt) / 2)) : Math.floor(seedPointer1() / exitConstraints);
         if (exLoc % 2 === 0) {
-            Math.max(exLoc--, 1);
+            exLoc = Math.max(exLoc - 1, 1);
         }
         const entPt = entWall.charAt(entWall.length - 1) === 'T' ? [
             entLoc,
@@ -1024,7 +1024,7 @@ let mazeGeneratorReturnObject = {
     Seed: 0,
     SeedVerification: 0
 }, _ANIMATION_DURATION = 0, Maze;
-const huntPtArr = [], huntPtMap = {};
+const huntPtArr = [], huntEndPtArr = [], huntPtMap = {};
 const markEggress = ()=>{
     const { Enter , Exit  } = mazeGeneratorReturnObject.Egress;
     Maze[Enter[0]][Enter[1]] = CELL_STATE.EGGRESS.ENTER;
@@ -1113,6 +1113,18 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
         setTimeout(()=>{
             Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH;
             if (mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.HUNT_AND_KILL) {
+                if (!huntEndPtArr.length) {
+                    const firstRow = Math.max(Math.min(_pathAcitve[0][0], mazeGeneratorReturnObject.Grid.amtRow - 2), 1), firstCol = Math.max(Math.min(_pathAcitve[0][1], mazeGeneratorReturnObject.Grid.amtColumn - 2), 1);
+                    huntPtMap[`${firstRow}|${firstCol}`] = getConsiderations([
+                        firstRow,
+                        firstCol
+                    ]);
+                    huntPtArr.push([
+                        firstRow,
+                        firstCol
+                    ]);
+                }
+                huntEndPtArr.push(pt);
                 let hunted = false;
                 for(let row = 0; row < Maze.length; row++){
                     if (hunted) break;
@@ -1132,6 +1144,13 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
                     }
                 }
                 if (!hunted) {
+                    const hangingPaths = [];
+                    const egressPoint = huntPtArr.shift() || [
+                        0,
+                        0
+                    ];
+                    const egressConsiderations = huntPtMap[`${egressPoint[0]}|${egressPoint[1]}`];
+                    carveThrough(egressPoint, egressConsiderations[seedPointer.inc() % egressConsiderations.length]);
                     huntPtArr.forEach((huntd)=>{
                         getConsiderations(huntd);
                         let vCString = JSON.stringify(carvedArray);
@@ -1139,14 +1158,14 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
                             vCString = vCString.replace(JSON.stringify(hnt), '').replace(',,', ',').replace('[,', '[').replace(',]', ']');
                         });
                         const _validConsiderations = JSON.parse(vCString);
-                        carveThrough(huntd, _validConsiderations[seedPointer.inc() % _validConsiderations.length]);
-                        markEggress();
+                        if (_validConsiderations.length) carveThrough(huntd, _validConsiderations[seedPointer.inc() % _validConsiderations.length]);
+                        else hangingPaths.push(huntd);
                         _ANIMATION_DURATION && renderGridPassage(Maze);
-                        mazeGeneratorReturnObject.Maze = Maze;
-                        if (typeof Deno !== 'undefined') {
-                            console.log(JSON.stringify(mazeGeneratorReturnObject));
-                        }
                     });
+                    markEggress();
+                    mazeGeneratorReturnObject.Maze = Maze;
+                    _ANIMATION_DURATION && renderGridPassage(Maze);
+                    console.log(JSON.stringify(mazeGeneratorReturnObject));
                     return;
                 }
                 carveBacktrackMaze(huntPtArr[huntPtArr.length - 1]);
@@ -1168,9 +1187,7 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
         markEggress();
         if (_ANIMATION_DURATION) renderGridPassage(Maze);
         mazeGeneratorReturnObject.Maze = Maze;
-        if (typeof Deno !== 'undefined') {
-            console.log(JSON.stringify(mazeGeneratorReturnObject));
-        }
+        console.log(JSON.stringify(mazeGeneratorReturnObject));
     }
 };
 let _considerations = [];
@@ -1209,9 +1226,7 @@ const carvePrimMaze = (pt, offset = 2)=>{
             markEggress();
             if (_ANIMATION_DURATION) renderGridPassage(Maze);
             mazeGeneratorReturnObject.Maze = Maze;
-            if (typeof Deno !== 'undefined') {
-                console.log(JSON.stringify(mazeGeneratorReturnObject));
-            }
+            console.log(JSON.stringify(mazeGeneratorReturnObject));
         }
     }, _ANIMATION_DURATION);
 };

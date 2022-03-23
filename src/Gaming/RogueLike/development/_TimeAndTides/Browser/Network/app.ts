@@ -22,6 +22,6 @@ const server = new Drash.Server({
   ],
 });
 
+console.log(`Server running at ${server.address}.`);
 server.run();
 
-console.log(`Server running at ${server.address}.`);

@@ -17,15 +17,14 @@ export default class LandingResource extends Drash.Resource {
     // or set it in a cookie like so:
     //     response.setCookie({ name: "X-CSRF-TOKEN", value: csrf.token, });
     const templateVariables = {
-      user: {
-        name: "🤓",
+      generator: {
+        name: 'dungeon',
         details: {
-          "Role": "Software Engineer",
-          "Phone": "(555) 555-5555",
-          "E-mail": "bat@example.com",
+          Seed: new Date().getTime(),
         },
       },
     };
+    
 
     const html = response.render("/views/screens/landing.html", templateVariables) as string;
 
