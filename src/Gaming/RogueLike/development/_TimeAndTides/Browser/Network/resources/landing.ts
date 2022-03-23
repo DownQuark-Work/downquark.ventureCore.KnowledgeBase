@@ -6,6 +6,7 @@ const csrf = new CSRFService(); // allows access to `csrf.token`
 export default class LandingResource extends Drash.Resource {
   public paths = [
     '/',
+    '/maze'
   ];
 
   public services = {
@@ -16,14 +17,14 @@ export default class LandingResource extends Drash.Resource {
     response.headers.set("X-CSRF-TOKEN", csrf.token);
     // or set it in a cookie like so:
     //     response.setCookie({ name: "X-CSRF-TOKEN", value: csrf.token, });
-    const templateVariables = {
-      generator: {
-        name: 'dungeon',
-        details: {
-          Seed: new Date().getTime(),
-        },
-      },
-    };
+    const templateVariables = {generator: {name: 'dungeon', }};
+    const reqPath = new URL(request.url).pathname;
+    switch(reqPath) {
+      case '/maze':
+        templateVariables.generator.name='maze'; break
+      case '/':
+      default:
+    }
     
 
     const html = response.render("/views/screens/landing.html", templateVariables) as string;
