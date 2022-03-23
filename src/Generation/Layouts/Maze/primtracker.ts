@@ -29,6 +29,7 @@ let mazeGeneratorReturnObject = {
     Maze:number[][]
 
 const huntPtArr:number[][] = [],
+      huntEndPtArr:number[][] = [],
       huntPtMap:{[k:string]:number[][]}  = {}
 
 const markEggress = () => {
@@ -78,12 +79,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
   seedPointer.inc()
   if(offset - 1){ // leave Entrance tile as-is
     Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT
-  } else {
-    _pathAcitve.push(pt)
-    // for H&K
-    huntPtMap[`${pt[0]}|${pt[1]}`] = getConsiderations([pt[0],pt[1]])
-    huntPtArr.push([pt[0],pt[1]])
-  } // initial path point
+  } else { _pathAcitve.push(pt) } // initial path point
   
   const _considerations:number[][] = getConsiderations(pt)
   _considerations.forEach(c => { Maze[c[0]][c[1]] = CELL_STATE.COMMON.CONSIDER })
@@ -105,6 +101,14 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
       Maze[pt[0]][pt[1]] = CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATH
       if(mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.HUNT_AND_KILL)
       {
+        if(!huntEndPtArr.length) {
+          const firstRow = Math.max(Math.min(_pathAcitve[0][0],mazeGeneratorReturnObject.Grid.amtRow-2),1),
+            firstCol = Math.max(Math.min(_pathAcitve[0][1],mazeGeneratorReturnObject.Grid.amtColumn-2),1)
+          huntPtMap[`${firstRow}|${firstCol}`] = getConsiderations([firstRow,firstCol])
+          huntPtArr.push([firstRow,firstCol])
+        }
+        huntEndPtArr.push(pt)
+
         let hunted = false
         for(let row = 0; row < Maze.length; row++) {
           if(hunted) break
@@ -120,6 +124,10 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
         if(!hunted)
         { // all top level carving completed
           const hangingPaths:number[][] = []
+          const egressPoint = huntPtArr.shift() || [0,0]// handle egress as one off
+          const egressConsiderations = huntPtMap[`${egressPoint[0]}|${egressPoint[1]}`]
+          carveThrough(egressPoint,egressConsiderations[seedPointer.inc()%egressConsiderations.length])
+          
           huntPtArr.forEach(huntd => 
           {
             getConsiderations(huntd)
@@ -128,21 +136,10 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
               vCString = vCString.replace(JSON.stringify(hnt), '').replace(',,',',').replace('[,','[').replace(',]',']')
             })
             const _validConsiderations = JSON.parse(vCString)
-            console.log('huntd,_validConsiderations', huntd,_validConsiderations)
             if(_validConsiderations.length) carveThrough(huntd,_validConsiderations[seedPointer.inc()%_validConsiderations.length])
             else hangingPaths.push(huntd)
             _ANIMATION_DURATION && renderGridPassage(Maze)
           })
-          hangingPaths.forEach(hanging => {
-            // connect final hanging paths
-            let dir
-            if (Maze[hanging[0]-1][hanging[1]] === CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATHD) { dir = [-1,0] }
-            if (Maze[hanging[0]+1][hanging[1]] === CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATHD) { dir = [1,0] }
-            if (Maze[hanging[0]][hanging[1]-1] === CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATHD) { dir = [0,-1] }
-            if (Maze[hanging[0]][hanging[1]+1] === CELL_STATE[RENDER_MAZE_AS.PASSAGE].IN_PATHD) { dir = [0,+1] }
-            console.log('dir', dir)
-          })
-          console.log('hangingPaths', hangingPaths)
           markEggress() // updates terminal with final frame
           mazeGeneratorReturnObject.Maze = Maze
           _ANIMATION_DURATION && renderGridPassage(Maze)
