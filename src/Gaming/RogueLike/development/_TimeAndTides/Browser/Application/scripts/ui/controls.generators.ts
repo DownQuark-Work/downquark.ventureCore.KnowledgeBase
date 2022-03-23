@@ -9,11 +9,11 @@ const createSeedHash = (s = null) => {
 }
 export const setGeneratorArgs = () => {
   const generatorType = (document.querySelector('h3[data-generator-type]') as HTMLHeadingElement)?.dataset?.generatorType
-  console.log('generatorType', generatorType)
   const generatorArgs: {[k:string]:number} = { gw: 0, gh: 0, sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
+  console.log('spans', spans)
   spans.forEach(arg => {
-    generatorArgs[arg.dataset.genAttr || 'gw'] = parseInt(arg.innerText,10)
+    (generatorArgs[arg.dataset.genAttr || 'gw'] as any) = !isNaN(parseInt(arg.innerText,10)) ? parseInt(arg.innerText,10) : arg.innerText
   })
 
   if(!generatorArgs.sa) // update hash in url so we can grab if needed
@@ -21,21 +21,28 @@ export const setGeneratorArgs = () => {
     createSeedHash()
     generatorArgs.sa = parseInt(window.location.hash.replace('#',''))
   }
-  const seedInputText = (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText
+  const seedInputText = (document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText
   if( seedInputText.length && window.location.hash !== '#' + seedInputText) // reflect manual seed update
-  { window.location.hash = (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText}
+  { window.location.hash = (document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText}
 
-  generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }))
-  console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
-  console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
+  switch (generatorType) {
+    case 'maze':
+      console.log('generatorArgs', generatorArgs)
+      // TODO: Implement below and get graphical
+      // console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
+      // console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
+      break
+    default:
+      generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }))
+  }
 }
 if(!window.location.hash) { createSeedHash() }
-(document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
+(document.querySelector('span[data-gen-attr$="s"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
 
 if(typeof document !== 'undefined') {
   document?.getElementById('generate-button')?.addEventListener('click',setGeneratorArgs)
   document?.getElementById('generate-random-button')?.addEventListener('click',(e) => {
-    (document.querySelector('span[data-gen-attr="sa"]') as HTMLSpanElement).innerText = ''
+    (document.querySelector('span[data-gen-attr$="s"]') as HTMLSpanElement).innerText = ''
     setGeneratorArgs()
     console.log( '{e}', {e}, (e?.target as HTMLSpanElement)?.dataset?.type )
   })

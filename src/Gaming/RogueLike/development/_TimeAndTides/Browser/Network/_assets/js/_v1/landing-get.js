@@ -1423,7 +1423,6 @@ const createSeedHash = (s = null)=>{
 };
 const setGeneratorArgs = ()=>{
     const generatorType = document.querySelector('h3[data-generator-type]')?.dataset?.generatorType;
-    console.log('generatorType', generatorType);
     const generatorArgs = {
         gw: 0,
         gh: 0,
@@ -1431,20 +1430,27 @@ const setGeneratorArgs = ()=>{
         ir: 0
     };
     const spans = document.querySelectorAll('[data-gen-attr]');
+    console.log('spans', spans);
     spans.forEach((arg)=>{
-        generatorArgs[arg.dataset.genAttr || 'gw'] = parseInt(arg.innerText, 10);
+        generatorArgs[arg.dataset.genAttr || 'gw'] = !isNaN(parseInt(arg.innerText, 10)) ? parseInt(arg.innerText, 10) : arg.innerText;
     });
     if (!generatorArgs.sa) {
         createSeedHash();
         generatorArgs.sa = parseInt(window.location.hash.replace('#', ''));
     }
-    const seedInputText = document.querySelector('span[data-gen-attr="sa"]').innerText;
+    const seedInputText = document.querySelector('span[data-gen-attr^="s"]').innerText;
     if (seedInputText.length && window.location.hash !== '#' + seedInputText) {
-        window.location.hash = document.querySelector('span[data-gen-attr="sa"]').innerText;
+        window.location.hash = document.querySelector('span[data-gen-attr^="s"]').innerText;
     }
-    generateDungeon({
-        ...generatorArgs
-    });
+    switch(generatorType){
+        case 'maze':
+            console.log('generatorArgs', generatorArgs);
+            break;
+        default:
+            generateDungeon({
+                ...generatorArgs
+            });
+    }
     console.log('generateMaze({gw:12, gh:8})', generateMaze2({
         gw: 12,
         gh: 8
@@ -1458,11 +1464,11 @@ const setGeneratorArgs = ()=>{
 if (!window.location.hash) {
     createSeedHash();
 }
-document.querySelector('span[data-gen-attr="sa"]').innerText = window.location.hash.replace('#', '');
+document.querySelector('span[data-gen-attr$="s"]').innerText = window.location.hash.replace('#', '');
 if (typeof document !== 'undefined') {
     document?.getElementById('generate-button')?.addEventListener('click', setGeneratorArgs);
     document?.getElementById('generate-random-button')?.addEventListener('click', (e)=>{
-        document.querySelector('span[data-gen-attr="sa"]').innerText = '';
+        document.querySelector('span[data-gen-attr$="s"]').innerText = '';
         setGeneratorArgs();
         console.log('{e}', {
             e

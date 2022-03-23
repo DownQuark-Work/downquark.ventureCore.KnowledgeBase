@@ -1,9 +1,18 @@
 <h3 data-generator-type="<% generator.name %>"><% generator.name %> Settings</h3>
     <p>
-      Width: <span contenteditable data-gen-attr="gw">75</span> 
-      Height: <span contenteditable data-gen-attr="gh">20</span> 
-      Seed: <span contenteditable data-gen-attr="sa"></span> 
-      Max Generations: <span contenteditable data-gen-attr="ir">5</span> 
+      Width: <span contenteditable data-gen-attr="c">30</span> 
+      Height: <span contenteditable data-gen-attr="r">20</span> 
+      Seed: <span contenteditable data-gen-attr="s"></span> 
+    </p>
+    <p>
+      Algorithm: <span contenteditable data-gen-attr="a">RENDER_MAZE.WITH_BACKTRACKER</span>
+        <input value="RENDER_MAZE.WITH_BACKTRACKER" />
+        <input value="RENDER_MAZE.WITH_HUNT_AND_KILL" />
+        <input value="RENDER_MAZE.WITH_PRIM" />
+        <input value="RENDER_MAZE.WITH_SIDEWINDER" />
+    </p>
+    <p>
+      Maze Type: <span data-gen-attr="t">RENDER_MAZE_AS.PASSAGE</span> (only <i>passage</i> currently exists)
     </p>
   </div>
   <button id="generate-button" data-type="<% generator.name %>">Generate <% generator.name %></button>
