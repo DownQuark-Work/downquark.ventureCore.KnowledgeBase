@@ -1,4 +1,4 @@
-<h3>Dungeon Settings</h3>
+<h3 data-generator-type="<% generator.name %>"><% generator.name %> Settings</h3>
     <p>
       Width: <span contenteditable data-gen-attr="gw">75</span> 
       Height: <span contenteditable data-gen-attr="gh">20</span> 
@@ -6,8 +6,8 @@
       Max Generations: <span contenteditable data-gen-attr="ir">5</span> 
     </p>
   </div>
-  <button id="generate-button">Generate Dungeon</button>
-  <button id="generate-random-button">Generate Random Seed</button>
+  <button id="generate-button" data-type="<% generator.name %>">Generate <% generator.name %></button>
+  <button id="generate-random-button"  data-type="<% generator.name %>">Generate Random <% generator.name %> Seed</button>
   <br/><br/>
   <details>
     <summary><strong>Interesting Seeds</strong></summary>
@@ -20,5 +20,6 @@
       <li>75 20 1647058444767</li>
       <li>75 20 1647058559555</li>
       <li>75 20 1648017362960</li>
+      <li>35 20 1648019984645</li>
     </ul>
   </details>

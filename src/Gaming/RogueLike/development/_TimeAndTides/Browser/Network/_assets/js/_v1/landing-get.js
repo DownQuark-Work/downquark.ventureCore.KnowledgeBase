@@ -1421,16 +1421,9 @@ const createSeedHash = (s = null)=>{
     const hashSeed = s || new Date().getTime().toString();
     window.location.hash = hashSeed;
 };
-const setCellularAutomataArgs = ()=>{
-    console.log('generateMaze({gw:12, gh:8})', generateMaze2({
-        gw: 12,
-        gh: 8
-    }));
-    console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze2({
-        gw: 12,
-        gh: 8,
-        algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
-    }));
+const setGeneratorArgs = ()=>{
+    const generatorType = document.querySelector('h3[data-generator-type]')?.dataset?.generatorType;
+    console.log('generatorType', generatorType);
     const generatorArgs = {
         gw: 0,
         gh: 0,
@@ -1451,19 +1444,29 @@ const setCellularAutomataArgs = ()=>{
     }
     generateDungeon({
         ...generatorArgs
-    }, ()=>{
-        document?.getElementById('generate-button')?.removeAttribute('disabled');
     });
+    console.log('generateMaze({gw:12, gh:8})', generateMaze2({
+        gw: 12,
+        gh: 8
+    }));
+    console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze2({
+        gw: 12,
+        gh: 8,
+        algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
+    }));
 };
 if (!window.location.hash) {
     createSeedHash();
 }
 document.querySelector('span[data-gen-attr="sa"]').innerText = window.location.hash.replace('#', '');
 if (typeof document !== 'undefined') {
-    document?.getElementById('generate-button')?.addEventListener('click', setCellularAutomataArgs);
-    document?.getElementById('generate-random-button')?.addEventListener('click', ()=>{
+    document?.getElementById('generate-button')?.addEventListener('click', setGeneratorArgs);
+    document?.getElementById('generate-random-button')?.addEventListener('click', (e)=>{
         document.querySelector('span[data-gen-attr="sa"]').innerText = '';
-        setCellularAutomataArgs();
+        setGeneratorArgs();
+        console.log('{e}', {
+            e
+        }, e?.target?.dataset?.type);
     });
     document?.querySelectorAll('li')?.forEach((li)=>li.addEventListener('click', (e)=>{
             const seedit = e.target?.innerText.split(' ');
@@ -1471,7 +1474,7 @@ if (typeof document !== 'undefined') {
             seedit.forEach((sd, indx)=>{
                 spans[indx].innerText = sd;
             });
-            setCellularAutomataArgs();
+            setGeneratorArgs();
         })
     );
 }
