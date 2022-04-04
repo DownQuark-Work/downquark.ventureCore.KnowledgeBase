@@ -206,8 +206,10 @@ textarea {
     text-shadow: none !important;
   }
 
+  a { color: green }
   a,
   a:visited {
+    color:crimson;
     text-decoration: underline;
   }
 

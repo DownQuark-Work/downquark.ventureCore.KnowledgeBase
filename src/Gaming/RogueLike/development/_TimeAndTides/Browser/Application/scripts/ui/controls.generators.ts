@@ -37,12 +37,12 @@ export const setGeneratorArgs = () => {
   }
 }
 if(!window.location.hash) { createSeedHash() }
-(document.querySelector('span[data-gen-attr$="s"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
+(document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
 
 if(typeof document !== 'undefined') {
   document?.getElementById('generate-button')?.addEventListener('click',setGeneratorArgs)
   document?.getElementById('generate-random-button')?.addEventListener('click',(e) => {
-    (document.querySelector('span[data-gen-attr$="s"]') as HTMLSpanElement).innerText = ''
+    (document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText = ''
     setGeneratorArgs()
     console.log( '{e}', {e}, (e?.target as HTMLSpanElement)?.dataset?.type )
   })

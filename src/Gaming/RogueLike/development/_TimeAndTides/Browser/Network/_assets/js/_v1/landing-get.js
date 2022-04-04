@@ -851,19 +851,6 @@ if (typeof Deno !== 'undefined') {
     }
     init(row, col, walled && SETTINGS.RENDER_MAZE_AS.WALLED, seed);
 }
-const setMazeProps = (c = 0, r = 0, s = 0, a = '', t = '')=>{
-    mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER;
-    if (a === SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL) {
-        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL;
-    }
-    if (a === SETTINGS.RENDER_MAZE_AS.PRIM) {
-        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM;
-    }
-    if (a === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) {
-        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER;
-    }
-    return init(r, c, t, s);
-};
 const renderGridPassage = (Grid5)=>{
     !0 && console.clear();
     const topBorder = [
@@ -952,7 +939,7 @@ const createEgress = (RenderType, { Grid: Grid6 , Maze: Maze2 = [
     if (RenderType === RENDER_MAZE_AS.SIDEWINDER) {
         const getLocation = (wall)=>{
             seedPointer1.inc();
-            const initialLoc = wall.charAt(wall.length - 1) === 'T' ? Math.min(Math.max(Math.round(seedPointer1() / denomCol) + 1, 1), colAmt - 1) : Math.min(Math.max(Math.round(seedPointer1() / denomRow) + 1, 1), rowAmt - 1);
+            const initialLoc = wall.charAt(wall.length - 1) === 'T' ? Math.min(Math.max(Math.round(seedPointer1() / denomCol) + 1, 1), rowAmt - 1) : Math.min(Math.max(Math.round(seedPointer1() / denomRow) + 1, 1), colAmt - 1);
             let colCheck = colAmt - 2, rowCheck = 1;
             switch(wall){
                 case 'LEFT':
@@ -1256,10 +1243,6 @@ const instantiate = (base)=>{
     generateMaze(_flatGrid);
 };
 typeof Deno !== 'undefined' && instantiate(JSON.parse(Deno.args[0]));
-const generatePrimTracker = (base)=>{
-    instantiate(base);
-    return mazeGeneratorReturnObject;
-};
 let mazeGeneratorReturnObject1 = {
     Algorithm: RENDER_MAZE_AS.BACKTRACKER,
     AnimationDuration: 0,
@@ -1384,10 +1367,6 @@ const instantiate1 = (base)=>{
     generateMaze1(_flatGrid);
 };
 typeof Deno !== 'undefined' && instantiate1(JSON.parse(Deno.args[0]));
-const generateSidewinder = (base)=>{
-    instantiate1(base);
-    return mazeGeneratorReturnObject1;
-};
 const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     const dungeonAutomata = initCellularAutomata({
         gw,
@@ -1411,11 +1390,6 @@ const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     });
     if (dungeonMap) dungeonMap.innerHTML = dungeonMapString;
     cb && cb();
-};
-const generateMaze2 = ({ gw , gh , seedArg: seedArg2 , mazeType , algorithm  }, cb = ()=>{})=>{
-    const mazeBase = setMazeProps(gh, gw, seedArg2, algorithm, mazeType);
-    const generatedMaze = algorithm === 'RENDER_MAZE.WITH_SIDEWINDER' ? generateSidewinder(mazeBase) : generatePrimTracker(mazeBase);
-    return generatedMaze;
 };
 const createSeedHash = (s = null)=>{
     const hashSeed = s || new Date().getTime().toString();
@@ -1451,24 +1425,15 @@ const setGeneratorArgs = ()=>{
                 ...generatorArgs
             });
     }
-    console.log('generateMaze({gw:12, gh:8})', generateMaze2({
-        gw: 12,
-        gh: 8
-    }));
-    console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze2({
-        gw: 12,
-        gh: 8,
-        algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
-    }));
 };
 if (!window.location.hash) {
     createSeedHash();
 }
-document.querySelector('span[data-gen-attr$="s"]').innerText = window.location.hash.replace('#', '');
+document.querySelector('span[data-gen-attr^="s"]').innerText = window.location.hash.replace('#', '');
 if (typeof document !== 'undefined') {
     document?.getElementById('generate-button')?.addEventListener('click', setGeneratorArgs);
     document?.getElementById('generate-random-button')?.addEventListener('click', (e)=>{
-        document.querySelector('span[data-gen-attr$="s"]').innerText = '';
+        document.querySelector('span[data-gen-attr^="s"]').innerText = '';
         setGeneratorArgs();
         console.log('{e}', {
             e
