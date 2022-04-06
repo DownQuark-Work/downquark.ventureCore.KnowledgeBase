@@ -28,9 +28,9 @@ export const setGeneratorArgs = () => {
   switch (generatorType) {
     case 'maze':
       console.log('generatorArgs', generatorArgs)
-      // TODO: Implement below and get graphical
+      console.log('TODO: Implement below and get graphical');
       // console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
-      // console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
+      console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
       break
     default:
       generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }))

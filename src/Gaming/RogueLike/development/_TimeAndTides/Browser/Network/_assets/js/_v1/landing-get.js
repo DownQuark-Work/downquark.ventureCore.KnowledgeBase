@@ -851,6 +851,19 @@ if (typeof Deno !== 'undefined') {
     }
     init(row, col, walled && SETTINGS.RENDER_MAZE_AS.WALLED, seed);
 }
+const setMazeProps = (c = 0, r = 0, s = 0, a = '', t = '')=>{
+    mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.BACKTRACKER;
+    if (a === SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL;
+    }
+    if (a === SETTINGS.RENDER_MAZE_AS.PRIM) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM;
+    }
+    if (a === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) {
+        mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER;
+    }
+    return init(r, c, t, s);
+};
 const renderGridPassage = (Grid5)=>{
     !0 && console.clear();
     const topBorder = [
@@ -1243,6 +1256,10 @@ const instantiate = (base)=>{
     generateMaze(_flatGrid);
 };
 typeof Deno !== 'undefined' && instantiate(JSON.parse(Deno.args[0]));
+const generatePrimTracker = (base)=>{
+    instantiate(base);
+    return mazeGeneratorReturnObject;
+};
 let mazeGeneratorReturnObject1 = {
     Algorithm: RENDER_MAZE_AS.BACKTRACKER,
     AnimationDuration: 0,
@@ -1367,6 +1384,10 @@ const instantiate1 = (base)=>{
     generateMaze1(_flatGrid);
 };
 typeof Deno !== 'undefined' && instantiate1(JSON.parse(Deno.args[0]));
+const generateSidewinder = (base)=>{
+    instantiate1(base);
+    return mazeGeneratorReturnObject1;
+};
 const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     const dungeonAutomata = initCellularAutomata({
         gw,
@@ -1390,6 +1411,11 @@ const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     });
     if (dungeonMap) dungeonMap.innerHTML = dungeonMapString;
     cb && cb();
+};
+const generateMaze2 = ({ gw , gh , seedArg: seedArg2 , mazeType , algorithm  }, cb = ()=>{})=>{
+    const mazeBase = setMazeProps(gh, gw, seedArg2, algorithm, mazeType);
+    const generatedMaze = algorithm === 'RENDER_MAZE.WITH_SIDEWINDER' ? generateSidewinder(mazeBase) : generatePrimTracker(mazeBase);
+    return generatedMaze;
 };
 const createSeedHash = (s = null)=>{
     const hashSeed = s || new Date().getTime().toString();
@@ -1419,6 +1445,12 @@ const setGeneratorArgs = ()=>{
     switch(generatorType){
         case 'maze':
             console.log('generatorArgs', generatorArgs);
+            console.log('TODO: Implement below and get graphical');
+            console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze2({
+                gw: 12,
+                gh: 8,
+                algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
+            }));
             break;
         default:
             generateDungeon({
