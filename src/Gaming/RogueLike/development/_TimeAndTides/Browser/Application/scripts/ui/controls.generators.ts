@@ -28,10 +28,6 @@ export const setGeneratorArgs = () => {
     case 'maze':
       (document.getElementById('game') as HTMLDivElement).innerHTML = 'Loading...'
       const {sa: seedArg, a: algorithm, t: mazeType} = generatorArgs
-      
-      document?.querySelectorAll('[name="maze-type"]').forEach((mazetype) => mazetype.addEventListener('click',() => {
-        (document.querySelector('[data-match-to="maze-type"') as HTMLSpanElement).innerHTML = (mazetype as any)?.target?.value
-      }))
 
       generateMaze(({...generatorArgs, seedArg, algorithm, mazeType} as { gw: number; gh: number; algorithm:string; seedArg: number; mazeType: string; }))
       break
@@ -40,9 +36,7 @@ export const setGeneratorArgs = () => {
   }
 }
 
-export const setMazeTypeArgs = (mzType:string) => {
-    console.log('mzType', mzType)
-}
+export const setMazeTypeArgs = (mzType:string) => (document.querySelector('[data-match-to="maze-type"') as HTMLSpanElement).innerHTML = mzType
 
 if(!window.location.hash) { createSeedHash() }
 (document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
@@ -62,4 +56,5 @@ if(typeof document !== 'undefined') {
     })
     setGeneratorArgs()
   }))
+  document?.querySelectorAll('[name="maze-type"]')?.forEach(li => li.addEventListener('click',(e) => setMazeTypeArgs((e?.target as any)?.value)))
 }

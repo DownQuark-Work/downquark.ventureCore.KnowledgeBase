@@ -1481,10 +1481,6 @@ const setGeneratorArgs = ()=>{
         case 'maze':
             document.getElementById('game').innerHTML = 'Loading...';
             const { sa: seedArg3 , a: algorithm , t: mazeType  } = generatorArgs;
-            document?.querySelectorAll('[name="maze-type"]').forEach((mazetype)=>mazetype.addEventListener('click', ()=>{
-                    document.querySelector('[data-match-to="maze-type"').innerHTML = mazetype?.target?.value;
-                })
-            );
             generateMaze2({
                 ...generatorArgs,
                 seedArg: seedArg3,
@@ -1498,6 +1494,8 @@ const setGeneratorArgs = ()=>{
             });
     }
 };
+const setMazeTypeArgs = (mzType)=>document.querySelector('[data-match-to="maze-type"').innerHTML = mzType
+;
 if (!window.location.hash) {
     createSeedHash();
 }
@@ -1519,5 +1517,8 @@ if (typeof document !== 'undefined') {
             });
             setGeneratorArgs();
         })
+    );
+    document?.querySelectorAll('[name="maze-type"]')?.forEach((li)=>li.addEventListener('click', (e)=>setMazeTypeArgs(e?.target?.value)
+        )
     );
 }

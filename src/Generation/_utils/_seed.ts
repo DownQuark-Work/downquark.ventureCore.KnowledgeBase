@@ -21,6 +21,7 @@ export const parsedVerifiedValue = () => verifiedSeed
 // let curSeedPointer = 0
 export const seedPointer = (setter?:number) => {
   if(setter) { seedPointer.pointerValue = setter }
+  // console.log('->', seedPointer.pointerValue, parsedSeed[seedPointer.pointerValue])
   return parsedSeed[seedPointer.pointerValue]
 }
 seedPointer.inc = () => {

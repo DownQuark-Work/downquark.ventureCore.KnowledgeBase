@@ -148,6 +148,5 @@ export const setMazeProps = (c=0,r=0,s=0,a='',t='') => {
     if (a === SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.HUNT_AND_KILL }
     if (a === SETTINGS.RENDER_MAZE_AS.PRIM) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.PRIM }
     if (a === SETTINGS.RENDER_MAZE_AS.SIDEWINDER) { mazeReturnObject.Algorithm = SETTINGS.RENDER_MAZE_AS.SIDEWINDER }
-
   return init(r,c,t,s)
 } // Browser
