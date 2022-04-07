@@ -5,11 +5,12 @@
 // larger: deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 30 -s 1369 --anim 100 --prim)
 // deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 17 -s 42 --hak --anim 120) <-- seed that exposed a few bugs
 // deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 25 -c 17 -s 421369 --hak --anim 100)
-//// deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 20 -c 48 -s 13 --hak --anim 120) <--!!
+//// deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 20 -c 48 -s 13 --hak --anim 1) <--!!
+//  deno run Layouts/Maze/primtracker.ts $(deno run Layouts/Maze/_base.ts -r 16 -c 18 -s 1649298811519 --hak --anim 1) 
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {CELL_STATE, RENDER_MAZE_AS, SHOW_ANIMATION} from './_settings.ts'
-import {createEgress, renderGridPassage} from './_utils.ts'
+import {createEgress, denoLog, renderGridPassage} from './_utils.ts'
 
 let mazeGeneratorReturnObject = {
       Algorithm: RENDER_MAZE_AS.BACKTRACKER,
@@ -139,7 +140,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
           markEggress() // updates terminal with final frame
           mazeGeneratorReturnObject.Maze = Maze
           _ANIMATION_DURATION && renderGridPassage(Maze)
-          console.log(JSON.stringify(mazeGeneratorReturnObject))
+          denoLog(JSON.stringify(mazeGeneratorReturnObject))
           return
         }
         carveBacktrackMaze(huntPtArr[huntPtArr.length-1])
@@ -155,7 +156,7 @@ const carveBacktrackMaze = (pt:number[],offset=2) => {
     markEggress() // updates terminal with final frame
     if(_ANIMATION_DURATION) renderGridPassage(Maze)
     mazeGeneratorReturnObject.Maze = Maze
-    console.log(JSON.stringify(mazeGeneratorReturnObject))
+    if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject))
   }
 }
 
@@ -190,7 +191,7 @@ const carvePrimMaze = (pt:number[],offset=2) => {
       markEggress() // updates terminal with final frame
       if(_ANIMATION_DURATION) renderGridPassage(Maze)
       mazeGeneratorReturnObject.Maze = Maze
-      console.log(JSON.stringify(mazeGeneratorReturnObject))
+      if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject))
     }
   },_ANIMATION_DURATION)
 }
@@ -205,15 +206,16 @@ const generateMaze = (_maze:number[][]) => {
 }
 
 const instantiate = (base:typeof mazeGeneratorReturnObject) => {
-  seedPointer(0)
   const { _flatGrid } = (base.Grid as { amtColumn: number, amtRow: number, _flatGrid:number[][]})
   delete (base.Grid as { amtColumn: number, amtRow: number, _flatGrid?:number[][]})._flatGrid
   parseSeed(base.Seed,((base.Grid.amtColumn*base.Grid.amtRow) + base.Grid.amtRow)) // + base.Grid.amtRow is safety buffer
+  seedPointer(0)
   seedPointer.inc() // needed to instantiate seed parsing
   mazeGeneratorReturnObject = {
     ...base,
     SeedVerification: parsedVerifiedValue()
   }
+
   _ANIMATION_DURATION = [mazeGeneratorReturnObject.AnimationDuration?.valueOf(), SHOW_ANIMATION].sort().pop() || 0
   generateMaze(_flatGrid)
 

@@ -66,7 +66,7 @@ const carveSidewinderMaze = (pt:number[]) => {
     mazeGeneratorReturnObject.Egress = createEgress(mazeGeneratorReturnObject.Algorithm, {Grid:mazeGeneratorReturnObject.Grid, Maze, seedPointer})
     markEggress()
     mazeGeneratorReturnObject.Maze = Maze
-    if (typeof Deno !== 'undefined') { console.log(JSON.stringify(mazeGeneratorReturnObject)) } // CLI
+    if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject)) // CLI
     return // mazeGeneratorReturnObject // BROWSER
   }
   Maze[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT

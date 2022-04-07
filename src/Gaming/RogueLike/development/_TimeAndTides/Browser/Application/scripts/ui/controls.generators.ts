@@ -9,9 +9,8 @@ const createSeedHash = (s = null) => {
 }
 export const setGeneratorArgs = () => {
   const generatorType = (document.querySelector('h3[data-generator-type]') as HTMLHeadingElement)?.dataset?.generatorType
-  const generatorArgs: {[k:string]:number} = { gw: 0, gh: 0, sa: 0, ir: 0, }
+  const generatorArgs: {[k:string]:number|string} = { gw: 0, gh: 0, sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
-  console.log('spans', spans)
   spans.forEach(arg => {
     (generatorArgs[arg.dataset.genAttr || 'gw'] as any) = !isNaN(parseInt(arg.innerText,10)) ? parseInt(arg.innerText,10) : arg.innerText
   })
@@ -27,10 +26,10 @@ export const setGeneratorArgs = () => {
 
   switch (generatorType) {
     case 'maze':
-      console.log('generatorArgs', generatorArgs)
-      console.log('TODO: Implement below and get graphical');
-      // console.log('generateMaze({gw:12, gh:8})', generateMaze({gw:12, gh:8}))
-      console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze({gw:12, gh:8, algorithm:'RENDER_MAZE.WITH_SIDEWINDER'}))
+      (document.getElementById('game') as HTMLDivElement).innerHTML = 'Loading...'
+      const {sa: seedArg, a: algorithm, t: mazeType} = generatorArgs
+      console.log('...generatorArgs', {...generatorArgs})
+      generateMaze(({...generatorArgs, seedArg, algorithm, mazeType} as { gw: number; gh: number; algorithm:string; seedArg: number; mazeType: string; }))
       break
     default:
       generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }))

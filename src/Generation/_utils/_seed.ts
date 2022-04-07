@@ -1,7 +1,11 @@
 import { PRNG } from '../_PRNG/prng.ts'
 
-let verifiedSeed = 0, seededArr = [], parsedSeed:number[] = []
+let verifiedSeed = 0, seededArr:string[] = [], parsedSeed:number[] = []
 export const parseSeed = (preParsedSeed:number, seedLength:number) => {
+  if(seededArr.length) { // only create 1 seed at a time
+    seedPointer.pointerValue = 0 // ensure reset
+    return seededArr
+  }
   // deno-lint-ignore no-explicit-any
   const seed = new (PRNG as any)(preParsedSeed)
   let seededStr = ''

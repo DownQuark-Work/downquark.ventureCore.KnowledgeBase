@@ -306,6 +306,10 @@ PRNG.prototype.next = function(a, b) {
 };
 let verifiedSeed = 0, seededArr = [], parsedSeed = [];
 const parseSeed = (preParsedSeed, seedLength)=>{
+    if (seededArr.length) {
+        seedPointer.pointerValue = 0;
+        return seededArr;
+    }
     const seed = new PRNG(preParsedSeed);
     let seededStr = '';
     while(seededStr.length < seedLength)seededStr += String(seed.next(10, 100)).replace(/[^0-9]/g, '');
@@ -864,6 +868,9 @@ const setMazeProps = (c = 0, r = 0, s = 0, a = '', t = '')=>{
     }
     return init(r, c, t, s);
 };
+const denoLog = (...logVal)=>{
+    if (typeof Deno !== 'undefined') console.log(...logVal);
+};
 const renderGridPassage = (Grid5)=>{
     !0 && console.clear();
     const topBorder = [
@@ -1165,7 +1172,7 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
                     markEggress();
                     mazeGeneratorReturnObject.Maze = Maze;
                     _ANIMATION_DURATION && renderGridPassage(Maze);
-                    console.log(JSON.stringify(mazeGeneratorReturnObject));
+                    denoLog(JSON.stringify(mazeGeneratorReturnObject));
                     return;
                 }
                 carveBacktrackMaze(huntPtArr[huntPtArr.length - 1]);
@@ -1187,7 +1194,7 @@ const carveBacktrackMaze = (pt, offset = 2)=>{
         markEggress();
         if (_ANIMATION_DURATION) renderGridPassage(Maze);
         mazeGeneratorReturnObject.Maze = Maze;
-        console.log(JSON.stringify(mazeGeneratorReturnObject));
+        if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject));
     }
 };
 let _considerations = [];
@@ -1226,7 +1233,7 @@ const carvePrimMaze = (pt, offset = 2)=>{
             markEggress();
             if (_ANIMATION_DURATION) renderGridPassage(Maze);
             mazeGeneratorReturnObject.Maze = Maze;
-            console.log(JSON.stringify(mazeGeneratorReturnObject));
+            if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject));
         }
     }, _ANIMATION_DURATION);
 };
@@ -1240,10 +1247,10 @@ const generateMaze = (_maze)=>{
     mazeGeneratorReturnObject.Algorithm === RENDER_MAZE_AS.PRIM ? carvePrimMaze(mazeGeneratorReturnObject.Egress.Enter, 1) : carveBacktrackMaze(mazeGeneratorReturnObject.Egress.Enter, 1);
 };
 const instantiate = (base)=>{
-    seedPointer(0);
     const { _flatGrid  } = base.Grid;
     delete base.Grid._flatGrid;
     parseSeed(base.Seed, base.Grid.amtColumn * base.Grid.amtRow + base.Grid.amtRow);
+    seedPointer(0);
     seedPointer.inc();
     mazeGeneratorReturnObject = {
         ...base,
@@ -1333,9 +1340,7 @@ const carveSidewinderMaze = (pt)=>{
         });
         markEggress1();
         mazeGeneratorReturnObject1.Maze = Maze1;
-        if (typeof Deno !== 'undefined') {
-            console.log(JSON.stringify(mazeGeneratorReturnObject1));
-        }
+        if (typeof Deno !== 'undefined') console.log(JSON.stringify(mazeGeneratorReturnObject1));
         return;
     }
     Maze1[pt[0]][pt[1]] = CELL_STATE.COMMON.CURRENT;
@@ -1412,10 +1417,43 @@ const generateDungeon = ({ gw , gh , sa , ir  }, cb = ()=>{})=>{
     if (dungeonMap) dungeonMap.innerHTML = dungeonMapString;
     cb && cb();
 };
-const generateMaze2 = ({ gw , gh , seedArg: seedArg2 , mazeType , algorithm  }, cb = ()=>{})=>{
-    const mazeBase = setMazeProps(gh, gw, seedArg2, algorithm, mazeType);
-    const generatedMaze = algorithm === 'RENDER_MAZE.WITH_SIDEWINDER' ? generateSidewinder(mazeBase) : generatePrimTracker(mazeBase);
-    return generatedMaze;
+const generateMaze2 = async ({ gw , gh , seedArg: seedArg2 , mazeType , algorithm  }, cb = ()=>{})=>{
+    const mazeBase = setMazeProps(gw, gh, seedArg2, algorithm, mazeType);
+    let generatedMaze = algorithm === 'RENDER_MAZE.WITH_SIDEWINDER' ? generateSidewinder(mazeBase) : generatePrimTracker(mazeBase);
+    while(!generatedMaze.Maze)await new Promise((resolve)=>{
+        setTimeout(()=>{
+            resolve(1);
+        }, 600);
+    });
+    console.log('generatedMaze', {
+        ...generatedMaze
+    });
+    const mazeMap = document.getElementById('game');
+    let mazeString = '';
+    mazeMap && generatedMaze.Maze.forEach((row, indx)=>{
+        row.forEach((i, idx)=>{
+            mazeString += `<span data-point="${idx}|${indx}" data-point-type="`;
+            switch(i){
+                case SETTINGS.CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH:
+                    mazeString += 'on">';
+                    break;
+                case SETTINGS.CELL_STATE.EGGRESS.ENTER:
+                    mazeString += 'on" data-point-variant="water">';
+                    break;
+                case SETTINGS.CELL_STATE.EGGRESS.EXIT:
+                    mazeString += 'off" data-point-variant="water">';
+                    break;
+                default:
+                    mazeString += 'off">';
+            }
+            mazeString += '&nbsp;</span>';
+        });
+        mazeString += '<br />';
+    });
+    if (mazeMap) mazeMap.innerHTML = mazeString;
+    mazeString = '';
+    generatedMaze = null;
+    cb && cb();
 };
 const createSeedHash = (s = null)=>{
     const hashSeed = s || new Date().getTime().toString();
@@ -1430,7 +1468,6 @@ const setGeneratorArgs = ()=>{
         ir: 0
     };
     const spans = document.querySelectorAll('[data-gen-attr]');
-    console.log('spans', spans);
     spans.forEach((arg)=>{
         generatorArgs[arg.dataset.genAttr || 'gw'] = !isNaN(parseInt(arg.innerText, 10)) ? parseInt(arg.innerText, 10) : arg.innerText;
     });
@@ -1444,13 +1481,17 @@ const setGeneratorArgs = ()=>{
     }
     switch(generatorType){
         case 'maze':
-            console.log('generatorArgs', generatorArgs);
-            console.log('TODO: Implement below and get graphical');
-            console.log('generateMaze({gw:12, gh:8, algorithm:SIDEWINDER})', generateMaze2({
-                gw: 12,
-                gh: 8,
-                algorithm: 'RENDER_MAZE.WITH_SIDEWINDER'
-            }));
+            document.getElementById('game').innerHTML = 'Loading...';
+            const { sa: seedArg3 , a: algorithm , t: mazeType  } = generatorArgs;
+            console.log('...generatorArgs', {
+                ...generatorArgs
+            });
+            generateMaze2({
+                ...generatorArgs,
+                seedArg: seedArg3,
+                algorithm,
+                mazeType
+            });
             break;
         default:
             generateDungeon({

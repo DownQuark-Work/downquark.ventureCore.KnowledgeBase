@@ -1,15 +1,16 @@
+// deno-lint-ignore-file no-explicit-any
 import {CELL_DIRECTIONS_MAP, CELL_STATE, RENDER_MAZE_AS} from './_settings.ts'
 
 const _DEBUG = 0
+export const denoLog = (...logVal:any[]) => {
+  if (typeof Deno !== 'undefined') console.log(...logVal)
+}
 export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
   !_DEBUG && console.clear()
   const topBorder:'_'[] = [...Array(Grid[0].length+2).fill('_')],
     bottomBorder:'-'[] = [...Array(Grid[0].length+2).fill('—')]
     console.log(...topBorder)
   Grid.forEach((row: number[]|string[]) => {
-    // let char = switch(CELL_STATE)
-    // console.log('CELL_STATE', CELL_STATE)
-    // console.log('RENDER_MAZE_AS', RENDER_MAZE_AS)
     const graphics = row.map(i => {
         switch(i)
         {
@@ -54,7 +55,6 @@ export const createEgress:(_:string,__:{Grid:{amtColumn:number,amtRow:number}, M
   
   while( seedPointer() > 7) // 8 & 9 would cause bias towards BOTTOM LEFT
   { seedPointer.inc() }
-  
   const entWall = CELL_DIRECTIONS_MAP[seedPointer()%4]
   seedPointer.inc()
   const exWall = CELL_DIRECTIONS_MAP[seedPointer()%4] === entWall ? CELL_DIRECTIONS_MAP[(seedPointer()+1)%4] : CELL_DIRECTIONS_MAP[seedPointer()%4] // ensures not the entrance wall

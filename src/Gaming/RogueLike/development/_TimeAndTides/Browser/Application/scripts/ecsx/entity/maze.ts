@@ -1,36 +1,56 @@
-import {setMazeProps, generatePrimTracker, generateSidewinder}  from '../../_modules/_deno.ts'
+import {MazeSettings, setMazeProps, generatePrimTracker, generateSidewinder}  from '../../_modules/_deno.ts'
 
-export const generateMaze:(x:{gw:number,gh:number,seedArg?:number, mazeType?:string, algorithm?:string}, cb?:()=>void) => void = ({gw, gh, seedArg, mazeType, algorithm}, cb = ()=>{}) => {
-  const mazeBase:any = setMazeProps(gh,gw, seedArg, algorithm, mazeType)
-  const generatedMaze = (algorithm === 'RENDER_MAZE.WITH_SIDEWINDER')
+// console.log('MazeSettings', MazeSettings)
+const madeMazes:string[] = []
+export const generateMaze:(x:{gw:number,gh:number,seedArg?:number, mazeType?:string, algorithm?:string}, cb?:()=>void) => void = async ({gw, gh, seedArg, mazeType, algorithm}, cb = ()=>{}) => {
+  const mazeBase:any = setMazeProps(gw, gh, seedArg, algorithm, mazeType)
+  let generatedMaze:any|null = (algorithm === 'RENDER_MAZE.WITH_SIDEWINDER')
     ? generateSidewinder(mazeBase)
     : generatePrimTracker(mazeBase)
-  return generatedMaze
-}
 
-/**
- * import {initCellularAutomata, applyFloodFill, createCorridors} from '../../_modules/_deno.ts'
-
-export const generateDungeon:(x:{gw:number,gh:number,sa:number,ir:number}, cb?:()=>void) => void = ({gw, gh, sa, ir}, cb = ()=>{}) => {
-  const dungeonAutomata = initCellularAutomata({gw, gh, sa, ir})
-  const dungeonRooms = dungeonAutomata.CellularAutomata && applyFloodFill(dungeonAutomata.CellularAutomata, (dungeonAutomata.seedArg || 0), (dungeonAutomata.verifySeed || 0))
-  const dungeonCorridor =  createCorridors(dungeonRooms)
-  const dungeon = dungeonCorridor.CorridorAutomata[0]
-
-  const dungeonMap = document.getElementById('game')
-  if (dungeonMap) dungeonMap.innerHTML = ''
+    while (!generatedMaze.Maze) await new Promise((resolve) => { setTimeout(() => { resolve(1); }, 600); });
+    console.log('generatedMaze', {...generatedMaze})
   
-  let dungeonMapString = ''
-  dungeonMap && dungeon.forEach((row: string[],indx:number) => {
+  const mazeMap = document.getElementById('game')
+  let mazeString = ''
+  mazeMap && generatedMaze.Maze.forEach((row: number[],indx:number) => {
     row.forEach((i,idx) => {
-      dungeonMapString += `<span data-point="${idx}|${indx}" data-point-type="`
-      dungeonMapString += i === '#' ? 'bridge">&nbsp;' : /⊡|^1$/g.test(i) ? 'on">&nbsp;' : 'off">&nbsp;'
-      // dungeonMapString += i === '#' ? 'bridge">&nbsp;' : /⊡|^1$/g.test(i) ? 'on" data-point-variant="water">&nbsp;' : 'off" data-point-variant="water">&nbsp;'
-      dungeonMapString += `</span>`
+      mazeString += `<span data-point="${idx}|${indx}" data-point-type="`
+      switch (i) {
+        case MazeSettings.CELL_STATE['RENDER_MAZE_AS.PASSAGE'].IN_PATH:
+          mazeString += 'on">'
+          break
+        case MazeSettings.CELL_STATE.EGGRESS.ENTER:
+          mazeString += 'on" data-point-variant="water">'
+          break
+        case MazeSettings.CELL_STATE.EGGRESS.EXIT:
+          mazeString += 'off" data-point-variant="water">'
+          break
+        default :
+          mazeString += 'off">'
+      }
+      mazeString += '&nbsp;</span>'
     })
-    dungeonMapString += '<br />'
+    mazeString += '<br />'
   })
-  if (dungeonMap) dungeonMap.innerHTML = dungeonMapString
+
+  if (mazeMap) mazeMap.innerHTML = mazeString
+  // DEBUGGING WEIRDNESS
+  // madeMazes.push(mazeString)
+  // console.log('[...madeMazes]', [...madeMazes])
+  // if(madeMazes[1]) {
+  //   console.log(madeMazes[0] === madeMazes[1])
+  //   console.log(madeMazes[0].length === madeMazes[1].length, madeMazes[0].length)
+  //   // for (let i=madeMazes[0].length-1; i>madeMazes[0].length-150; i--)
+  //   for (let i=0; i<madeMazes[0].length; i++)
+  //   {
+  //     if(madeMazes[0][i] !== madeMazes[1][i]) { console.log(i,madeMazes[0][i],madeMazes[1][i]); break }
+  //     // if(madeMazes[0][i] !== madeMazes[1][i]) { console.log(i,madeMazes[0][i],madeMazes[1][i]); /*break*/ }
+  //   }
+  //   console.log(madeMazes[0].substring(500, 585));
+  //   console.log(madeMazes[1].substring(500, 585));
+  // }
+  mazeString = ''
+  generatedMaze = null
   cb && cb()
 }
- */

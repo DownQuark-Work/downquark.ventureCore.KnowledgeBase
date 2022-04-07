@@ -4,6 +4,7 @@ export {createCorridors} from '../../../../../../../../Generation/_utils/corrido
 export {initCellularAutomata} from '../../../../../../../../Generation/CellularAutomata/cellular_automata.ts'
 
 // Mazes
+export {SETTINGS as MazeSettings} from '../../../../../../../../Generation/Layouts/Maze/_settings.ts'
 export {setMazeProps} from '../../../../../../../../Generation/Layouts/Maze/_base.ts'
 export {generatePrimTracker} from '../../../../../../../../Generation/Layouts/Maze/primtracker.ts'
 export {generateSidewinder} from '../../../../../../../../Generation/Layouts/Maze/sidewinder.ts'
