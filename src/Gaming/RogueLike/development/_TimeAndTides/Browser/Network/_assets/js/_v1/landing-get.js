@@ -305,11 +305,11 @@ PRNG.prototype.next = function(a, b) {
     }
 };
 let verifiedSeed = 0, seededArr = [], parsedSeed = [];
+let initSeed = 0;
 const parseSeed = (preParsedSeed, seedLength)=>{
-    if (seededArr.length) {
-        seedPointer.pointerValue = 0;
-        return seededArr;
-    }
+    seedPointer.pointerValue = 0;
+    if (initSeed === preParsedSeed) return seededArr;
+    initSeed = preParsedSeed;
     const seed = new PRNG(preParsedSeed);
     let seededStr = '';
     while(seededStr.length < seedLength)seededStr += String(seed.next(10, 100)).replace(/[^0-9]/g, '');
@@ -1425,9 +1425,6 @@ const generateMaze2 = async ({ gw , gh , seedArg: seedArg2 , mazeType , algorith
             resolve(1);
         }, 600);
     });
-    console.log('generatedMaze', {
-        ...generatedMaze
-    });
     const mazeMap = document.getElementById('game');
     let mazeString = '';
     mazeMap && generatedMaze.Maze.forEach((row, indx)=>{
@@ -1464,6 +1461,7 @@ const setGeneratorArgs = ()=>{
     const generatorArgs = {
         gw: 0,
         gh: 0,
+        a: 'RENDER_MAZE.WITH_BACKTRACKER',
         sa: 0,
         ir: 0
     };
@@ -1483,9 +1481,10 @@ const setGeneratorArgs = ()=>{
         case 'maze':
             document.getElementById('game').innerHTML = 'Loading...';
             const { sa: seedArg3 , a: algorithm , t: mazeType  } = generatorArgs;
-            console.log('...generatorArgs', {
-                ...generatorArgs
-            });
+            document?.querySelectorAll('[name="maze-type"]').forEach((mazetype)=>mazetype.addEventListener('click', ()=>{
+                    document.querySelector('[data-match-to="maze-type"').innerHTML = mazetype?.target?.value;
+                })
+            );
             generateMaze2({
                 ...generatorArgs,
                 seedArg: seedArg3,
@@ -1512,7 +1511,7 @@ if (typeof document !== 'undefined') {
             e
         }, e?.target?.dataset?.type);
     });
-    document?.querySelectorAll('li')?.forEach((li)=>li.addEventListener('click', (e)=>{
+    document?.querySelectorAll('[data-ref="interesting-seeds"] li')?.forEach((li)=>li.addEventListener('click', (e)=>{
             const seedit = e.target?.innerText.split(' ');
             const spans = document.querySelectorAll('[data-gen-attr]');
             seedit.forEach((sd, indx)=>{

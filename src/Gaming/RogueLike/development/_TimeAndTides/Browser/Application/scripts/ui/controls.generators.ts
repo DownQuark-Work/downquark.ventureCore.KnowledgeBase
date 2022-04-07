@@ -9,7 +9,7 @@ const createSeedHash = (s = null) => {
 }
 export const setGeneratorArgs = () => {
   const generatorType = (document.querySelector('h3[data-generator-type]') as HTMLHeadingElement)?.dataset?.generatorType
-  const generatorArgs: {[k:string]:number|string} = { gw: 0, gh: 0, sa: 0, ir: 0, }
+  const generatorArgs: {[k:string]:number|string} = { gw: 0, gh: 0, a: 'RENDER_MAZE.WITH_BACKTRACKER', sa: 0, ir: 0, }
   const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
   spans.forEach(arg => {
     (generatorArgs[arg.dataset.genAttr || 'gw'] as any) = !isNaN(parseInt(arg.innerText,10)) ? parseInt(arg.innerText,10) : arg.innerText
@@ -28,13 +28,22 @@ export const setGeneratorArgs = () => {
     case 'maze':
       (document.getElementById('game') as HTMLDivElement).innerHTML = 'Loading...'
       const {sa: seedArg, a: algorithm, t: mazeType} = generatorArgs
-      console.log('...generatorArgs', {...generatorArgs})
+      
+      document?.querySelectorAll('[name="maze-type"]').forEach((mazetype) => mazetype.addEventListener('click',() => {
+        (document.querySelector('[data-match-to="maze-type"') as HTMLSpanElement).innerHTML = (mazetype as any)?.target?.value
+      }))
+
       generateMaze(({...generatorArgs, seedArg, algorithm, mazeType} as { gw: number; gh: number; algorithm:string; seedArg: number; mazeType: string; }))
       break
     default:
       generateDungeon(({...generatorArgs} as { gw: number; gh: number; sa: number; ir: number; }))
   }
 }
+
+export const setMazeTypeArgs = (mzType:string) => {
+    console.log('mzType', mzType)
+}
+
 if(!window.location.hash) { createSeedHash() }
 (document.querySelector('span[data-gen-attr^="s"]') as HTMLSpanElement).innerText = window.location.hash.replace('#','')
 
@@ -45,7 +54,7 @@ if(typeof document !== 'undefined') {
     setGeneratorArgs()
     console.log( '{e}', {e}, (e?.target as HTMLSpanElement)?.dataset?.type )
   })
-  document?.querySelectorAll('li')?.forEach(li => li.addEventListener('click',(e) => {
+  document?.querySelectorAll('[data-ref="interesting-seeds"] li')?.forEach(li => li.addEventListener('click',(e) => {
     const seedit = (e.target as HTMLLIElement)?.innerText.split(' ')
     const spans = (document.querySelectorAll('[data-gen-attr]') as NodeListOf<HTMLSpanElement>)
     seedit.forEach((sd,indx) => {

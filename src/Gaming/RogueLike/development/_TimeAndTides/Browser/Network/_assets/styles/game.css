@@ -31,8 +31,10 @@ span[contenteditable][data-gen-attr] {
 #game span[data-point-type="off"] { background-color:black }
 #game span[data-point-type="on"] { background-color:bisque }
 
-#game span[data-point-type="on"][data-point-variant="sand"] { background-color:chocolate }
-#game span[data-point-type="on"][data-point-variant="grass"] { background-color:bisque }
+#game span[data-point-type="on"][data-point-variant="sand"] { background-color:wheat }
+#game span[data-point-type="off"][data-point-variant="sand"] { background-color:darkslategrey }
+#game span[data-point-type="on"][data-point-variant="grass"] { background-color:forestgreen }
+#game span[data-point-type="off"][data-point-variant="grass"] { background-color: darkolivegreen}
 #game span[data-point-type="on"][data-point-variant="water"] { background-color:lightskyblue }
 #game span[data-point-type="off"][data-point-variant="water"] { background-color:darkblue }
 #generate-button[disabled] {display: none;}

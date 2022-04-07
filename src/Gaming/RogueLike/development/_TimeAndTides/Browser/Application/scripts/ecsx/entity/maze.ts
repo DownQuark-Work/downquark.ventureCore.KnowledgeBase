@@ -1,6 +1,5 @@
 import {MazeSettings, setMazeProps, generatePrimTracker, generateSidewinder}  from '../../_modules/_deno.ts'
 
-// console.log('MazeSettings', MazeSettings)
 const madeMazes:string[] = []
 export const generateMaze:(x:{gw:number,gh:number,seedArg?:number, mazeType?:string, algorithm?:string}, cb?:()=>void) => void = async ({gw, gh, seedArg, mazeType, algorithm}, cb = ()=>{}) => {
   const mazeBase:any = setMazeProps(gw, gh, seedArg, algorithm, mazeType)
@@ -9,7 +8,6 @@ export const generateMaze:(x:{gw:number,gh:number,seedArg?:number, mazeType?:str
     : generatePrimTracker(mazeBase)
 
     while (!generatedMaze.Maze) await new Promise((resolve) => { setTimeout(() => { resolve(1); }, 600); });
-    console.log('generatedMaze', {...generatedMaze})
   
   const mazeMap = document.getElementById('game')
   let mazeString = ''
@@ -35,21 +33,7 @@ export const generateMaze:(x:{gw:number,gh:number,seedArg?:number, mazeType?:str
   })
 
   if (mazeMap) mazeMap.innerHTML = mazeString
-  // DEBUGGING WEIRDNESS
-  // madeMazes.push(mazeString)
-  // console.log('[...madeMazes]', [...madeMazes])
-  // if(madeMazes[1]) {
-  //   console.log(madeMazes[0] === madeMazes[1])
-  //   console.log(madeMazes[0].length === madeMazes[1].length, madeMazes[0].length)
-  //   // for (let i=madeMazes[0].length-1; i>madeMazes[0].length-150; i--)
-  //   for (let i=0; i<madeMazes[0].length; i++)
-  //   {
-  //     if(madeMazes[0][i] !== madeMazes[1][i]) { console.log(i,madeMazes[0][i],madeMazes[1][i]); break }
-  //     // if(madeMazes[0][i] !== madeMazes[1][i]) { console.log(i,madeMazes[0][i],madeMazes[1][i]); /*break*/ }
-  //   }
-  //   console.log(madeMazes[0].substring(500, 585));
-  //   console.log(madeMazes[1].substring(500, 585));
-  // }
+
   mazeString = ''
   generatedMaze = null
   cb && cb()
