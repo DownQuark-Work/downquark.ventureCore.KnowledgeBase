@@ -5,7 +5,7 @@ const _DEBUG = 0
 export const denoLog = (...logVal:any[]) => {
   if (typeof Deno !== 'undefined') console.log(...logVal)
 }
-export const renderGridPassage = (Grid:Array<number[]|string[]>) => {
+export const renderGrid = (Grid:Array<number[]|string[]>) => {
   !_DEBUG && console.clear()
   const topBorder:'_'[] = [...Array(Grid[0].length+2).fill('_')],
     bottomBorder:'-'[] = [...Array(Grid[0].length+2).fill('—')]

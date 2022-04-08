@@ -1,7 +1,7 @@
-import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
-
 // deno run Layouts/Grid/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225
 // deno run Layouts/Grid/bsp.ts -r 13 -c 13 -s 1313
+
+import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 
 let gridReturnObj = {
   AnimationDuration: 0,
