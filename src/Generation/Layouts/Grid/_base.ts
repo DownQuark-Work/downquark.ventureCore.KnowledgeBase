@@ -1,5 +1,8 @@
 import { parse } from "../../_utils/_deps.ts";
+import { proto } from "./_utils.ts";
 import { CELL_STATE } from './_settings.ts'
+
+proto()
 
 const _DEBUG = 0
 

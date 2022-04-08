@@ -2,6 +2,11 @@
 import {CELL_STATE} from './_settings.ts'
 
 const _DEBUG = 0
+
+export const proto = () => {
+  Math.clamp = function(num:number, min:number, max:number){ console.log(this); return Math.min(Math.max(num, min), max); }
+}
+
 export const denoLog = (...logVal:any[]) => {
   if (typeof Deno !== 'undefined') console.log(...logVal)
 }

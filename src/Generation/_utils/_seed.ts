@@ -22,10 +22,11 @@ export const parsedVerifiedValue = () => verifiedSeed
 export const seedPointer = (setter?:number) => {
   if(setter) { seedPointer.pointerValue = setter }
   // console.log('->', seedPointer.pointerValue, parsedSeed[seedPointer.pointerValue])
-  return parsedSeed[seedPointer.pointerValue]
+  return seedPointer.autoIncrement ? seedPointer.inc() : parsedSeed[seedPointer.pointerValue]
 }
 seedPointer.inc = () => {
   if(++seedPointer.pointerValue >= parsedSeed.length) seedPointer.pointerValue = 0
   return parsedSeed[seedPointer.pointerValue]
 }
 seedPointer.pointerValue = 0
+seedPointer.autoIncrement = false

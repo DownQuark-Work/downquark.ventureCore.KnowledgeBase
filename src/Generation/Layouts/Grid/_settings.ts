@@ -1,3 +1,15 @@
+/**
+ * PERCENT: 0-1: percentage of area :: .05 -> divide until rooms are ~5% of total Grid
+ * AREA: <rows*columns> area :: 34 -> divide until roomColAmt * roomRowAmt is ~ 34
+ * ROOMS: amount of divisions to create :: -13 -> divide until there are 13 rooms
+ * - Add multiple constraints and the first one to be achieved will stop the divisions
+ */
+export const DIVISION_CONSTRAINTS = {
+  PERCENT: .05,
+  AREA: 34,
+  ROOMS: 13
+}
+export const WOBBLE_RANGE = [.08, .27] // used when determining how far off-center a divide will be
 export const CELL_STATE:{[k:string]: {[k:string]: number}} = {
   COMMON: {
     NON_CONSIDERED: 0,
