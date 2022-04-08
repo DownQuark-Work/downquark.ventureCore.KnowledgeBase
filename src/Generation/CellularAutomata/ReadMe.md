@@ -3,6 +3,9 @@
 - `$ deno run --watch run.ts 7 5 12 ` to update on file save
 `$  deno doc run.ts`
 
+-> not exactly CA - but a nice cavern-like touch?
+http://www.roguebasin.com/index.php/Basic_directional_dungeon_generation
+
 ---
 
 ## Node -> Deno cheatsheet

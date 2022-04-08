@@ -8,6 +8,8 @@ https://procgen.space/resources << YES
       - http://roguebasin.com/?title=Basic_BSP_Dungeon_generation
 
 
+http://www.roguebasin.com/index.php/Creating_Measurably_%22Fun%22_Maps
+
 https://www.redblobgames
 http://devmag.org.za/2009/05/03/poisson-disk-sampling/
 https://www.emanueleferonato.com/2009/08/28/color-differences-algorithm/
@@ -28,7 +30,7 @@ In a different direction - use this to generate mock data for testing/etc
 
 - https://www.reddit.com/r/gamedev/comments/1dlwc4/procedural_dungeon_generation_algorithm_explained/
 
-  https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/
+  https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/ <<<<< --- https://munificent.github.io/hauberk/ [Nystrom]
   https://www.gamedeveloper.com/programming/procedural-dungeon-generation-algorithm
   https://www.tomstephensondeveloper.co.uk/post/creating-simple-procedural-dungeon-generation
   http://pcg.wikidot.com/category-pcg-algorithms
