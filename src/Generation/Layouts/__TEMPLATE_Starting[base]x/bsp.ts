@@ -1,8 +1,7 @@
-// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 13 -c 13 -s 1313)
+// deno run Layouts/Grid/_base.ts -r 13 -c 13 -s 1313 --prim --anim 225
+// deno run Layouts/Grid/bsp.ts -r 13 -c 13 -s 1313
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
-import {renderGrid} from './_utils.ts'
-
 
 let gridReturnObj = {
   AnimationDuration: 0,
@@ -23,9 +22,7 @@ let gridReturnObj = {
       SeedVerification: parsedVerifiedValue()
     }
     // init(row,col,walled && SETTINGS.RENDER_MAZE_AS.WALLED,seed) 
-    renderGrid(base.Grid)
     console.log('BSP:', base.Dimension.columns*base.Dimension.rows,base.Dimension.columns*base.Dimension.columns,base.Seed)
-    console.log('gridReturnObj', gridReturnObj)
   }
 
 (typeof Deno !== 'undefined') && instantiate(JSON.parse(Deno.args[0])) // CLI
