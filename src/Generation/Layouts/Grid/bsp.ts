@@ -81,7 +81,8 @@ let gridReturnObj = {
     console.log('newDivisions', newDivisions)
 
     // console.log('DIVISION_CONSTRAINTSs', DIVISION_CONSTRAINTS)
-    // console.log('Divisions', Divisions)
+    Divisions.push(...newDivisions)
+    console.log('Divisions', Divisions)
     // const splitH = () => { }
     // const splitDir = seedPointer() % 2 === 0 ? '-' : '|'
     // seedPointer.inc()
