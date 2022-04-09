@@ -17,8 +17,9 @@ let gridReturnObj = {
   const generateDivisions = () => {
      // [START_COL, START_ROW, END_COL, END_ROW]
     const tmp = [[[0,0,24,19]],[[0,0,24,6],[0,7,24,19]]]
+    // const curDivisions = tmp[tmp.length-1]
     const curDivisions = Divisions[Divisions.length-1]
-    console.log('curDivisions', curDivisions, tmp[tmp.length-1])
+    console.log('curDivisions', curDivisions, tmp[tmp.length-1], Divisions, tmp)
     const newDivisions:Array<number[]> = curDivisions.map((division: number[]) => {
       const splitAlpha = [division[0],division[1]] // TOP LEFT
       const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
