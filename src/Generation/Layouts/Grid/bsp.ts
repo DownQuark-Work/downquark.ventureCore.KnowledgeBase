@@ -13,14 +13,15 @@ let gridReturnObj = {
   Seed: 0,
   SeedVerification: 0
 }
-
+  let genDiv = 0
   const generateDivisions = () => {
      // [START_COL, START_ROW, END_COL, END_ROW]
-    const tmp = [[[0,0,24,19]],[[0,0,24,6],[0,7,24,19]]]
-    // const curDivisions = tmp[tmp.length-1]
     const curDivisions = Divisions[Divisions.length-1]
-    console.log('curDivisions', curDivisions, tmp[tmp.length-1], Divisions, tmp)
-    const newDivisions:Array<number[]> = curDivisions.map((division: number[]) => {
+    console.log('Divs',Divisions)
+    console.log('curD',curDivisions)
+    let newDivisions:Array<number[]> = []
+    curDivisions.forEach((division: number[]) => {
+      // const newDivisions:Array<number[][]> = tmpDivisions.map((division: number[]) => {
       const splitAlpha = [division[0],division[1]] // TOP LEFT
       const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
       const splitDir = seedPointer() % 2 === 0 ? 0 : 1 // ? FOLD DOWN : FOLD ACROSS
@@ -40,25 +41,11 @@ let gridReturnObj = {
         const wobbleRooms = curDivisions.length
         const currentWobbleAmt = Math.min(Math.max(WOBBLE_RANGE[1] - (wobbleStep*wobbleRooms), WOBBLE_RANGE[0]), WOBBLE_RANGE[1])
         const currentWobbleAmtStep = currentWobbleAmt/9
-        // seedPointer.inc()
-        // seedPointer.inc()
-        // seedPointer.inc()
-        // seedPointer.inc()
+
         const applyCurrentWobble = seedPointer.inc() % 2 === 0 ? currentWobbleAmtStep * seedPointer() : -(currentWobbleAmtStep * seedPointer())
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
         console.log('applyCurrentWobble', applyCurrentWobble.toFixed(3), divideAt)
         console.log('divideAt WORKS::', divideAt)
-        
-        // if(splitDir)
-        // { // FOLD ACROSS
-        //   splitAlpha.push(divideAt-1,division[3])
-        //   splitBeta.unshift(divideAt,division[1])
-        // } else { // FOLD DOWN
-        //   splitAlpha.push(division[2],divideAt)
-        //   splitBeta.unshift(division[0],divideAt+1)
-        // }
-        // const splitArr = []
-        // console.log('sAB', splitAlpha, splitBeta)
 
         return divideAt // DIVISION_CONSTRAINTS.ROOMS
       }
@@ -73,18 +60,28 @@ let gridReturnObj = {
           splitAlpha.push(division[2],splitVals.dividedAt)
           splitBeta.unshift(division[0],splitVals.dividedAt+1)
         }
-        console.log('sAB', splitAlpha, splitBeta)
-
+        console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
+        newDivisions.push(splitAlpha, splitBeta)
+        console.log('newDivisions', newDivisions)
       // console.log('splitVals', splitVals)
       // console.log('division', division)
       // console.log('splitAlpha, splitBeta', splitAlpha, splitBeta)
       return [splitAlpha, splitBeta]
     })
-    console.log('newDivisions', newDivisions)
+    const pushDivisions = [...newDivisions]
+    console.log('newDivisions', pushDivisions)
 
     // console.log('DIVISION_CONSTRAINTSs', DIVISION_CONSTRAINTS)
-    Divisions.push(...newDivisions)
+    // Divisions.push(...newDivisions)
+    console.log('newDivisionsXXX', newDivisions)
+    Divisions.push(newDivisions)
+    // Divisions.push(pushDivisions)
+    
     console.log('Divisions', Divisions)
+    console.log('=============');
+    console.log('=============');
+    newDivisions = [[]]
+    
     // const splitH = () => { }
     // const splitDir = seedPointer() % 2 === 0 ? '-' : '|'
     // seedPointer.inc()
@@ -92,6 +89,7 @@ let gridReturnObj = {
 
     // console.log('seedPointer()1', seedPointer())
     // console.log('seedPointer()2', seedPointer())
+    if(genDiv++ < 3) setTimeout(generateDivisions,1000)
   }
 
   const instantiate = (base:typeof gridReturnObj) => {
@@ -105,6 +103,9 @@ let gridReturnObj = {
     }
     Divisions.push([[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]) // [START_COL, START_ROW, END_COL, END_ROW]
     generateDivisions()
+    // setTimeout(generateDivisions, 3000)
+    // setTimeout(generateDivisions, 7000)
+
     // renderGrid(base.Grid)
     // console.log('BSP:', base.Dimension.columns*base.Dimension.rows,base.Dimension.columns*base.Dimension.columns,base.Seed)
     // console.log('gridReturnObj', gridReturnObj)
