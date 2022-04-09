@@ -19,9 +19,9 @@ let gridReturnObj = {
     const curDivisions = Divisions[Divisions.length-1]
     console.log('Divs',Divisions)
     console.log('curD',curDivisions)
-    let newDivisions:Array<number[]> = []
-    curDivisions.forEach((division: number[]) => {
-      // const newDivisions:Array<number[][]> = tmpDivisions.map((division: number[]) => {
+    let newDivisions:Array<number[][]>|null = null
+    curDivisions[0].forEach((division: number[]) => {
+      console.log('divisionX', division)
       const splitAlpha = [division[0],division[1]] // TOP LEFT
       const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
       const splitDir = seedPointer() % 2 === 0 ? 0 : 1 // ? FOLD DOWN : FOLD ACROSS
@@ -61,15 +61,17 @@ let gridReturnObj = {
           splitBeta.unshift(division[0],splitVals.dividedAt+1)
         }
         console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
-        newDivisions.push(splitAlpha, splitBeta)
-        console.log('newDivisions', newDivisions)
+        // THE BELOW WORKS AND IS THE STRUCURE NEEDED
+        if(!newDivisions) newDivisions = [[splitAlpha, splitBeta]]
+        else newDivisions.push([splitAlpha, splitBeta])
       // console.log('splitVals', splitVals)
       // console.log('division', division)
       // console.log('splitAlpha, splitBeta', splitAlpha, splitBeta)
-      return [splitAlpha, splitBeta]
+      // return [splitAlpha, splitBeta]
     })
-    const pushDivisions = [...newDivisions]
-    console.log('newDivisions', pushDivisions)
+    const pushDivisions = [newDivisions]
+    // pushDivisions = [...pushDivisions]
+    console.log('pushDivisions', pushDivisions)
 
     // console.log('DIVISION_CONSTRAINTSs', DIVISION_CONSTRAINTS)
     // Divisions.push(...newDivisions)
@@ -80,7 +82,7 @@ let gridReturnObj = {
     console.log('Divisions', Divisions)
     console.log('=============');
     console.log('=============');
-    newDivisions = [[]]
+    newDivisions = null
     
     // const splitH = () => { }
     // const splitDir = seedPointer() % 2 === 0 ? '-' : '|'
@@ -101,7 +103,7 @@ let gridReturnObj = {
       ...base,
       SeedVerification: parsedVerifiedValue()
     }
-    Divisions.push([[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]) // [START_COL, START_ROW, END_COL, END_ROW]
+    Divisions.push([[[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]]) // [START_COL, START_ROW, END_COL, END_ROW]
     generateDivisions()
     // setTimeout(generateDivisions, 3000)
     // setTimeout(generateDivisions, 7000)
