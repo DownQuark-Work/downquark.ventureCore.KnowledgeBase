@@ -1,4 +1,5 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 13 -c 13 -s 1313)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {renderGrid} from './_utils.ts'
@@ -14,12 +15,13 @@ let gridReturnObj = {
 }
 
   const generateDivisions = () => {
+     // [START_COL, START_ROW, END_COL, END_ROW]
     const curDivisions = Divisions[Divisions.length-1]
     console.log('curDivisions', curDivisions)
     const newDivisions:Array<number[]> = curDivisions.map((division: number[]) => {
-      const splitAlpha = [division[0],division[1]]
-      const splitBeta = [division[2],division[3]]
-      const splitDir = seedPointer() % 2 === 0 ? 0 : 1
+      const splitAlpha = [division[0],division[1]] // TOP LEFT
+      const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
+      const splitDir = seedPointer() % 2 === 0 ? 0 : 1 // ? FOLD DOWN : FOLD ACROSS
       const splitVals = {
         midpoint: [
           (division[3] - division[1])/2, // vert midpoint
@@ -44,15 +46,37 @@ let gridReturnObj = {
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
         console.log('applyCurrentWobble', applyCurrentWobble.toFixed(3), divideAt)
         console.log('divideAt WORKS::', divideAt)
+        
+        // if(splitDir)
+        // { // FOLD ACROSS
+        //   splitAlpha.push(divideAt-1,division[3])
+        //   splitBeta.unshift(divideAt,division[1])
+        // } else { // FOLD DOWN
+        //   splitAlpha.push(division[2],divideAt)
+        //   splitBeta.unshift(division[0],divideAt+1)
+        // }
+        // const splitArr = []
+        // console.log('sAB', splitAlpha, splitBeta)
 
-        return DIVISION_CONSTRAINTS.ROOMS
+        return divideAt // DIVISION_CONSTRAINTS.ROOMS
       }
 
       splitVals.dividedAt = createDivide()
 
+      if(splitDir)
+        { // FOLD ACROSS
+          splitAlpha.push(splitVals.dividedAt-1,division[3])
+          splitBeta.unshift(splitVals.dividedAt,division[1])
+        } else { // FOLD DOWN
+          splitAlpha.push(division[2],splitVals.dividedAt)
+          splitBeta.unshift(division[0],splitVals.dividedAt+1)
+        }
+        console.log('sAB', splitAlpha, splitBeta)
+
       // console.log('splitVals', splitVals)
       // console.log('division', division)
       // console.log('splitAlpha, splitBeta', splitAlpha, splitBeta)
+      return [splitAlpha, splitBeta]
     })
     console.log('newDivisions', newDivisions)
 
@@ -76,7 +100,7 @@ let gridReturnObj = {
       ...base,
       SeedVerification: parsedVerifiedValue()
     }
-    Divisions.push([[0,0,base.Dimension.columns-1,base.Dimension.rows-1]])
+    Divisions.push([[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]) // [START_COL, START_ROW, END_COL, END_ROW]
     generateDivisions()
     // renderGrid(base.Grid)
     // console.log('BSP:', base.Dimension.columns*base.Dimension.rows,base.Dimension.columns*base.Dimension.columns,base.Seed)
