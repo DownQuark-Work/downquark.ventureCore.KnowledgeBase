@@ -44,20 +44,21 @@ let gridReturnObj = {
 
         const applyCurrentWobble = seedPointer.inc() % 2 === 0 ? currentWobbleAmtStep * seedPointer() : -(currentWobbleAmtStep * seedPointer())
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
-        // console.log('applyCurrentWobble, divideAt', applyCurrentWobble.toFixed(3), divideAt)
+        console.log('applyCurrentWobble, divideAt', applyCurrentWobble.toFixed(3), divideAt, splitVals.midpoint[splitDir])
 
         return divideAt // DIVISION_CONSTRAINTS.ROOMS
       }
 
       splitVals.dividedAt = createDivide()
 
+      console.log('splitVals.dividedAt', splitVals.dividedAt, splitDir)
       if(splitDir)
         { // FOLD ACROSS
-          splitAlpha.push(splitVals.dividedAt-1,division[3])
-          splitBeta.unshift(splitVals.dividedAt,division[1])
+          splitAlpha.push(division[0]+splitVals.dividedAt,division[3])
+          splitBeta.unshift(division[0]+splitVals.dividedAt+1,division[1])
         } else { // FOLD DOWN
-          splitAlpha.push(division[2],splitVals.dividedAt)
-          splitBeta.unshift(division[0],splitVals.dividedAt+1)
+          splitAlpha.push(division[2],division[1]+splitVals.dividedAt)
+          splitBeta.unshift(division[0],division[1]+splitVals.dividedAt+1)
         }
         console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
 
@@ -72,6 +73,7 @@ let gridReturnObj = {
     console.log('=============');
     newDivisions = null
 
+    renderGrid(Divisions[Divisions.length-1])
     if(genDiv++ < 3) setTimeout(generateDivisions,1000)
   }
 
@@ -85,9 +87,10 @@ let gridReturnObj = {
       SeedVerification: parsedVerifiedValue()
     }
     Divisions.push([[[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]]) // [START_COL, START_ROW, END_COL, END_ROW]
+    renderGrid(base.Grid)
     generateDivisions()
 
-    // renderGrid(base.Grid)
+    // renderGrid(base.Grid, true)
     // console.log('gridReturnObj', gridReturnObj)
   }
 
