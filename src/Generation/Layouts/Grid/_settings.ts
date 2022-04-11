@@ -1,3 +1,4 @@
+export const [START_COL, START_ROW, END_COL, END_ROW] = new Array(4).fill(0).map((_,i) => i)
 /**
  * PERCENT: 0-1: percentage of area :: .05 -> divide until rooms are ~5% of total Grid
  * AREA: <rows*columns> area :: 34 -> divide until roomColAmt * roomRowAmt is ~ 34

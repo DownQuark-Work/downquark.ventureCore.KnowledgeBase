@@ -19,20 +19,19 @@ let memoGrid:Array<Array<number|string>>
 export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>) => {
   !_DEBUG && console.clear()
   if(!memoGrid) { memoGrid = (splitSections as number[][]); return } // initial grid
-  const newGrid = [...memoGrid]
   splitSections.forEach((splits,indx) => {
     splits.forEach((split, i) => {
       const splt = (split as number[])
       console.log(indx, SPLIT_CHARS[i][indx], 'split', splt,i)
       for (let y=splt[0]; y<=splt[2]; y++ ) {
         for (let x=splt[1]; x<=splt[3]; x++ ) {
-          newGrid[x][y] = SPLIT_CHARS[i][indx]
+          memoGrid[x][y] = SPLIT_CHARS[i][indx]
           // console.log('SPLIT_CHARS[i][indx]', SPLIT_CHARS[i][indx])
         }
       }
     })
   })
-  renderBorderedGrid(newGrid)
+  renderBorderedGrid(memoGrid)
   console.log('splitSections', splitSections, SPLIT_CHARS[0][0])
 }
 

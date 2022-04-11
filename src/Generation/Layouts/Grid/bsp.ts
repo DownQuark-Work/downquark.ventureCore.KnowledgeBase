@@ -3,7 +3,7 @@
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {renderGrid} from './_utils.ts'
-import {DIVISION_CONSTRAINTS, WOBBLE_RANGE} from './_settings.ts'
+import {DIVISION_CONSTRAINTS, WOBBLE_RANGE, START_COL, START_ROW, END_COL, END_ROW} from './_settings.ts'
 
 const Divisions:any = []
 let gridReturnObj = {
@@ -22,16 +22,16 @@ let gridReturnObj = {
     let newDivisions:Array<number[][]>|null = null
     curDivisions.forEach((divisions: number[][]) => { // all divisions at level
       divisions.forEach((division: number[]) => { // paired split
-      const splitAlpha = [division[0],division[1]] // TOP LEFT
-      const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
+      const splitAlpha = [division[START_COL],division[START_ROW]] // TOP LEFT
+      const splitBeta = [division[END_COL],division[END_ROW]] // BOTTOM RIGHT
       const splitDir = seedPointer() % 2 === 0 ? 0 : 1 // ? FOLD DOWN : FOLD ACROSS
       const splitVals = {
         midpoint: [
-          (division[3] - division[1])/2, // vert midpoint
-          (division[2] - division[0])/2, // horiz  midpoint
+          (division[END_ROW] - division[START_ROW])/2, // vert midpoint
+          (division[END_COL] - division[START_COL])/2, // horiz  midpoint
         ],
-        horiz: [division[0], division[2]],
-        vert: [division[1], division[3]],
+        horiz: [division[0], division[END_COL]],
+        vert: [division[START_ROW], division[END_ROW]],
         dividedAt: -1,
       }
 
@@ -54,11 +54,11 @@ let gridReturnObj = {
       // console.log('splitVals.dividedAt, splitDir', splitVals.dividedAt, splitDir)
       if(splitDir)
         { // FOLD ACROSS
-          splitAlpha.push(division[0]+splitVals.dividedAt,division[3])
-          splitBeta.unshift(division[0]+splitVals.dividedAt+1,division[1])
+          splitAlpha.push(division[START_COL]+splitVals.dividedAt,division[END_ROW])
+          splitBeta.unshift(division[START_COL]+splitVals.dividedAt+1,division[START_ROW])
         } else { // FOLD DOWN
-          splitAlpha.push(division[2],division[1]+splitVals.dividedAt)
-          splitBeta.unshift(division[0],division[1]+splitVals.dividedAt+1)
+          splitAlpha.push(division[2],division[START_ROW]+splitVals.dividedAt)
+          splitBeta.unshift(division[START_COL],division[START_ROW]+splitVals.dividedAt+1)
         }
         console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
 
