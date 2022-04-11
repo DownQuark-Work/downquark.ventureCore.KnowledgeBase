@@ -44,14 +44,14 @@ let gridReturnObj = {
 
         const applyCurrentWobble = seedPointer.inc() % 2 === 0 ? currentWobbleAmtStep * seedPointer() : -(currentWobbleAmtStep * seedPointer())
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
-        console.log('applyCurrentWobble, divideAt', applyCurrentWobble.toFixed(3), divideAt, splitVals.midpoint[splitDir])
+        // console.log('applyCurrentWobble, divideAt', applyCurrentWobble.toFixed(3), divideAt, splitVals.midpoint[splitDir])
 
         return divideAt // DIVISION_CONSTRAINTS.ROOMS
       }
 
       splitVals.dividedAt = createDivide()
 
-      console.log('splitVals.dividedAt', splitVals.dividedAt, splitDir)
+      // console.log('splitVals.dividedAt, splitDir', splitVals.dividedAt, splitDir)
       if(splitDir)
         { // FOLD ACROSS
           splitAlpha.push(division[0]+splitVals.dividedAt,division[3])
