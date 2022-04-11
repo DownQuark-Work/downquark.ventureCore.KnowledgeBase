@@ -52,7 +52,7 @@ class Grid {
     } = parsedArgs
   
     gridReturnObj.AnimationDuration = anim
-      ? typeof anim === 'number' ? Math.min(Math.max(100,anim),500) : 225
+      ? typeof anim === 'number' ? Math.min(Math.max(100,anim),1000) : 500
       : 0
   
     init(row,col,seed) 

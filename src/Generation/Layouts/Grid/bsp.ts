@@ -1,4 +1,4 @@
-// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 13 -c 13 -s 1313)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1342)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
@@ -15,6 +15,7 @@ let gridReturnObj = {
 }
   let genDiv = 0
   const generateDivisions = () => {
+    let continueGenerate = false
      // [START_COL, START_ROW, END_COL, END_ROW]
     const curDivisions = Divisions[Divisions.length-1]
     // console.log('Divs',Divisions)
@@ -62,19 +63,33 @@ let gridReturnObj = {
         }
         console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
 
-        if(!newDivisions) newDivisions = [[splitAlpha, splitBeta]]
-        else newDivisions.push([splitAlpha, splitBeta])
+        if(!newDivisions) newDivisions = []
+        const shortWall = Math.min(
+          splitAlpha[END_COL] - splitAlpha[START_COL],
+          splitAlpha[END_ROW] - splitAlpha[START_ROW],
+          splitBeta[END_COL] - splitBeta[START_COL],
+          splitBeta[END_ROW] - splitBeta[START_ROW],
+        )
+        // console.log('shortWall, DIVISION_CONSTRAINTS_WALL_LENGTH', shortWall, DIVISION_CONSTRAINTS.WALL_LENGTH)
+        if(shortWall < DIVISION_CONSTRAINTS.WALL_LENGTH)
+        { newDivisions.push([division])}
+        else {
+          newDivisions.push([splitAlpha, splitBeta])
+          continueGenerate = true
+        }
     })
   })
-    Divisions.push(newDivisions)
+
+  Divisions.push(newDivisions)
 
     console.log('Divisions', Divisions)
     console.log('=============');
     console.log('=============');
     newDivisions = null
 
-    renderGrid(Divisions[Divisions.length-1])
-    if(genDiv++ < 3) setTimeout(generateDivisions,1000)
+    gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
+    if(Divisions[Divisions.length-1].length * 2 >= DIVISION_CONSTRAINTS.ROOMS) {console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', Divisions[Divisions.length-1].length * 2); return}
+    if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
   }
 
   const instantiate = (base:typeof gridReturnObj) => {
@@ -87,7 +102,7 @@ let gridReturnObj = {
       SeedVerification: parsedVerifiedValue()
     }
     Divisions.push([[[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]]) // [START_COL, START_ROW, END_COL, END_ROW]
-    renderGrid(base.Grid)
+    gridReturnObj.AnimationDuration && renderGrid(base.Grid)
     generateDivisions()
 
     // renderGrid(base.Grid, true)

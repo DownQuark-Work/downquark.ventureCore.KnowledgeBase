@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import {CELL_STATE} from './_settings.ts'
 
-const _DEBUG = 1
+const _DEBUG = 0
 
 export const proto = () => {
   Math.clamp = function(num:number, min:number, max:number){ console.log(this); return Math.min(Math.max(num, min), max); }
@@ -22,7 +22,7 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>) => {
   splitSections.forEach((splits,indx) => {
     splits.forEach((split, i) => {
       const splt = (split as number[])
-      console.log(indx, SPLIT_CHARS[i][indx], 'split', splt,i)
+      // console.log(indx, SPLIT_CHARS[i][indx], 'split', splt,i)
       for (let y=splt[0]; y<=splt[2]; y++ ) {
         for (let x=splt[1]; x<=splt[3]; x++ ) {
           memoGrid[x][y] = SPLIT_CHARS[i][indx]
@@ -32,7 +32,7 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>) => {
     })
   })
   renderBorderedGrid(memoGrid)
-  console.log('splitSections', splitSections, SPLIT_CHARS[0][0])
+  console.log('splitSections', splitSections)
 }
 
 export const renderBorderedGrid = (Grid:(number|string)[][]) => {
