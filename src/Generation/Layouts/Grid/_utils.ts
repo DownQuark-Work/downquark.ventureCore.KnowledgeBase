@@ -25,7 +25,7 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>) => {
       // console.log(indx, SPLIT_CHARS[i][indx], 'split', splt,i)
       for (let y=splt[0]; y<=splt[2]; y++ ) {
         for (let x=splt[1]; x<=splt[3]; x++ ) {
-          memoGrid[x][y] = SPLIT_CHARS[i][indx]
+          memoGrid[x][y] = SPLIT_CHARS[i][indx%26]
           // console.log('SPLIT_CHARS[i][indx]', SPLIT_CHARS[i][indx])
         }
       }

@@ -1,6 +1,6 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1342)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
-// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000)  
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000) # SETTINGS -> ROOMS: 50
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {renderGrid} from './_utils.ts'
@@ -103,7 +103,7 @@ let gridReturnObj = {
     newDivisions = null
 
     gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
-    console.log('totalRooms', totalRooms, Divisions[Divisions.length-1].length * 2)
+    console.log('totalRooms', totalRooms)
     if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) {console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', totalRooms); return}
     if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
     else { renderRooms() }
