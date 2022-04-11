@@ -17,11 +17,11 @@ let gridReturnObj = {
   const generateDivisions = () => {
      // [START_COL, START_ROW, END_COL, END_ROW]
     const curDivisions = Divisions[Divisions.length-1]
-    console.log('Divs',Divisions)
-    console.log('curD',curDivisions)
+    // console.log('Divs',Divisions)
+    // console.log('curD',curDivisions)
     let newDivisions:Array<number[][]>|null = null
-    curDivisions[0].forEach((division: number[]) => {
-      console.log('divisionX', division)
+    curDivisions.forEach((divisions: number[][]) => { // all divisions at level
+      divisions.forEach((division: number[]) => { // paired split
       const splitAlpha = [division[0],division[1]] // TOP LEFT
       const splitBeta = [division[2],division[3]] // BOTTOM RIGHT
       const splitDir = seedPointer() % 2 === 0 ? 0 : 1 // ? FOLD DOWN : FOLD ACROSS
@@ -44,8 +44,7 @@ let gridReturnObj = {
 
         const applyCurrentWobble = seedPointer.inc() % 2 === 0 ? currentWobbleAmtStep * seedPointer() : -(currentWobbleAmtStep * seedPointer())
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
-        console.log('applyCurrentWobble', applyCurrentWobble.toFixed(3), divideAt)
-        console.log('divideAt WORKS::', divideAt)
+        // console.log('applyCurrentWobble, divideAt', applyCurrentWobble.toFixed(3), divideAt)
 
         return divideAt // DIVISION_CONSTRAINTS.ROOMS
       }
@@ -61,36 +60,18 @@ let gridReturnObj = {
           splitBeta.unshift(division[0],splitVals.dividedAt+1)
         }
         console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
-        // THE BELOW WORKS AND IS THE STRUCURE NEEDED
+
         if(!newDivisions) newDivisions = [[splitAlpha, splitBeta]]
         else newDivisions.push([splitAlpha, splitBeta])
-      // console.log('splitVals', splitVals)
-      // console.log('division', division)
-      // console.log('splitAlpha, splitBeta', splitAlpha, splitBeta)
-      // return [splitAlpha, splitBeta]
     })
-    const pushDivisions = [newDivisions]
-    // pushDivisions = [...pushDivisions]
-    console.log('pushDivisions', pushDivisions)
-
-    // console.log('DIVISION_CONSTRAINTSs', DIVISION_CONSTRAINTS)
-    // Divisions.push(...newDivisions)
-    console.log('newDivisionsXXX', newDivisions)
+  })
     Divisions.push(newDivisions)
-    // Divisions.push(pushDivisions)
-    
+
     console.log('Divisions', Divisions)
     console.log('=============');
     console.log('=============');
     newDivisions = null
-    
-    // const splitH = () => { }
-    // const splitDir = seedPointer() % 2 === 0 ? '-' : '|'
-    // seedPointer.inc()
-    // console.log('splitDir', splitDir)
 
-    // console.log('seedPointer()1', seedPointer())
-    // console.log('seedPointer()2', seedPointer())
     if(genDiv++ < 3) setTimeout(generateDivisions,1000)
   }
 
@@ -105,11 +86,8 @@ let gridReturnObj = {
     }
     Divisions.push([[[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]]) // [START_COL, START_ROW, END_COL, END_ROW]
     generateDivisions()
-    // setTimeout(generateDivisions, 3000)
-    // setTimeout(generateDivisions, 7000)
 
     // renderGrid(base.Grid)
-    // console.log('BSP:', base.Dimension.columns*base.Dimension.rows,base.Dimension.columns*base.Dimension.columns,base.Seed)
     // console.log('gridReturnObj', gridReturnObj)
   }
 
