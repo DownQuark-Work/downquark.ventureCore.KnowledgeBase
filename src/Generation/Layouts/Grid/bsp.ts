@@ -1,5 +1,6 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1342)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000)  
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {renderGrid} from './_utils.ts'
@@ -7,15 +8,25 @@ import {DIVISION_CONSTRAINTS, WOBBLE_RANGE, START_COL, START_ROW, END_COL, END_R
 
 const Divisions:any = []
 let gridReturnObj = {
-  AnimationDuration: 0,
-  Dimension: { columns: 0, rows: 0 },
-  Grid: [[0]],
-  Seed: 0,
-  SeedVerification: 0
-}
-  let genDiv = 0
+    AnimationDuration: 0,
+    Dimension: { columns: 0, rows: 0 },
+    Grid: [[0]],
+    Seed: 0,
+    SeedVerification: 0
+  }
+
+  const renderCorridors = () => {
+    // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
+    // no split means corridor will be drawn closer to the 0 index
+  }
+  const renderRooms = () => {
+    console.log('Use Divisions[Divisions.length-1] to create and position rooms which will fit in each section')
+    false && renderCorridors()
+  }
+
   const generateDivisions = () => {
     let continueGenerate = false
+    let totalRooms = 0
      // [START_COL, START_ROW, END_COL, END_ROW]
     const curDivisions = Divisions[Divisions.length-1]
     // console.log('Divs',Divisions)
@@ -72,9 +83,13 @@ let gridReturnObj = {
         )
         // console.log('shortWall, DIVISION_CONSTRAINTS_WALL_LENGTH', shortWall, DIVISION_CONSTRAINTS.WALL_LENGTH)
         if(shortWall < DIVISION_CONSTRAINTS.WALL_LENGTH)
-        { newDivisions.push([division])}
+        {
+          newDivisions.push([division])
+          totalRooms += 1
+        }
         else {
           newDivisions.push([splitAlpha, splitBeta])
+          totalRooms += 2
           continueGenerate = true
         }
     })
@@ -88,8 +103,10 @@ let gridReturnObj = {
     newDivisions = null
 
     gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
-    if(Divisions[Divisions.length-1].length * 2 >= DIVISION_CONSTRAINTS.ROOMS) {console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', Divisions[Divisions.length-1].length * 2); return}
+    console.log('totalRooms', totalRooms, Divisions[Divisions.length-1].length * 2)
+    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) {console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', totalRooms); return}
     if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
+    else { renderRooms() }
   }
 
   const instantiate = (base:typeof gridReturnObj) => {
