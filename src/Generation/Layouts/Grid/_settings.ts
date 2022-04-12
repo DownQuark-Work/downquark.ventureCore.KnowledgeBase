@@ -6,7 +6,7 @@ export const [START_COL, START_ROW, END_COL, END_ROW] = new Array(4).fill(0).map
  * - Add multiple constraints and the first one to be achieved will stop the divisions
  */
 export const DIVISION_CONSTRAINTS = {
-  WALL_LENGTH: 5,
+  WALL_LENGTH: 5, // min room wall length will be (WALL_LENGTH - 2) for each side
   ROOMS: 13
 }
 export const WOBBLE_RANGE = [.08, .27] // used when determining how far off-center a divide will be

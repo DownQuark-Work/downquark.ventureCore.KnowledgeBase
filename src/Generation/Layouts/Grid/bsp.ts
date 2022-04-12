@@ -23,6 +23,24 @@ let gridReturnObj = {
   }
   const renderRooms = () => {
     console.log('Use Divisions[Divisions.length-1] to create and position rooms which will fit in each section')
+    const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH - 2
+    const roomMinBorder = 2 // 1 for top|bottom or left|right
+    Divisions[Divisions.length-1].forEach((gridArea:number[][]): void => {
+      console.log('gridArea', gridArea)
+      gridArea.forEach((gA) => {
+        console.log('gA', gA)
+        const roomRangeCols = gA[END_COL] - gA[START_COL] - roomMin
+        const roomRangeRows = gA[END_ROW] - gA[START_ROW] - roomMin
+        console.log('roomMaxCols, roomMaxRows, roomMin', roomRangeRows, roomRangeCols)
+        // console.log('seedPointer.inc()', seedPointer.inc())
+        const roomDims = [Math.floor((roomRangeCols/9)*seedPointer.inc()+roomMin-roomMinBorder), Math.floor((roomRangeRows/9)*seedPointer.inc()+roomMin-roomMinBorder)]
+        const availableOffsetCols = roomRangeCols - roomDims[0] + roomMin
+        const availableOffsetRows = roomRangeRows - roomDims[1] + roomMin
+        console.log('roomDims', roomDims, roomRangeCols + 2, roomRangeRows + 2)
+        console.log('availableOffsetCols, availableOffsetRows', availableOffsetCols, availableOffsetRows)
+      })
+      }
+    )
     false && renderCorridors()
   }
 
@@ -106,7 +124,11 @@ let gridReturnObj = {
 
     gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
     console.log('totalRooms', totalRooms)
-    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) {console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', totalRooms); return}
+    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) {
+      continueGenerate = false
+      console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', totalRooms); 
+      // return
+    }
     if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
     else { renderRooms() }
   }
