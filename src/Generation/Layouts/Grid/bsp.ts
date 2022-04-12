@@ -48,6 +48,7 @@ let gridReturnObj = {
           roomDataInitRow+roomDims[1],
         ]
         roomsLayout.push(roomData)
+        // renderGrid([gA, roomData])
       })
       }
     )
