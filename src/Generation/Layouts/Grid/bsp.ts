@@ -23,8 +23,9 @@ let gridReturnObj = {
   }
   const renderRooms = () => {
     console.log('Use Divisions[Divisions.length-1] to create and position rooms which will fit in each section')
-    const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH - 2
-    const roomMinBorder = 2 // 1 for top|bottom or left|right
+    const roomMinBorder = 1 // 1 for top,bottom,left,right
+    const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH - (roomMinBorder*2) //*2 for top&bot, left&right
+    const roomsLayout:number[][] = []
     Divisions[Divisions.length-1].forEach((gridArea:number[][]): void => {
       console.log('gridArea', gridArea)
       gridArea.forEach((gA) => {
@@ -34,13 +35,23 @@ let gridReturnObj = {
         console.log('roomMaxCols, roomMaxRows, roomMin', roomRangeRows, roomRangeCols)
         // console.log('seedPointer.inc()', seedPointer.inc())
         const roomDims = [Math.floor((roomRangeCols/9)*seedPointer.inc()+roomMin-roomMinBorder), Math.floor((roomRangeRows/9)*seedPointer.inc()+roomMin-roomMinBorder)]
-        const availableOffsetCols = roomRangeCols - roomDims[0] + roomMin
-        const availableOffsetRows = roomRangeRows - roomDims[1] + roomMin
+        const availableOffsetCols = roomRangeCols - roomDims[0] + roomMin - roomMinBorder
+        const availableOffsetRows = roomRangeRows - roomDims[1] + roomMin - roomMinBorder
         console.log('roomDims', roomDims, roomRangeCols + 2, roomRangeRows + 2)
         console.log('availableOffsetCols, availableOffsetRows', availableOffsetCols, availableOffsetRows)
+        const roomDataInitCol = gA[START_COL]+Math.floor((availableOffsetCols/9)*seedPointer.inc())
+        const roomDataInitRow = gA[START_ROW]+Math.floor((availableOffsetRows/9)*seedPointer.inc())
+        const roomData = [
+          roomDataInitCol,
+          roomDataInitRow,
+          roomDataInitCol+roomDims[0],
+          roomDataInitRow+roomDims[1],
+        ]
+        roomsLayout.push(roomData)
       })
       }
     )
+    console.log('roomsLayout', roomsLayout)
     false && renderCorridors()
   }
 
