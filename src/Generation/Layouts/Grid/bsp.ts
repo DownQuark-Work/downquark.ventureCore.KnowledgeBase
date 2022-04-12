@@ -18,6 +18,8 @@ let gridReturnObj = {
   const renderCorridors = () => {
     // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
     // no split means corridor will be drawn closer to the 0 index
+    // TODO(@mlnck): incorporate random walk path
+    // TODO(@mlnck): - with and without dead ends
   }
   const renderRooms = () => {
     console.log('Use Divisions[Divisions.length-1] to create and position rooms which will fit in each section')
