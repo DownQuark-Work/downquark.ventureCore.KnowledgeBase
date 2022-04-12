@@ -23,8 +23,8 @@ let gridReturnObj = {
   }
   const renderRooms = () => {
     console.log('Use Divisions[Divisions.length-1] to create and position rooms which will fit in each section')
-    const roomMinBorder = 1 // 1 for top,bottom,left,right
-    const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH - (roomMinBorder*2) //*2 for top&bot, left&right
+    const roomMinBorder = 1 * 2 // 1 for top,bottom,left,right //*2 for top&bot, left&right
+    const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH
     const roomsLayout:number[][] = []
     Divisions[Divisions.length-1].forEach((gridArea:number[][]): void => {
       console.log('gridArea', gridArea)
