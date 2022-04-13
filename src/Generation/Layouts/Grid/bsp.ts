@@ -19,6 +19,8 @@ let gridReturnObj = {
   const renderCorridors = () => {
     console.log('render corridor')
     console.log('Divisions', Divisions)
+    // if 2 TOPLEFT corners are equal then Horizontal bridge : Vertical
+
     // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
     // no split means corridor will be drawn closer to the 0 index
     // TODO(@mlnck): incorporate random walk path
