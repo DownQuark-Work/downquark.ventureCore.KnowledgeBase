@@ -70,8 +70,8 @@ let gridReturnObj = {
       roomAnim()
     } else renderCorridors()
 
-    console.log('roomsLayout', roomsLayout)
-    console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
+    // console.log('roomsLayout', roomsLayout)
+    // console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
     // false && renderCorridors()
   }
 
