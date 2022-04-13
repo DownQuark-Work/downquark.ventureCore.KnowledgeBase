@@ -37,8 +37,8 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
     })
   })
   renderBorderedGrid(memoGrid)
-  console.log('curMethod', curMethod)
-  console.log('splitSections', splitSections)
+  // console.log('curMethod', curMethod)
+  // console.log('splitSections', splitSections)
 }
 
 export const renderBorderedGrid = (Grid:(number|string)[][]) => {

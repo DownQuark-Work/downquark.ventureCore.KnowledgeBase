@@ -16,6 +16,8 @@ let gridReturnObj = {
   }
 
   const renderCorridors = () => {
+    console.log('render corridor')
+    console.log('Divisions', Divisions)
     // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
     // no split means corridor will be drawn closer to the 0 index
     // TODO(@mlnck): incorporate random walk path
@@ -53,24 +55,24 @@ let gridReturnObj = {
       const roomAnim = async () => {
         let curRm = 0
         while (curRm < renderArrayRoomsLayout.length) {
-          // console.log('curRminside', curRm)
           roomRenderArr[curRm] = renderArrayRoomsLayout[curRm]
           await new Promise((resolve) => {
             setTimeout(() => {
               renderGrid(roomRenderArr, 'rooms', {curRm})
               curRm++
               resolve(1)
-            }, 600)
+            }, gridReturnObj.AnimationDuration)
           })
         }
-        console.log('curRmoutside', curRm)
+        console.log('shown Rooms', curRm)
+        renderCorridors()
       }
       roomAnim()
-    }
+    } else renderCorridors()
 
     console.log('roomsLayout', roomsLayout)
     console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
-    false && renderCorridors()
+    // false && renderCorridors()
   }
 
   const generateDivisions = () => {
