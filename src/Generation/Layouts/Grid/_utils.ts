@@ -7,8 +7,8 @@ export const proto = () => {
   // Math.clamp = function(num:number, min:number, max:number){ console.log(this); return Math.min(Math.max(num, min), max); }
 }
 
-const renderMethod: {[k:string]:any} = {
-  rooms: (i: number,indx: number):string => i === 0 ? ' ' : SPLIT_CHARS[i][indx%26],
+const renderMethods: {[k:string]:any} = {
+  rooms: (i: number, indx: number, opts: { curRm: number; }):string => { if(indx>opts.curRm){curMethod = 'default'} return i === 0 ? ' ' : SPLIT_CHARS[0][indx%26]},
   default: (i: number,indx: number):string => SPLIT_CHARS[i][indx%26]
 }
 
@@ -21,23 +21,23 @@ const SPLIT_CHARS = [
 ]
 
 let memoGrid:Array<Array<number|string>>
-export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, renderRooms = false) => {
+let curMethod = 'default'
+export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useMethod = 'default', opts:{[k:string]:any}={}) => {
   !_DEBUG && console.clear()
-  const rndrMthd:string = renderRooms ?  'rooms' : 'default'
+  curMethod = useMethod
   if(!memoGrid) { memoGrid = (splitSections as number[][]); return } // initial grid
   splitSections.forEach((splits,indx) => {
     splits.forEach((split, i) => {
       const splt = (split as number[])
-      // console.log(indx, SPLIT_CHARS[i][indx], 'split', splt,i)
       for (let y=splt[0]; y<=splt[2]; y++ ) {
         for (let x=splt[1]; x<=splt[3]; x++ ) {
-          memoGrid[x][y] = renderMethod[rndrMthd](i,indx)
-          // console.log('SPLIT_CHARS[i][indx]', SPLIT_CHARS[i][indx])
+          memoGrid[x][y] = renderMethods[curMethod](i,indx,opts)
         }
       }
     })
   })
   renderBorderedGrid(memoGrid)
+  console.log('curMethod', curMethod)
   console.log('splitSections', splitSections)
 }
 
