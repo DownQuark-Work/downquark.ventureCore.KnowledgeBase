@@ -16,21 +16,75 @@ let gridReturnObj = {
     SeedVerification: 0
   }
 
+  const createAnchors = (spans:number[][]) => {
+    console.log('spans', spans)
+    let curSpan = 0
+    const createAnchorPoint = () => {
+      const colPos = Math.floor(((spans[curSpan][END_COL] - spans[curSpan][START_COL])/9)*seedPointer.inc())
+      const rowPos = Math.floor(((spans[curSpan][END_ROW] - spans[curSpan][START_ROW])/9)*seedPointer.inc())
+      const anchors = [
+        spans[curSpan][START_COL]+colPos,
+        spans[curSpan][START_ROW]+rowPos
+      ]
+      curSpan++
+      return anchors
+      // return [13,13]
+    }
+    const spanRangeStart = createAnchorPoint()
+    const spanRangeEnd = createAnchorPoint()
+    // console.log('rnge', spanRangeStart, spanRangeEnd)
+    //s = gA[END_COL] - gA[START_COL] - roomMin
+    
+    // console.log('startPt,endPt', startPt,endPt)
+    return [spanRangeStart, spanRangeEnd]
+  }
+
   const renderCorridors = () => {
     console.log('render corridor')
+    console.log('roomsLayout', roomsLayout)
+    console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
     console.log('Divisions', Divisions)
+
+    const roomLayoutGridMap:{[k:string]:number[]} = {}
+    Object.entries(renderArrayRoomsLayout).forEach(rmLayout => {
+      console.log('rmLayout', rmLayout)
+      roomLayoutGridMap[rmLayout[1][0].join('x')] = rmLayout[1][1]
+      // roomLayoutGridMap[(rmLayout[0] as unknown as number[]).join('')] = (rmLayout[1] as unknown as number[])
+    })
+    console.log('roomLayoutGridMap', roomLayoutGridMap)
+    // console.log('roomLayoutGridMap[0x0x23x34', roomLayoutGridMap['0x0x23x34'])
     // if 2 TOPLEFT corners are equal then Horizontal bridge : Vertical
 
     // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
+    const corridors = []
+    // for(let depth = Divisions.length-1; depth >= 0; depth--) {
+    for(let depth = Divisions.length-1; depth >= Divisions.length-1; depth--) {
+      const levelCorridors = []
+      // console.log('depth', depth)
+      for(let span = Divisions[depth].length-1; span >= 0; span--) {
+        // console.log('span', span, Divisions[depth][span].length)
+        if(Divisions[depth][span].length > 1) {
+          const gridMapKey = [Divisions[depth][span][0].join('x'), Divisions[depth][span][1].join('x')]
+          console.log('gridMapKey', gridMapKey)
+          const bridgeSpan = [roomLayoutGridMap[gridMapKey[0]], roomLayoutGridMap[gridMapKey[1]]]
+          console.log('bridgeSpan', bridgeSpan)
+          levelCorridors.unshift(createAnchors( bridgeSpan ))
+          // levelCorridors.unshift(createAnchors( Divisions[depth][span] ))
+        }
+      }
+      corridors.push(levelCorridors)
+    }
+    console.log('corridors', corridors)
+
     // no split means corridor will be drawn closer to the 0 index
     // TODO(@mlnck): incorporate random walk path
     // TODO(@mlnck): - with and without dead ends
   }
+  const roomsLayout:number[][] = []
+  const renderArrayRoomsLayout:number[][][] = []
   const renderRooms = () => {
     const roomMinBorder = 1 * 2 // 1 for top,bottom,left,right //*2 for top&bot, left&right
     const roomMin = DIVISION_CONSTRAINTS.WALL_LENGTH
-    const roomsLayout:number[][] = []
-    const renderArrayRoomsLayout:number[][][] = []
     Divisions[Divisions.length-1].forEach((gridArea:number[][]): void => {
       gridArea.forEach((gA) => {
         const roomRangeCols = gA[END_COL] - gA[START_COL] - roomMin
