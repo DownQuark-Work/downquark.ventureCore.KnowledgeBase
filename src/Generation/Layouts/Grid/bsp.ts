@@ -28,7 +28,6 @@ let gridReturnObj = {
       ]
       curSpan++
       return anchors
-      // return [13,13]
     }
     const spanRangeStart = createAnchorPoint()
     const spanRangeEnd = createAnchorPoint()
@@ -64,12 +63,20 @@ let gridReturnObj = {
       for(let span = Divisions[depth].length-1; span >= 0; span--) {
         // console.log('span', span, Divisions[depth][span].length)
         if(Divisions[depth][span].length > 1) {
+          // Upon completion fo this step - the matched values should collapse and obtain a value for the state object.
+            // the key would be made by: [Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][2], Divisions[depth][span][1][3]]
+            console.log('[Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][0], Divisions[depth][span][1][2]], Divisions[depth][span][1][2]]', [Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][2], Divisions[depth][span][1][3]])
+            console.log('randomly select one of the 2 rooms from the split to associate with the new key')
+            console.log('do this recursively until depth 0')
+            console.log('that should resolve the order of linking to the rooms')
+            
           const gridMapKey = [Divisions[depth][span][0].join('x'), Divisions[depth][span][1].join('x')]
           console.log('gridMapKey', gridMapKey)
           const bridgeSpan = [roomLayoutGridMap[gridMapKey[0]], roomLayoutGridMap[gridMapKey[1]]]
           console.log('bridgeSpan', bridgeSpan)
           levelCorridors.unshift(createAnchors( bridgeSpan ))
           // levelCorridors.unshift(createAnchors( Divisions[depth][span] ))
+          // TODO@mlnck: sorting and filtering
         }
       }
       corridors.push(levelCorridors)
