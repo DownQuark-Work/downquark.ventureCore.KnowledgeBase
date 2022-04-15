@@ -1,6 +1,12 @@
 https://itch.io/jam/procjam
 https://procgen.space/resources
 
+
+[holistic](http://entropicparticles.com/climates-of-mars) <--!!!
+- [and here](http://entropicparticles.com/6-days-of-creation) <--!!!
+
+https://azgaar.wordpress.com/
+
 https://procgen.space/resources << YES
 - search for `Erosion`
 

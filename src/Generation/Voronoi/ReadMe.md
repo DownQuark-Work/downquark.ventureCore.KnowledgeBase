@@ -1,3 +1,5 @@
+> ALSO: Delaunay triangulation
+
 http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/
 
 https://donjon.bin.sh/fantasy/town/
