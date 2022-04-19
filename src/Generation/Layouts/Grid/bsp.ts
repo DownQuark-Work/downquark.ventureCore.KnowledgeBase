@@ -10,6 +10,7 @@
 //  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 40 -c 60 -s 691342 --anim 100) # <--Branchy -ROOMS: 35
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100 --rooms 12)  # Rooms as arg works now
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100) # <--Branchy -ROOMS: 35
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969421313 --anim 100) # <--- quandranted
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
