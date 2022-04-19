@@ -2,10 +2,11 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000) # SETTINGS -> ROOMS: 50
 //  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913134242 --anim 500) -> ROOMS:13 
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969131 --anim 500) <- fun!
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {renderGrid} from './_utils.ts'
-import {DIVISION_CONSTRAINTS, WOBBLE_RANGE, START_COL, START_ROW, END_COL, END_ROW} from './_settings.ts'
+import {CELL_STATE, DIVISION_CONSTRAINTS, WOBBLE_RANGE, START_COL, START_ROW, END_COL, END_ROW} from './_settings.ts'
 
 const Divisions:any = []
 let gridReturnObj = {
@@ -14,6 +15,22 @@ let gridReturnObj = {
     Grid: [[0]],
     Seed: 0,
     SeedVerification: 0
+  }
+
+  const configureReturnObjGrid = (corridorPaths:number[][][]) => {
+    if (!corridorPaths) return // not yet completed
+    roomsLayout.forEach(room => {
+      for(let col = room[START_COL]; col <= room[END_COL]; col++)
+      { for(let row = room[START_ROW]; row <= room[END_ROW]; row++)
+        { gridReturnObj.Grid[row][col] = CELL_STATE.COMMON.CREATED } }
+    })
+    
+    corridorPaths.forEach(cPath => {
+      cPath.forEach(cStep => {
+        if(gridReturnObj.Grid[cStep[1]][cStep[0]] === CELL_STATE.COMMON.NON_CONSIDERED)
+        { gridReturnObj.Grid[cStep[1]][cStep[0]] = CELL_STATE.CORRIDOR.IN_PATH }
+      })
+    })
   }
 
   const createAnchors = (spans:number[][]) => {
@@ -30,15 +47,56 @@ let gridReturnObj = {
     }
     const spanRangeStart = createAnchorPoint()
     const spanRangeEnd = createAnchorPoint()
-    // console.log('rnge', spanRangeStart, spanRangeEnd)
-    //s = gA[END_COL] - gA[START_COL] - roomMin
-    
-    // console.log('startPt,endPt', startPt,endPt)
+
     return [spanRangeStart, spanRangeEnd]
   }
 
-  const renderCorridors = (corridors:number[][][]) => {
-    console.log('renderCorridors', corridors.length, corridors)
+  const constructCorridors = (corridors:number[][][]) => {
+    const corRoute = (pts:number[][], colFirst=0) => {
+      const [s,e] = pts,
+            rte = [s],
+            dirCol = (e[0]-s[0]) / Math.abs(e[0]-s[0]) || 0,
+            dirRow = (e[1]-s[1]) / Math.abs(e[1]-s[1]) || 0
+
+      // console.log('s,e', s,e,rte)
+      // console.log('colDir', dirCol, 'dirRow', dirRow, 'colFirst', colFirst)
+
+      const rteCols = [...Array(Math.abs(e[0]-s[0])).keys()].map(k => [((k+1)*dirCol) + s[0], colFirst ? s[1] : e[1]])
+      const rteRows = [...Array(Math.abs(e[1]-s[1])).keys()].map(k => [colFirst ? e[0] : s[0], ((k+1)*dirRow) + s[1]])
+      
+      if(colFirst) rte.push(...rteCols, ...rteRows)
+      else rte.push(...rteRows, ...rteCols)
+      return rte
+    }
+
+    const corridorPaths = corridors.map(corridor => {
+      // console.log('corridor[seedP', corridor[seedPointer.inc()%2])
+      // const curCorridorPaths:number[][] = []
+      const sePts = [[...corridor[seedPointer.inc()%2]], [...corridor[Math.abs(seedPointer()%2-1)]]]
+      return corRoute(sePts,seedPointer()%2)
+      // console.log('curCorridorPaths', curCorridorPaths)
+    })
+    // console.log('corridorPaths', corridorPaths.length, corridorPaths)
+    // corridorPaths.forEach(cPath => {
+    //   gridReturnObj.Grid
+    // })
+
+    configureReturnObjGrid(corridorPaths)
+
+    const corridorAnim = async () => {
+      let curCor = 0
+      while (curCor < corridorPaths.length) {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            renderGrid(corridorPaths[curCor], 'corridor', {curCor})
+            curCor++
+            resolve(1)
+          }, gridReturnObj.AnimationDuration)
+        })
+      }
+      // finish?()
+    }
+    gridReturnObj.AnimationDuration && corridorAnim()
   }
 
   const determineCorridors = () => {
@@ -70,7 +128,7 @@ let gridReturnObj = {
       }
       corridors.push(...levelCorridors)
     }
-    renderCorridors(corridors)
+    constructCorridors(corridors)
 
     // TODO(@mlnck): incorporate random walk path
     // TODO(@mlnck): - with and without dead ends
@@ -102,6 +160,7 @@ let gridReturnObj = {
       })
       }
     )
+
     if(gridReturnObj.AnimationDuration) {
       const roomRenderArr = [...Divisions[Divisions.length-1]]
       const roomAnim = async () => {

@@ -8,6 +8,7 @@ export const proto = () => {
 }
 
 const renderMethods: {[k:string]:any} = {
+  corridor: ():string => '#',
   rooms: (i: number, indx: number, opts: { curRm: number; }):string => { if(indx>opts.curRm){curMethod = 'default'} return i === 0 ? ' ' : SPLIT_CHARS[0][indx%26]},
   default: (i: number,indx: number):string => SPLIT_CHARS[i][indx%26]
 }
@@ -26,16 +27,29 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
   !_DEBUG && console.clear()
   curMethod = useMethod
   if(!memoGrid) { memoGrid = (splitSections as number[][]); return } // initial grid
-  splitSections.forEach((splits,indx) => {
-    splits.forEach((split, i) => {
-      const splt = (split as number[])
-      for (let y=splt[0]; y<=splt[2]; y++ ) {
-        for (let x=splt[1]; x<=splt[3]; x++ ) {
-          memoGrid[x][y] = renderMethods[curMethod](i,indx,opts)
-        }
-      }
+  if(curMethod === 'corridor')
+  { // splitSections is single array of points for corridor
+    splitSections.forEach(corridorStep => {
+      const cStep = (corridorStep as number[])
+      if (memoGrid[cStep[1]][cStep[0]] !== ' ') return
+      memoGrid[cStep[1]][cStep[0]] = renderMethods[curMethod]()
     })
-  })
+    // memoGrid[(splitSections[opts.curCor][0][0] as string)]
+    // memoGrid[[opts.curCorridorx]][opts.curCorridor[y]] = renderMethods[curMethod]()
+  }
+  else
+  {
+    splitSections.forEach((splits,indx) => {
+      splits.forEach((split, i) => {
+        const splt = (split as number[])
+        for (let y=splt[0]; y<=splt[2]; y++ ) {
+          for (let x=splt[1]; x<=splt[3]; x++ ) {
+            memoGrid[x][y] = renderMethods[curMethod](i,indx,opts)
+          }
+        }
+      })
+    })
+  }
   renderBorderedGrid(memoGrid)
   // console.log('curMethod', curMethod)
   // console.log('splitSections', splitSections)
