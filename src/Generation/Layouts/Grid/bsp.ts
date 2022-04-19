@@ -11,6 +11,9 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100 --rooms 12)  # Rooms as arg works now
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100) # <--Branchy -ROOMS: 35
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969421313 --anim 100) # <--- quandranted
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913 --anim 100 --rooms 18)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 50 -s 1650385056649)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 -s 1650385430526) # towers
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
@@ -46,6 +49,7 @@ let gridReturnObj = {
       for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
         if(
           (gridReturnObj.Grid[r][c] === CELL_STATE.CORRIDOR.IN_PATH && ((gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.NON_CONSIDERED || gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.CREATED) && (gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c+1] === CELL_STATE.COMMON.CREATED)))
+          && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] !== CELL_STATE.CORRIDOR.IN_PATH)
           // && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH
           //   && (gridReturnObj.Grid[r-1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.CREATED)
           //   && (gridReturnObj.Grid[r-1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c+1] === CELL_STATE.COMMON.CREATED))
@@ -59,6 +63,7 @@ let gridReturnObj = {
 
     // !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
     gridReturnObj.AnimationDuration ? renderGrid(gridReturnObj.Grid, 'final') : denoLog(JSON.stringify(gridReturnObj))
+    gridReturnObj.AnimationDuration && console.log(gridReturnObj.Seed)
   }
 
   const createAnchors = (spans:number[][]) => {
