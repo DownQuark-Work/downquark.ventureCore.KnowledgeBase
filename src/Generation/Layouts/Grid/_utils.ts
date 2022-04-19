@@ -23,6 +23,17 @@ const SPLIT_CHARS = [
 
 let memoGrid:Array<Array<number|string>>
 let curMethod = 'default'
+export const constructGrid = (cols:number,rows:number) => {
+  const tmpR =[]
+  for(let r=0;r<rows;r++){
+    const tmpC = []
+    for(let c=0;c<cols;c++){
+      tmpC.push(0)
+    }
+    tmpR.push(tmpC)
+  }
+  memoGrid = tmpR
+}
 export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useMethod = 'default', opts:{[k:string]:any}={}) => {
   !_DEBUG && console.clear()
   curMethod = useMethod

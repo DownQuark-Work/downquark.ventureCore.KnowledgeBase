@@ -5,7 +5,7 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969131 --anim 500) <- fun!
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
-import {renderGrid} from './_utils.ts'
+import {denoLog, constructGrid, renderGrid} from './_utils.ts'
 import {CELL_STATE, DIVISION_CONSTRAINTS, WOBBLE_RANGE, START_COL, START_ROW, END_COL, END_ROW} from './_settings.ts'
 
 const Divisions:any = []
@@ -31,6 +31,8 @@ let gridReturnObj = {
         { gridReturnObj.Grid[cStep[1]][cStep[0]] = CELL_STATE.CORRIDOR.IN_PATH }
       })
     })
+
+    !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
   }
 
   const createAnchors = (spans:number[][]) => {
@@ -58,9 +60,6 @@ let gridReturnObj = {
             dirCol = (e[0]-s[0]) / Math.abs(e[0]-s[0]) || 0,
             dirRow = (e[1]-s[1]) / Math.abs(e[1]-s[1]) || 0
 
-      // console.log('s,e', s,e,rte)
-      // console.log('colDir', dirCol, 'dirRow', dirRow, 'colFirst', colFirst)
-
       const rteCols = [...Array(Math.abs(e[0]-s[0])).keys()].map(k => [((k+1)*dirCol) + s[0], colFirst ? s[1] : e[1]])
       const rteRows = [...Array(Math.abs(e[1]-s[1])).keys()].map(k => [colFirst ? e[0] : s[0], ((k+1)*dirRow) + s[1]])
       
@@ -70,16 +69,9 @@ let gridReturnObj = {
     }
 
     const corridorPaths = corridors.map(corridor => {
-      // console.log('corridor[seedP', corridor[seedPointer.inc()%2])
-      // const curCorridorPaths:number[][] = []
       const sePts = [[...corridor[seedPointer.inc()%2]], [...corridor[Math.abs(seedPointer()%2-1)]]]
       return corRoute(sePts,seedPointer()%2)
-      // console.log('curCorridorPaths', curCorridorPaths)
     })
-    // console.log('corridorPaths', corridorPaths.length, corridorPaths)
-    // corridorPaths.forEach(cPath => {
-    //   gridReturnObj.Grid
-    // })
 
     configureReturnObjGrid(corridorPaths)
 
@@ -94,7 +86,6 @@ let gridReturnObj = {
           }, gridReturnObj.AnimationDuration)
         })
       }
-      // finish?()
     }
     gridReturnObj.AnimationDuration && corridorAnim()
   }
@@ -225,7 +216,6 @@ let gridReturnObj = {
           splitAlpha.push(division[2],division[START_ROW]+splitVals.dividedAt)
           splitBeta.unshift(division[START_COL],division[START_ROW]+splitVals.dividedAt+1)
         }
-        console.log('sAB',Divisions.length,' - ', splitAlpha, splitBeta)
 
         if(!newDivisions) newDivisions = []
         const shortWall = Math.min(
@@ -249,25 +239,15 @@ let gridReturnObj = {
   })
 
   Divisions.push(newDivisions)
-
-    console.log('Divisions', Divisions)
-    console.log('=============');
-    console.log('=============');
     newDivisions = null
 
     gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
-    console.log('totalRooms', totalRooms)
-    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) {
-      continueGenerate = false
-      console.log('DIVISION_CONSTRAINTS.ROOMS: ', DIVISION_CONSTRAINTS.ROOMS, ' Rooms: ', totalRooms); 
-      // return
-    }
+    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) continueGenerate = false
     if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
     else { renderRooms() }
   }
 
   const instantiate = (base:typeof gridReturnObj) => {
-    console.log('Deno.args[0]', Deno.args)
     seedPointer(0)
     parseSeed(base.Seed,((base.Dimension.columns*base.Dimension.rows) + base.Dimension.rows)) // + base.Dimension.column is safety buffer
     seedPointer.inc() // needed to instantiate seed parsing
@@ -276,7 +256,7 @@ let gridReturnObj = {
       SeedVerification: parsedVerifiedValue()
     }
     Divisions.push([[[0,0,base.Dimension.columns-1,base.Dimension.rows-1]]]) // [START_COL, START_ROW, END_COL, END_ROW]
-    gridReturnObj.AnimationDuration && renderGrid(base.Grid)
+    gridReturnObj.AnimationDuration && constructGrid(base.Dimension.columns, base.Dimension.rows)
     generateDivisions()
 
     // renderGrid(base.Grid, true)
