@@ -17,7 +17,6 @@ let gridReturnObj = {
   }
 
   const createAnchors = (spans:number[][]) => {
-    console.log('spans', spans)
     let curSpan = 0
     const createAnchorPoint = () => {
       const colPos = Math.floor(((spans[curSpan][END_COL] - spans[curSpan][START_COL])/9)*seedPointer.inc())
@@ -38,52 +37,41 @@ let gridReturnObj = {
     return [spanRangeStart, spanRangeEnd]
   }
 
-  const renderCorridors = () => {
-    console.log('render corridor')
-    console.log('roomsLayout', roomsLayout)
-    console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
-    console.log('Divisions', Divisions)
+  const renderCorridors = (corridors:number[][][]) => {
+    console.log('renderCorridors', corridors.length, corridors)
+  }
 
+  const determineCorridors = () => {
+    // console.log('render corridor')
+    // console.log('roomsLayout', roomsLayout)
+    // console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
+    // console.log('Divisions', Divisions)
     const roomLayoutGridMap:{[k:string]:number[]} = {}
     Object.entries(renderArrayRoomsLayout).forEach(rmLayout => {
-      console.log('rmLayout', rmLayout)
       roomLayoutGridMap[rmLayout[1][0].join('x')] = rmLayout[1][1]
-      // roomLayoutGridMap[(rmLayout[0] as unknown as number[]).join('')] = (rmLayout[1] as unknown as number[])
     })
-    console.log('roomLayoutGridMap', roomLayoutGridMap)
-    // console.log('roomLayoutGridMap[0x0x23x34', roomLayoutGridMap['0x0x23x34'])
-    // if 2 TOPLEFT corners are equal then Horizontal bridge : Vertical
 
+    const collapseDivision = (span:string, val:number[]) => {
+      // associates rooms to keys which have been split and therefor are no longer valid
+      const k = [span[0][0], span[0][1], span[1][2], span[1][3]].join('x')
+      roomLayoutGridMap[k] = val
+    }
     // walk backwards through Divisions and _only_ if there is an associated split do we draw the corridor
     const corridors = []
-    // for(let depth = Divisions.length-1; depth >= 0; depth--) {
-    for(let depth = Divisions.length-1; depth >= Divisions.length-1; depth--) {
+    for(let depth = Divisions.length-1; depth >= 0; depth--) {
       const levelCorridors = []
-      // console.log('depth', depth)
       for(let span = Divisions[depth].length-1; span >= 0; span--) {
-        // console.log('span', span, Divisions[depth][span].length)
         if(Divisions[depth][span].length > 1) {
-          // Upon completion fo this step - the matched values should collapse and obtain a value for the state object.
-            // the key would be made by: [Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][2], Divisions[depth][span][1][3]]
-            console.log('[Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][0], Divisions[depth][span][1][2]], Divisions[depth][span][1][2]]', [Divisions[depth][span][0][0], Divisions[depth][span][0][1], Divisions[depth][span][1][2], Divisions[depth][span][1][3]])
-            console.log('randomly select one of the 2 rooms from the split to associate with the new key')
-            console.log('do this recursively until depth 0')
-            console.log('that should resolve the order of linking to the rooms')
-            
           const gridMapKey = [Divisions[depth][span][0].join('x'), Divisions[depth][span][1].join('x')]
-          console.log('gridMapKey', gridMapKey)
           const bridgeSpan = [roomLayoutGridMap[gridMapKey[0]], roomLayoutGridMap[gridMapKey[1]]]
-          console.log('bridgeSpan', bridgeSpan)
           levelCorridors.unshift(createAnchors( bridgeSpan ))
-          // levelCorridors.unshift(createAnchors( Divisions[depth][span] ))
-          // TODO@mlnck: sorting and filtering
+          collapseDivision(Divisions[depth][span],bridgeSpan[seedPointer.inc()%2])
         }
       }
-      corridors.push(levelCorridors)
+      corridors.push(...levelCorridors)
     }
-    console.log('corridors', corridors)
+    renderCorridors(corridors)
 
-    // no split means corridor will be drawn closer to the 0 index
     // TODO(@mlnck): incorporate random walk path
     // TODO(@mlnck): - with and without dead ends
   }
@@ -128,15 +116,10 @@ let gridReturnObj = {
             }, gridReturnObj.AnimationDuration)
           })
         }
-        console.log('shown Rooms', curRm)
-        renderCorridors()
+        determineCorridors()
       }
       roomAnim()
-    } else renderCorridors()
-
-    // console.log('roomsLayout', roomsLayout)
-    // console.log('renderArrayRoomsLayout', renderArrayRoomsLayout)
-    // false && renderCorridors()
+    } else determineCorridors()
   }
 
   const generateDivisions = () => {
