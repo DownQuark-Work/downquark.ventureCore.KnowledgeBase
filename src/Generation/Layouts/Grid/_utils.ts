@@ -38,6 +38,14 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
   !_DEBUG && console.clear()
   curMethod = useMethod
   if(!memoGrid) { memoGrid = (splitSections as number[][]); return } // initial grid
+  if(curMethod === 'final')
+  {
+    for(let r=0;r<splitSections.length;r++){
+      for(let c=0;c<splitSections[r].length;c++){
+        if(splitSections[r][c] !== memoGrid[r][c] && splitSections[r][c] === 0 && memoGrid[r][c] === '#') memoGrid[r][c] = ' '
+      }
+    }
+  }
   if(curMethod === 'corridor')
   { // splitSections is single array of points for corridor
     splitSections.forEach(corridorStep => {

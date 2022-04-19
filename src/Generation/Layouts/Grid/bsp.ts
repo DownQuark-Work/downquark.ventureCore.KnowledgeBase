@@ -9,6 +9,7 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 131369 --anim 100) # -ROOMS: 35
 //  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 40 -c 60 -s 691342 --anim 100) # <--Branchy -ROOMS: 35
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100 --rooms 12)  # Rooms as arg works now
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100) # <--Branchy -ROOMS: 35
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
@@ -39,7 +40,21 @@ let gridReturnObj = {
       })
     })
 
-    !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
+    // clean-up
+    for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
+      for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
+        if(
+          (gridReturnObj.Grid[r][c] === CELL_STATE.CORRIDOR.IN_PATH && ((gridReturnObj.Grid[r][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.CREATED) && (gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c+1] === CELL_STATE.COMMON.CREATED)))
+          && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH
+            && (gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.NON_CONSIDERED || gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.CREATED)
+            && (gridReturnObj.Grid[r-1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c+1] === CELL_STATE.COMMON.CREATED))
+          ){ gridReturnObj.Grid[r-1][c] = CELL_STATE.COMMON.NON_CONSIDERED }
+          
+      }
+    }
+
+    // !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
+    gridReturnObj.AnimationDuration ? renderGrid(gridReturnObj.Grid, 'final') : denoLog(JSON.stringify(gridReturnObj))
   }
 
   const createAnchors = (spans:number[][]) => {
@@ -80,8 +95,7 @@ let gridReturnObj = {
       return corRoute(sePts,seedPointer()%2)
     })
 
-    configureReturnObjGrid(corridorPaths)
-
+    
     const corridorAnim = async () => {
       let curCor = 0
       while (curCor < corridorPaths.length) {
@@ -93,8 +107,9 @@ let gridReturnObj = {
           }, gridReturnObj.AnimationDuration)
         })
       }
+      configureReturnObjGrid(corridorPaths)
     }
-    gridReturnObj.AnimationDuration && corridorAnim()
+    gridReturnObj.AnimationDuration ? corridorAnim() : configureReturnObjGrid(corridorPaths)
   }
 
   const determineCorridors = () => {
