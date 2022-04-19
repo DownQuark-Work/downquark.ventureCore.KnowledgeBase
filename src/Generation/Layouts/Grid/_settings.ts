@@ -7,7 +7,7 @@ export const [START_COL, START_ROW, END_COL, END_ROW] = new Array(4).fill(0).map
  */
 export const DIVISION_CONSTRAINTS = {
   WALL_LENGTH: 5, // min room wall length will be (WALL_LENGTH - 2) for each side
-  ROOMS: 13
+  ROOMS: 35
 }
 export const WOBBLE_RANGE = [.08, .27] // used when determining how far off-center a divide will be
 export const CELL_STATE:{[k:string]: {[k:string]: number}} = {

@@ -28,7 +28,7 @@ export const constructGrid = (cols:number,rows:number) => {
   for(let r=0;r<rows;r++){
     const tmpC = []
     for(let c=0;c<cols;c++){
-      tmpC.push(0)
+      tmpC.push(CELL_STATE.COMMON.NON_CONSIDERED)
     }
     tmpR.push(tmpC)
   }
@@ -43,6 +43,7 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
     splitSections.forEach(corridorStep => {
       const cStep = (corridorStep as number[])
       if (memoGrid[cStep[1]][cStep[0]] !== ' ') return
+      // if(memoGrid[cStep[1]][cStep[0]-1] === CELL_STATE.CORRIDOR.IN_PATH || memoGrid[cStep[1]][cStep[0]+1] === CELL_STATE.CORRIDOR.IN_PATH) return
       memoGrid[cStep[1]][cStep[0]] = renderMethods[curMethod]()
     })
     // memoGrid[(splitSections[opts.curCor][0][0] as string)]

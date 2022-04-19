@@ -1,8 +1,14 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1342)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 20 -c 25 -s 1313)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000) # SETTINGS -> ROOMS: 50
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 1313 --anim 100) # SETTINGS -> ROOMS: 50
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969 --anim 100) # SETTINGS -> ROOMS: 50
 //  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913134242 --anim 500) -> ROOMS:13 
-// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969131 --anim 500) <- fun!
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969131 --anim 500) <- fun! -ROOMS: 13
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69691313 --anim 100) <- fun! -ROOMS: 13
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 131369 --anim 100) # -ROOMS: 35
+//  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 40 -c 60 -s 691342 --anim 100) # <--Branchy -ROOMS: 35
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100 --rooms 12)  # Rooms as arg works now
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
@@ -12,6 +18,7 @@ const Divisions:any = []
 let gridReturnObj = {
     AnimationDuration: 0,
     Dimension: { columns: 0, rows: 0 },
+    DivisionConstraints:{ ROOMS:0 },
     Grid: [[0]],
     Seed: 0,
     SeedVerification: 0
@@ -195,7 +202,7 @@ let gridReturnObj = {
 
       const createDivide = (curDivisions:Array<number[]> = []) => {
         const wAmtRange = WOBBLE_RANGE[1]-WOBBLE_RANGE[0]
-        const wobbleStep = wAmtRange/DIVISION_CONSTRAINTS.ROOMS
+        const wobbleStep = wAmtRange/gridReturnObj.DivisionConstraints.ROOMS
         const wobbleRooms = curDivisions.length
         const currentWobbleAmt = Math.min(Math.max(WOBBLE_RANGE[1] - (wobbleStep*wobbleRooms), WOBBLE_RANGE[0]), WOBBLE_RANGE[1])
         const currentWobbleAmtStep = currentWobbleAmt/9
@@ -203,7 +210,7 @@ let gridReturnObj = {
         const applyCurrentWobble = seedPointer.inc() % 2 === 0 ? currentWobbleAmtStep * seedPointer() : -(currentWobbleAmtStep * seedPointer())
         const divideAt = Math.floor(splitVals.midpoint[splitDir] + splitVals.midpoint[splitDir] * applyCurrentWobble)
 
-        return divideAt // DIVISION_CONSTRAINTS.ROOMS
+        return divideAt // gridReturnObj.DivisionConstraints.ROOMS
       }
 
       splitVals.dividedAt = createDivide()
@@ -242,7 +249,7 @@ let gridReturnObj = {
     newDivisions = null
 
     gridReturnObj.AnimationDuration && renderGrid(Divisions[Divisions.length-1])
-    if(totalRooms >= DIVISION_CONSTRAINTS.ROOMS) continueGenerate = false
+    if(totalRooms >= gridReturnObj.DivisionConstraints.ROOMS) continueGenerate = false
     if(continueGenerate) setTimeout(generateDivisions,gridReturnObj.AnimationDuration)
     else { renderRooms() }
   }

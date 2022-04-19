@@ -1,6 +1,6 @@
 import { parse } from "../../_utils/_deps.ts";
 import { proto } from "./_utils.ts";
-import { CELL_STATE } from './_settings.ts'
+import { CELL_STATE, DIVISION_CONSTRAINTS } from './_settings.ts'
 
 proto()
 
@@ -9,6 +9,7 @@ const _DEBUG = 0
 const gridReturnObj = {
   AnimationDuration: 0,
   Dimension: { columns: 0, rows: 0 },
+  DivisionConstraints: {...DIVISION_CONSTRAINTS},
   Grid:[[0]],
   Seed: 0,
 }
@@ -49,11 +50,13 @@ class Grid {
     const { r: row = 13, c: col = 17,
       s: seed = new Date().getTime(),
       anim = 0,
+      rooms = null
     } = parsedArgs
   
     gridReturnObj.AnimationDuration = anim
       ? typeof anim === 'number' ? Math.min(Math.max(100,anim),1000) : 500
       : 0
+    if (rooms) gridReturnObj.DivisionConstraints.ROOMS = rooms
   
     init(row,col,seed) 
   }
