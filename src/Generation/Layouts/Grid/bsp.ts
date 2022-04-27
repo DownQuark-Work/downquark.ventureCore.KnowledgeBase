@@ -14,6 +14,12 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913 --anim 100 --rooms 18)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 50 -s 1650385056649)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 -s 1650385430526) # towers
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 -s 1650398738129)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 13 -s 1650398811911)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 18 -s 1650557601862)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 24 -s 1650557601862)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 24 -s 1650564672631)
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 14 -s 1631)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
@@ -57,7 +63,6 @@ let gridReturnObj = {
             && (gridReturnObj.Grid[r+1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c-1] === CELL_STATE.COMMON.CREATED)
             && (gridReturnObj.Grid[r+1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c+1] === CELL_STATE.COMMON.CREATED))
           ){ gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.NON_CONSIDERED }
-          
       }
     }
 
