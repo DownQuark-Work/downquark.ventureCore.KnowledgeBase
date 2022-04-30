@@ -21,6 +21,7 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 24 -s 1650564672631)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 150 --rooms 14 -s 1631)
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 100 --rooms 5 -s 1651284824798) 
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 --anim 100 --rooms 11 -s 1651298305400)
 
 import {parseSeed, parsedVerifiedValue, seedPointer} from '../../_utils/_seed.ts'
 import {denoLog, constructGrid, renderGrid} from './_utils.ts'
