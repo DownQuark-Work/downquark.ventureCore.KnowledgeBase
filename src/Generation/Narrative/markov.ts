@@ -16,16 +16,17 @@
 
 const markov:{[k:string]:{[k:string]:number}} = {}
 const generateMarkov = (text:string[]) => { // pass in as many sources as needed
-  const cleanTxt = text[0].replace(/[^\w-]|_/g,'~!~').replace(/(~!~){2,}/g,'~!~').replace('^~!~','').replace('~!~$','')
+  const cleanTxt = text[0].replace(/[^\w-]|_/g,'~!~').replace(/(~!~){2,}/g,'~!~').replace('^~!~','').replace('~!~$','').toLowerCase()
   const txtArr = cleanTxt.split('~!~')
   txtArr.forEach((txt,indx) => {
     if (!text.length) return
+    // console.log('markov', JSON.stringify(markov))
 
     if(!markov[txt]) markov[txt] = {}
     const insertTxt = txtArr[indx+1] || ''
     if(markov[txt]?.[insertTxt]) markov[txt][insertTxt] = markov[txt][insertTxt] + 1
     else if(!markov[txt]?.[insertTxt]) markov[txt][insertTxt] = 1
-    // console.log('markov', markov)
+    console.log('markov', markov)
   })
 }
 
