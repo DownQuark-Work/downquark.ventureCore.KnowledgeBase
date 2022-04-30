@@ -3,11 +3,11 @@
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 134269 --anim 1000) # SETTINGS -> ROOMS: 50
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 1313 --anim 100) # SETTINGS -> ROOMS: 50
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969 --anim 100) # SETTINGS -> ROOMS: 50
-//  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913134242 --anim 500) -> ROOMS:13 
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 696913134242 --anim 500) -> ROOMS:13 
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969131 --anim 500) <- fun! -ROOMS: 13
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69691313 --anim 100) <- fun! -ROOMS: 13
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 131369 --anim 100) # -ROOMS: 35
-//  deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 40 -c 60 -s 691342 --anim 100) # <--Branchy -ROOMS: 35
+// deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 40 -c 60 -s 691342 --anim 100) # <--Branchy -ROOMS: 35
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100 --rooms 12)  # Rooms as arg works now
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 69131369 --anim 100) # <--Branchy -ROOMS: 35
 // deno run Layouts/Grid/bsp.ts $(deno run Layouts/Grid/_base.ts -r 35 -c 60 -s 6969421313 --anim 100) # <--- quandranted
@@ -44,9 +44,22 @@ let gridReturnObj = {
     })
     
     corridorPaths.forEach(cPath => {
+      const cPathEgress = [0,0,0,0] // [ENTRANCE_SET, EXIT_SET, ENTRANCE_COL, ENTRANCE_ROW]
       cPath.forEach(cStep => {
+        if(gridReturnObj.Grid[cStep[1]][cStep[0]] !== CELL_STATE.COMMON.NON_CONSIDERED)
+        {
+          if(gridReturnObj.Grid[cStep[1]][cStep[0]] !== CELL_STATE.CORRIDOR.IN_PATH && cPathEgress[0] && !cPathEgress[1]) {
+            cPathEgress[0] = 0; cPathEgress[1] = 1
+            gridReturnObj.Grid[cStep[1]][cStep[0]] = CELL_STATE.EGGRESS.EXIT
+          }
+          if(!cPathEgress[0]) { cPathEgress[2] = cStep[1]; cPathEgress[3] = cStep[0]}
+        }
         if(gridReturnObj.Grid[cStep[1]][cStep[0]] === CELL_STATE.COMMON.NON_CONSIDERED)
-        { gridReturnObj.Grid[cStep[1]][cStep[0]] = CELL_STATE.CORRIDOR.IN_PATH }
+        {
+          if(!cPathEgress[0]) { gridReturnObj.Grid[cPathEgress[2]][cPathEgress[3]] = CELL_STATE.EGGRESS.ENTER; cPathEgress[0] = 1; }
+          else { if (cPathEgress[1]) cPathEgress[1] = 0 }
+          gridReturnObj.Grid[cStep[1]][cStep[0]] = CELL_STATE.CORRIDOR.IN_PATH
+        }
       })
     })
 

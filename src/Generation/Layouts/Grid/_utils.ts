@@ -42,7 +42,11 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
   {
     for(let r=0;r<splitSections.length;r++){
       for(let c=0;c<splitSections[r].length;c++){
-        if(splitSections[r][c] !== memoGrid[r][c] && splitSections[r][c] === 0 && memoGrid[r][c] === '#') memoGrid[r][c] = ' '
+        if(splitSections[r][c] !== memoGrid[r][c]) {
+          if(splitSections[r][c] === 0 && memoGrid[r][c] === '#') memoGrid[r][c] = ' '
+          if(splitSections[r][c] === CELL_STATE.EGGRESS.ENTER) memoGrid[r][c] = '🄴'
+          if(splitSections[r][c] === CELL_STATE.EGGRESS.EXIT) memoGrid[r][c] = '🅇'
+        }
       }
     }
   }
@@ -50,12 +54,9 @@ export const renderGrid = (splitSections:Array<number[]>|Array<number[][]>, useM
   { // splitSections is single array of points for corridor
     splitSections.forEach(corridorStep => {
       const cStep = (corridorStep as number[])
-      if (memoGrid[cStep[1]][cStep[0]] !== ' ') return
-      // if(memoGrid[cStep[1]][cStep[0]-1] === CELL_STATE.CORRIDOR.IN_PATH || memoGrid[cStep[1]][cStep[0]+1] === CELL_STATE.CORRIDOR.IN_PATH) return
+      if (memoGrid[cStep[1]][cStep[0]] !== ' ') return 
       memoGrid[cStep[1]][cStep[0]] = renderMethods[curMethod]()
     })
-    // memoGrid[(splitSections[opts.curCor][0][0] as string)]
-    // memoGrid[[opts.curCorridorx]][opts.curCorridor[y]] = renderMethods[curMethod]()
   }
   else
   {
