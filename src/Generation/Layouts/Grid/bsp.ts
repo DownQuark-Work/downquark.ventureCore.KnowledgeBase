@@ -79,7 +79,7 @@ let gridReturnObj = {
         curCoorValue = gridReturnObj.Grid[gridCoor[0]][gridCoor[1]]
       }
     }
-    function *getAll() {
+    function *walkGridValues() {
       const colRow = [0,0]
     for (const c of gridReturnObj.Grid) {
       colRow[1] = 0
@@ -90,13 +90,13 @@ let gridReturnObj = {
       ++colRow[0]
     }
   }
-  for(const gridVal of getAll()) {
+  for(const gridVal of walkGridValues()) {
     if (gridVal[0] === CELL_STATE.EGGRESS.ENTER) {
       const [r,c] = gridVal[1] as number[],
         differenceColumns = (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] || CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r][c+1],
         differenceRows = (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r+1][c]
-        
 
+      if (r === 0 && c === 0) gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED // origin point will never have entrance
       if ( // vertical or horizontal tile has egress
       !(differenceColumns && differenceRows)
         || differenceColumns < -3
@@ -109,47 +109,21 @@ let gridReturnObj = {
         if(gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,1])
       }
     }
-}
+    // remove outliers left behind from above
+    if (gridVal[0] === CELL_STATE.EGGRESS.EXIT) {
+      const [r,c] = gridVal[1] as number[]
+      let hasCorridor = false
+      if(r && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH) hasCorridor = true
+      if(gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH) hasCorridor = true
+      if(c && gridReturnObj.Grid[r][c-1] === CELL_STATE.CORRIDOR.IN_PATH) hasCorridor = true
+      if(gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH) hasCorridor = true
+      if(!hasCorridor) gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
+    }
+  }
 
-    // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
-    //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
-    //     if (gridReturnObj.Grid[r][c] === CELL_STATE.EGGRESS.ENTER) {
-    //       // console.log('gridReturnObj.Grid[r][c-1] + gridReturnObj.Grid[r][c+1]',r,c,':', (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] || -1.2) + gridReturnObj.Grid[r][c+1])
-    //       // console.log('gridReturnObj.Grid[r-1][c] + gridReturnObj.Grid[r+1][c]',r,c,':', (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] || -1.2) + gridReturnObj.Grid[r+1][c])
-    //       if ( // vertical or horizontal tile has egress
-    //           (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r+1][c] < 3
-    //           || (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r][c+1] < 3
-    //         ) {
-    //           gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
-    //           if(r && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[-1,0])
-    //           if(gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[1,0])
-    //           if(c && gridReturnObj.Grid[r][c-1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,-1])
-    //           if(gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,1])
-    //           // gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
-    //         }
-    //     }
-    //   }
-    // }
-
-    // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
-    //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
-    //     if(
-    //       (gridReturnObj.Grid[r][c] === CELL_STATE.CORRIDOR.IN_PATH && ((gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.NON_CONSIDERED || gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.CREATED) && (gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c+1] === CELL_STATE.COMMON.CREATED)))
-    //       && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] !== CELL_STATE.CORRIDOR.IN_PATH)
-    //       // && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH
-    //       //   && (gridReturnObj.Grid[r-1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.CREATED)
-    //       //   && (gridReturnObj.Grid[r-1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c+1] === CELL_STATE.COMMON.CREATED))
-    //       && (gridReturnObj.Grid[r+1] && gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH
-    //         && (gridReturnObj.Grid[r+1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c-1] === CELL_STATE.COMMON.CREATED)
-    //         && (gridReturnObj.Grid[r+1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c+1] === CELL_STATE.COMMON.CREATED))
-    //       ){ gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.NON_CONSIDERED }
-    //   }
-    // }
-
-    // !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
     gridReturnObj.AnimationDuration ? renderGrid(gridReturnObj.Grid, 'final') : denoLog(JSON.stringify(gridReturnObj))
     gridReturnObj.AnimationDuration && console.log(gridReturnObj.Seed)
-  }
+}
 
   const createAnchors = (spans:number[][]) => {
     let curSpan = 0
