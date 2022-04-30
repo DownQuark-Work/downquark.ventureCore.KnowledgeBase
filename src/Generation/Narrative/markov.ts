@@ -25,14 +25,8 @@ const generateMarkov = (text:string[]) => { // pass in as many sources as needed
     const insertTxt = txtArr[indx+1] || ''
     if(markov[txt]?.[insertTxt]) markov[txt][insertTxt] = markov[txt][insertTxt] + 1
     else if(!markov[txt]?.[insertTxt]) markov[txt][insertTxt] = 1
-
-    // const insertObj:{[k:string]:number} = {}
-    // insertObj[insertTxt] = 0
-
-    // markov[txt] =  markov[txt].length ? {txtArr[indx+1]:}
-    console.log('markov', markov)
+    // console.log('markov', markov)
   })
-  console.log('text', txtArr) 
 }
 
 
