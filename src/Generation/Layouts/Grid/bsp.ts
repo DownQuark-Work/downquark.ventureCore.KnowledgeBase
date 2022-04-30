@@ -65,12 +65,72 @@ let gridReturnObj = {
     })
 
     // clean-up
-    // TODO(@mlnck): leverage adjacent points of egress and remove IN_PATH in a single direction until it turns or contacts a non IN_PATH tile
+    const removeCorridor = (row:number,col:number,dir:number[]) => {
+      const gridCoor = [row + dir[0], col + dir[1]]
+      let curCoorValue = gridReturnObj.Grid[gridCoor[0]][gridCoor[1]]
+      while ( curCoorValue === CELL_STATE.CORRIDOR.IN_PATH ) {
+        gridReturnObj.Grid[gridCoor[0]][gridCoor[1]] = CELL_STATE.COMMON.NON_CONSIDERED
+        gridCoor[0] += dir[0]; gridCoor[1] += dir[1]
+        curCoorValue = gridReturnObj.Grid[gridCoor[0]][gridCoor[1]]
+      }
+      while ( curCoorValue === CELL_STATE.EGGRESS.EXIT ) {
+        gridReturnObj.Grid[gridCoor[0]][gridCoor[1]] = CELL_STATE.COMMON.CREATED
+        gridCoor[0] += dir[0]; gridCoor[1] += dir[1]
+        curCoorValue = gridReturnObj.Grid[gridCoor[0]][gridCoor[1]]
+      }
+    }
+    function *getAll() {
+      const colRow = [0,0]
+    for (const c of gridReturnObj.Grid) {
+      colRow[1] = 0
+      for (const r of c) {
+          yield [r,colRow]
+          ++colRow[1]
+      }
+      ++colRow[0]
+    }
+  }
+  for(const gridVal of getAll()) {
+    if (gridVal[0] === CELL_STATE.EGGRESS.ENTER) {
+      const [r,c] = gridVal[1] as number[],
+        differenceColumns = (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] || CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r][c+1],
+        differenceRows = (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r+1][c]
+        
+
+      if ( // vertical or horizontal tile has egress
+      !(differenceColumns && differenceRows)
+        || differenceColumns < -3
+        || differenceRows < -3
+      ) {
+        gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
+        if(r && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[-1,0])
+        if(gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[1,0])
+        if(c && gridReturnObj.Grid[r][c-1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,-1])
+        if(gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,1])
+      }
+    }
+}
+
     // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
     //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
-    //     gridReturnObj.Grid[r][c] === CELL_STATE.EGGRESS.ENTER
+    //     if (gridReturnObj.Grid[r][c] === CELL_STATE.EGGRESS.ENTER) {
+    //       // console.log('gridReturnObj.Grid[r][c-1] + gridReturnObj.Grid[r][c+1]',r,c,':', (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] || -1.2) + gridReturnObj.Grid[r][c+1])
+    //       // console.log('gridReturnObj.Grid[r-1][c] + gridReturnObj.Grid[r+1][c]',r,c,':', (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] || -1.2) + gridReturnObj.Grid[r+1][c])
+    //       if ( // vertical or horizontal tile has egress
+    //           (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r+1][c] < 3
+    //           || (gridReturnObj.Grid[r][c-1] && gridReturnObj.Grid[r][c-1] ||  CELL_STATE.COMMON.CREATED) + gridReturnObj.Grid[r][c+1] < 3
+    //         ) {
+    //           gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
+    //           if(r && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[-1,0])
+    //           if(gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[1,0])
+    //           if(c && gridReturnObj.Grid[r][c-1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,-1])
+    //           if(gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH) removeCorridor(r,c,[0,1])
+    //           // gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.CREATED
+    //         }
+    //     }
     //   }
     // }
+
     // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
     //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
     //     if(
