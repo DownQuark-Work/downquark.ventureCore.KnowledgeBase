@@ -65,20 +65,21 @@ let gridReturnObj = {
     })
 
     // clean-up
-    for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
-      for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
-        if(
-          (gridReturnObj.Grid[r][c] === CELL_STATE.CORRIDOR.IN_PATH && ((gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.NON_CONSIDERED || gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.CREATED) && (gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c+1] === CELL_STATE.COMMON.CREATED)))
-          && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] !== CELL_STATE.CORRIDOR.IN_PATH)
-          // && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH
-          //   && (gridReturnObj.Grid[r-1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.CREATED)
-          //   && (gridReturnObj.Grid[r-1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c+1] === CELL_STATE.COMMON.CREATED))
-          && (gridReturnObj.Grid[r+1] && gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH
-            && (gridReturnObj.Grid[r+1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c-1] === CELL_STATE.COMMON.CREATED)
-            && (gridReturnObj.Grid[r+1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c+1] === CELL_STATE.COMMON.CREATED))
-          ){ gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.NON_CONSIDERED }
-      }
-    }
+    // TODO(@mlnck): leverage adjacent points of egress and remove IN_PATH in a single direction until it turns or contacts a non IN_PATH tile
+    // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
+    //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
+    //     if(
+    //       (gridReturnObj.Grid[r][c] === CELL_STATE.CORRIDOR.IN_PATH && ((gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.NON_CONSIDERED || gridReturnObj.Grid[r][c-1] === CELL_STATE.COMMON.CREATED) && (gridReturnObj.Grid[r][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r][c+1] === CELL_STATE.COMMON.CREATED)))
+    //       && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] !== CELL_STATE.CORRIDOR.IN_PATH)
+    //       // && (gridReturnObj.Grid[r-1] && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH
+    //       //   && (gridReturnObj.Grid[r-1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c-1] === CELL_STATE.COMMON.CREATED)
+    //       //   && (gridReturnObj.Grid[r-1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r-1][c+1] === CELL_STATE.COMMON.CREATED))
+    //       && (gridReturnObj.Grid[r+1] && gridReturnObj.Grid[r+1][c] === CELL_STATE.CORRIDOR.IN_PATH
+    //         && (gridReturnObj.Grid[r+1][c-1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c-1] === CELL_STATE.COMMON.CREATED)
+    //         && (gridReturnObj.Grid[r+1][c+1] === CELL_STATE.CORRIDOR.IN_PATH || gridReturnObj.Grid[r+1][c+1] === CELL_STATE.COMMON.CREATED))
+    //       ){ gridReturnObj.Grid[r][c] = CELL_STATE.COMMON.NON_CONSIDERED }
+    //   }
+    // }
 
     // !gridReturnObj.AnimationDuration && denoLog(JSON.stringify(gridReturnObj))
     gridReturnObj.AnimationDuration ? renderGrid(gridReturnObj.Grid, 'final') : denoLog(JSON.stringify(gridReturnObj))
