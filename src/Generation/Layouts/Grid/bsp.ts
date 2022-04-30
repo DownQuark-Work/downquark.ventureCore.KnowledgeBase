@@ -47,7 +47,7 @@ let gridReturnObj = {
     corridorPaths.forEach(cPath => {
       const cPathEgress = [0,0,0,0] // [ENTRANCE_SET, EXIT_SET, ENTRANCE_COL, ENTRANCE_ROW]
       cPath.forEach(cStep => {
-        if(gridReturnObj.Grid[cStep[1]][cStep[0]] !== CELL_STATE.COMMON.NON_CONSIDERED)
+        if(gridReturnObj.Grid[cStep[1]][cStep[0]] === CELL_STATE.COMMON.CREATED)
         {
           if(gridReturnObj.Grid[cStep[1]][cStep[0]] !== CELL_STATE.CORRIDOR.IN_PATH && cPathEgress[0] && !cPathEgress[1]) {
             cPathEgress[0] = 0; cPathEgress[1] = 1
@@ -66,6 +66,11 @@ let gridReturnObj = {
 
     // clean-up
     // TODO(@mlnck): leverage adjacent points of egress and remove IN_PATH in a single direction until it turns or contacts a non IN_PATH tile
+    // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
+    //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
+    //     gridReturnObj.Grid[r][c] === CELL_STATE.EGGRESS.ENTER
+    //   }
+    // }
     // for(let c=0;c<gridReturnObj.Dimension.columns;c++) {
     //   for(let r=0;r<gridReturnObj.Dimension.rows;r++) {
     //     if(
