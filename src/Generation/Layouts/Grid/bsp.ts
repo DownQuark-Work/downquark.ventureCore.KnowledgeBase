@@ -110,7 +110,7 @@ let gridReturnObj = {
       }
     }
     // remove outliers left behind from above
-    if (gridVal[0] === CELL_STATE.EGGRESS.EXIT) {
+    if (gridVal[0] === CELL_STATE.EGGRESS.ENTER || gridVal[0] === CELL_STATE.EGGRESS.EXIT) {
       const [r,c] = gridVal[1] as number[]
       let hasCorridor = false
       if(r && gridReturnObj.Grid[r-1][c] === CELL_STATE.CORRIDOR.IN_PATH) hasCorridor = true
