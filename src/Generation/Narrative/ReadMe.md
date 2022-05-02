@@ -4,9 +4,13 @@
 
 ## Features
 1. ngramths
-  > Responsible for word creation
+  - Responsible for word creation
+    - Useful in naming characters / places / items / etc
+    - Creations will most likely be gibberish
 1. ngrams
-  > Responsible for content/theme/etc creation
+  - Responsible for content/theme/etc creation
+    -  Useful in creating NPC conversations,  descriptions, histories, scrolls, etc
+    - Creations will most likely seem to be written in a stream-of-consciousness style
 
 ## Workflow
 
@@ -15,7 +19,39 @@ Acessing the upcoming/TBD'd **NoSQL** database on object like the below will eit
 ```
 {
   ngrams: {
-
+    _range: [1,3], // starting and ending ammounts 
+    'Book Title': {
+      _length: 1234,
+      1: {
+        _length: 816,
+        this: { little: 5, is: 1 },
+        little: { piggy: 5, box: 1 },
+        piggy: { went: 2, stayed: 1, had: 2, gold: 1 },
+        went: { to: 1, wee: 1 },
+        to: { market: 1, the: 1, be: 1 },
+        market: { this: 1 },
+        ...
+      },
+      2: {
+        _length: 507,
+        'this little': {piggy: 5},
+        'this is': {a: 1},
+        'little piggy': {went: 2, stayed: 1, had: 2},
+        'piggy had': { none: 1 },
+        'piggy stayed': { home: 1 },
+        'piggy went': { to: 1, wee: 1 },
+        'went to': {market: 1}
+        ...
+      },
+      3: {
+        _length: 241,
+        'this little piggy': {went: 2, stayed: 1, had: 2},
+        'little piggy had':{ none:1 },
+        'little piggy stayed':{ home:1 },
+        'little piggy went':{ to: 1, wee: 1 },
+        ...
+      }
+    }
   },
   ngramths: { // NOTE: _NO_ spaces should be stored with our implementation
     'Book Title': {
