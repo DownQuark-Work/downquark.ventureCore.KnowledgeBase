@@ -16,7 +16,7 @@
 
 ## Workflow
 1. Book is selected
-1. `db` queried
+1. `db` queried :: NOTE >  persistence state is a future integration when more is known about how the persistene layer will function
   1. book previously parsed
     1. return ngram content
   1. book DNE
