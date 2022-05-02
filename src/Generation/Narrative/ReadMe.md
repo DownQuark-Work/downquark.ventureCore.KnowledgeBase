@@ -11,6 +11,8 @@
   - Responsible for content/theme/etc creation
     -  Useful in creating NPC conversations,  descriptions, histories, scrolls, etc
     - Creations will most likely seem to be written in a stream-of-consciousness style
+1. markov chain
+  - string created by progressively walking through a linked key value pair
 
 ## Workflow
 1. Book is selected
