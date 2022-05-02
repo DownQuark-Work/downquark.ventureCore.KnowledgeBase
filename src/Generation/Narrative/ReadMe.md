@@ -13,6 +13,17 @@
     - Creations will most likely seem to be written in a stream-of-consciousness style
 
 ## Workflow
+1. Book is selected
+1. `db` queried
+  1. book previously parsed
+    1. return ngram content
+  1. book DNE
+    1. [ngram.ts] -> parse ngram(th)s from book
+    1. save to `db`
+    1. return parsed
+1. [markov.ts] -> start key decided
+1. [markov.ts] -> chain created
+1. return chain
 
 ## End Result
 Acessing the upcoming/TBD'd **NoSQL** database on object like the below will either be retrieved or created and stored for the book seelcted

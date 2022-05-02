@@ -1,6 +1,5 @@
-/*
-  Should export `ngrams` and `ngramths`
+// See ReadMe for deetails
 
-  `ngramths` is used for _**word** generation_ while ngram is used for _**content** generation_
-    should loop `from 2 -> longestWord.length`
-*/
+export const ngrams = () => {console.log('ngrams', ngrams)}
+
+export const ngramths = () => {console.log('ngramths', ngramths)}

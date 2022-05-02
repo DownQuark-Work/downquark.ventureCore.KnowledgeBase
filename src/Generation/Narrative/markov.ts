@@ -1,18 +1,4 @@
-/* End shape should have count amounts to be used in future weighting
-{
-  this: {
-    little:4,
-  },
-  little: {
-    piggy: 4,
-  },
-  piggy: {
-    went: 1,
-    stayed: 1,
-    had: 2,
-  }
-}
-*/
+import { ngrams, ngramths } from './ngram.ts'
 
 const markov:{[k:string]:{[k:string]:number}} = {}
 const generateMarkov = ({n = 1, text =''}) => { // n-gram defaults to single word-level (can extend to character level if desired later on)
