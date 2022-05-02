@@ -14,7 +14,6 @@ export const ngrams = ({n=1, src=''}) => { // n-gram defaults to single word-lev
       for(let indx=n-1; indx<txtArr.length; indx++) {
         ngramKey.shift()
         ngramKey.push(txtArr[indx])
-        console.log('ngramKey', ngramKey)
       const txtKey = ngramKey.join(' ')
       const insertTxt = txtArr[indx+1] || ''
       if(insertTxt.length) {
@@ -23,6 +22,7 @@ export const ngrams = ({n=1, src=''}) => { // n-gram defaults to single word-lev
         else if(!ngram[txtKey]?.[insertTxt]) ngram[txtKey][insertTxt] = 1
       }
     }
+    console.log('ngram', ngram)
   }
   generateNgram({n, text:src})
 }
