@@ -2,8 +2,8 @@
 // TODO(@mlnck) DRY the generateNgram(th) methods
 
 type MutateFncsType = {
-  filter: any[],
-  map: any[]
+  filter?: any[],
+  map?: any[]
 }
 type MutateFncsTypeType = 'filter'|'map'
 

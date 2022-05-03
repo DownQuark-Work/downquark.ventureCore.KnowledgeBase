@@ -6,14 +6,15 @@ const markovChain = () => {
   const filterShort = (wrd:string) => wrd.replace(/\W/g,'').length > 2
   const mapBacon = (wrd:string) => wrd.replace('piggy','bacon')
   const mutateFncs = {
-    filter: [filterShort],
+    filter: [(_:string)=>true],
     map: [mapBacon]
   }
-  const _ng = ngrams({n:2, src:THE_PIRATE, mutateFncs}),
+  const _ng = ngrams({n:1, src:THE_PIRATE, mutateFncs})
   // const _ng = ngrams({n:3, src:piggy+' '+bank}),
   // const _ng = ngrams({src:piggy+' '+bank}),
         // _ngth = ngramths({n:2, src:piggy+' '+bank, mutateFncs})
-        _ngth = ngramths({n:3, src:THE_PIRATE, mutateFncs})
+  mutateFncs['filter'].push(filterShort)
+  const _ngth = ngramths({n:3, src:THE_PIRATE, mutateFncs})
 
         console.log('_ng', _ng)
         console.log('_ngth', _ngth)
