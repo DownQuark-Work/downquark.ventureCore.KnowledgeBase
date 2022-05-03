@@ -16,6 +16,15 @@ const createCleanTextArray = (txt: string) => {
   return createCleanTextArrayMemo
 }
 
+const getSentenceBookends = ({src = ''}) => [...src.matchAll(/(\w+)[.?!]\s+(\w+)/g)].reduce((a:string[][],c) => {
+  a[0].push(c[1].toLowerCase())
+  a[1].push(c[2].toLowerCase())
+  return [
+    [...new Set(a[0])],
+    [...new Set(a[1])]
+  ]
+}, [[],[]])
+
 const iterateMutateFncs = (src:string, mutateFnc:MutateFncsType) => {
   let srcArray:string[]
   function *applyMutateFncs() {
@@ -36,15 +45,6 @@ const iterateMutateFncs = (src:string, mutateFnc:MutateFncsType) => {
 export const ngrams = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutateFncs?:MutateFncsType}) => { // n-gram defaults to single word-level
   if (!src.length) return
   if(mutateFncs) src = iterateMutateFncs(src, mutateFncs)
-
-  const getSentenceBookends = ({src = ''}) => [...src.matchAll(/(\w+)[.?!]\s+(\w+)/g)].reduce((a:string[][],c) => {
-    a[0].push(c[1].toLowerCase())
-    a[1].push(c[2].toLowerCase())
-    return [
-      [...new Set(a[0])],
-      [...new Set(a[1])]
-    ]
-  }, [[],[]])
 
   const generateNgram = ({n=1, text = ''}:{n:number, text:string}) => {
     const ng:{[k:string]:{[k:string]:number}} = {}
@@ -106,5 +106,18 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
   }
   const ngramth = generateNgramth({n, text:src})
 
-  return {ngramth}
+  const [_sentenceFirsts, sentenceLasts] = getSentenceBookends({src})
+  const _eow:{[k:string]:number} = {}
+  sentenceLasts.forEach(lastWord => {
+    const lastChars = lastWord.substr(n*-1,n)
+    if(_eow[lastChars]) _eow[lastChars] = _eow[lastChars] + 1
+    else if(!_eow[lastChars]) _eow[lastChars] = 1
+  })
+  const eowSum = Object.values(_eow).reduce((a,c) => a+c, 0)
+  _eow['_sum'] = eowSum
+
+  return {
+    ngramth,
+    _eow
+  }
 }
