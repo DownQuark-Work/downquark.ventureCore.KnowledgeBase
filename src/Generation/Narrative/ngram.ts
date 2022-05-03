@@ -47,13 +47,14 @@ export const ngrams = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutateF
   if(mutateFncs) src = iterateMutateFncs(src, mutateFncs)
 
   const generateNgram = ({n=1, text = ''}:{n:number, text:string}) => {
-    const ng:{[k:string]:{[k:string]:number}} = {}
+    const ng:{[k:string]:{[k:string]:number}} = {_stats:{}}
     const txtArr = createCleanTextArrayMemo || createCleanTextArray(text)
 
     const ngramKey = txtArr.slice(0,n-1)
     ngramKey.unshift('ALLOWS_NON-CONDITIONAL_LOOP')
-  
-    for(let indx=n-1; indx<txtArr.length; indx++) {
+    
+    const txtArrLen = txtArr.length
+    for(let indx=n-1; indx<txtArrLen; indx++) {
       ngramKey.shift()
       ngramKey.push(txtArr[indx])
       const txtKey = ngramKey.join(' ')
@@ -64,7 +65,7 @@ export const ngrams = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutateF
         else if(!ng[txtKey]?.[insertTxt]) ng[txtKey][insertTxt] = 1
       }
     }
-
+    ng['_stats']['_length'] = txtArrLen
     return ng
   }
   // having the {text:src} hash below if we want to extend/export/etc in the future
