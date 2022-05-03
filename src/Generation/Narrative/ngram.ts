@@ -90,12 +90,12 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
       const id = idx
       const txtWord = txtArr[id]
       
-      let ngramthKey = txtArr[idx].slice(0,n)
+      let ngramthKey = 'X'+txtArr[idx].slice(0,n-1) // `?` functions as ALLOWS_NON-CONDITIONAL_LOOP in above loop
       for(let indx=n-1; indx<txtWord.length; indx++) {
         const inx = indx
         ngramthKey = ngramthKey.substr(1)
         ngramthKey += txtWord[inx]
-        const txtKey = ngramthKey.substr(1)
+        const txtKey = ngramthKey
         const insertTxt = txtWord[inx+1] || ''
         if(insertTxt.length) {
           if(!ngth[txtKey]) ngth[txtKey] = {}
