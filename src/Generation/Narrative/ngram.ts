@@ -10,7 +10,7 @@ type MutateFncsTypeType = 'filter'|'map'
 // Common
 let createCleanTextArrayMemo:string[]
 const createCleanTextArray = (txt: string) => {
-  createCleanTextArrayMemo = txt.replace(/[^\w\s-]|_/g,'')
+  createCleanTextArrayMemo = txt.replace(/[^\w\s-]|_/g,'').replace(/\d/g,'').replace(/-/g,' ').replace(/\s\s+/g,' ')
                                   .replace(/\s/g,'~!~').replace(/(~!~){2,}/g,'~!~')
                                   .replace('^~!~','').replace('~!~$','').toLowerCase().split('~!~')
   return createCleanTextArrayMemo
@@ -115,7 +115,10 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
     else if(!_eow[lastChars]) _eow[lastChars] = 1
   })
   const eowSum = Object.values(_eow).reduce((a,c) => a+c, 0)
+  const eowLen = Object.values(_eow).length
+  _eow['_length'] = eowLen
   _eow['_sum'] = eowSum
+  console.log('Object.values(_eow).length', Object.values(_eow).length)
 
   return {
     ngramth,
