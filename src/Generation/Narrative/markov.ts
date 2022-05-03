@@ -15,7 +15,7 @@ const markovChain = () => {
         _ngth = ngramths({n:2, src:FROZEN_PIRATE, mutateFncs})
 
         console.log('_ng', _ng)
-        // console.log('_ngth', _ngth)
+        console.log('_ngth', _ngth)
   console.log('create markov chain'); 
 }
 
