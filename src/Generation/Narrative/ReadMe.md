@@ -105,3 +105,6 @@ Acessing the upcoming/TBD'd **NoSQL** database on object like the below will eit
   },
 }
 ```
+
+Future integration could also scrape Project Gutenberg when books were specified
+> https://www.gutenberg.org/ebooks/subject/3243?start_index=26

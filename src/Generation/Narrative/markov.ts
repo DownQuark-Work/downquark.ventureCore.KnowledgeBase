@@ -13,8 +13,10 @@ const markovChain = () => {
   const _ng = ngrams({n:2, src:piggy+' '+bank, mutateFncs}),
   // const _ng = ngrams({n:3, src:piggy+' '+bank}),
   // const _ng = ngrams({src:piggy+' '+bank}),
-        _ngth = ngramths()
-  console.log('_ng', _ng)
+        _ngth = ngramths({n:2, src:piggy+' '+bank, mutateFncs})
+
+        console.log('_ng', _ng)
+        console.log('_ngth', _ngth)
   console.log('create markov chain'); 
 }
 
