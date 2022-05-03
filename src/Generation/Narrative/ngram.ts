@@ -85,17 +85,18 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
   const generateNgramth = ({n=1, text = ''}:{n:number, text:string}) => {
     const ngth:{[k:string]:{[k:string]:number}} = {}
     const txtArr = [...new Set(createCleanTextArray(text))]
-    
-    const ngramthKey = [txtArr[0].slice(0,n-1)]
-    ngramthKey.unshift('ALLOWS_NON-CONDITIONAL_LOOP')
-
+  
     for(let idx=0; idx<txtArr.length; idx++) {
-      const txtWord = txtArr[idx]
+      const id = idx
+      const txtWord = txtArr[id]
+      
+      let ngramthKey = txtArr[idx].slice(0,n)
       for(let indx=n-1; indx<txtWord.length; indx++) {
-        ngramthKey.shift()
-        ngramthKey.push(txtWord[indx])
-        const txtKey = ngramthKey.join('')
-        const insertTxt = txtWord[indx+1] || ''
+        const inx = indx
+        ngramthKey = ngramthKey.substr(1)
+        ngramthKey += txtWord[inx]
+        const txtKey = ngramthKey.substr(1)
+        const insertTxt = txtWord[inx+1] || ''
         if(insertTxt.length) {
           if(!ngth[txtKey]) ngth[txtKey] = {}
           if(ngth[txtKey]?.[insertTxt]) ngth[txtKey][insertTxt] = ngth[txtKey][insertTxt] + 1
@@ -111,14 +112,15 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
   const _eow:{[k:string]:number} = {}
   sentenceLasts.forEach(lastWord => {
     const lastChars = lastWord.substr(n*-1,n)
-    if(_eow[lastChars]) _eow[lastChars] = _eow[lastChars] + 1
-    else if(!_eow[lastChars]) _eow[lastChars] = 1
+    if(lastChars.length === n) {
+      if(_eow[lastChars]) _eow[lastChars] = _eow[lastChars] + 1
+      else if(!_eow[lastChars]) _eow[lastChars] = 1
+    }
   })
   const eowSum = Object.values(_eow).reduce((a,c) => a+c, 0)
   const eowLen = Object.values(_eow).length
   _eow['_length'] = eowLen
   _eow['_sum'] = eowSum
-  console.log('Object.values(_eow).length', Object.values(_eow).length)
 
   return {
     ngramth,
