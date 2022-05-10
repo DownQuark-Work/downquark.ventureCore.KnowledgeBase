@@ -58,8 +58,8 @@ const createMarkovWord = () => {
   }
   markovData.MarkovReturn = markovData.MarkovReturn.replace(/['-]+$/,'')
   console.log('WORD: ', markovData.MarkovReturn);
-  
 }
+
 markovData.methods = {
   word:createMarkovWord,
   sentence:createMarkovWord,
@@ -69,6 +69,9 @@ markovData.methods = {
 }
 
 export const markovChain = (ngram:any, range=[3,7], type='markov') => {
+  console.log('TODO: could be fun to replace words from other methods with those we generated');
+  console.log('e.g. generate a few words, store in an array, replace ship, sword, and hat respectively');
+  
   markovData.MarkovReturn = ''
   markovData.ngram = {...ngram}
   markovData.range = range
