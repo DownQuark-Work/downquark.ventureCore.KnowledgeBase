@@ -1,4 +1,4 @@
-export const FROZEN_PIRATE = `
+const rawText = `
 THE FROZEN PIRATE.
 
 CHAPTER I.
@@ -10278,3 +10278,5 @@ longer shank." One ship was lost upon it: others embayed.
 
 
 THE END.`
+
+export default rawText

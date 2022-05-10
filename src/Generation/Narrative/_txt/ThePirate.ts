@@ -1,4 +1,4 @@
-export const THE_PIRATE = `
+const rawText = `
 CHAPTER ONE.
 
 THE BAY OF BISCAY.
@@ -6137,3 +6137,5 @@ old Jonathan.
 The twin-brothers were a comfort to him in his old age: they closed his
 eyes in peace--they divided his blessing and his large fortune and thus
 ends our history of THE PIRATE!`
+
+export default rawText
