@@ -1,5 +1,6 @@
 // deno run --allow-read --allow-write Narrative/_base.ts -s 13 -n 3 -t word -r 3,7 --src abc,def
 // deno run --allow-read --allow-write Narrative/_base.ts -n 2 -t word -r 7,12 -s 165210
+// deno run --allow-read --allow-write Narrative/_base.ts -n 2 -t word -r 3,6 -s 1652169
 import { parse } from '../_utils/_deps.ts'
 import {parseSeed, seedPointer} from '../_utils/_seed.ts'
 
@@ -21,7 +22,7 @@ const markovReturnObj = {
 
 const setDefaultMarkovObject = () => {
   nGramText = THE_PIRATE+' '+FROZEN_PIRATE
-  markovReturnObj.nGramValue = 3
+  markovReturnObj.nGramValue = 1
 }
 
 const createNGram = () => {

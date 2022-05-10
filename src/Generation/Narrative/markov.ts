@@ -1,5 +1,6 @@
 import { seedPointer } from '../_utils/_seed.ts'
 
+const noMatchesFill = ['\'','-']
 const markovData:any = {
   methods: {},
   ngram:{},
@@ -8,8 +9,6 @@ const markovData:any = {
   MarkovReturn: ''
 }
 
-const noMatchesFill = ['\'','-']
-// console.log('noMatchesFill', noMatchesFill)
 const createMarkovWord = () => {
   const { ngram, range } = markovData
   const ngramth = ngram.ngramth,
@@ -53,7 +52,7 @@ const createMarkovWord = () => {
       if(curNGramthKey[percentChar] === 0) delete curNGramthKey[percentChar]
 
       
-      if(endOfWord[markovData.MarkovReturn.substr(nLen)]) markovData.MarkovReturn += seedPointer.inc() > 7 ? noMatchesFill[1] : noMatchesFill[0]
+      if(endOfWord[markovData.MarkovReturn.substr(nLen)] && seedPointer.inc() % 2 === 1) markovData.MarkovReturn += seedPointer.inc() > 7 ? noMatchesFill[1] : noMatchesFill[0]
       curNGramthKey = ngramth[markovData.MarkovReturn.replace(/['-]/g,'').substr(nLen)] || {}
     }
   }
@@ -71,11 +70,6 @@ markovData.methods = {
 
 export const markovChain = (ngram:any, range=[3,7], type='markov') => {
   markovData.MarkovReturn = ''
-  // console.log('seedPointer.inc()', seedPointer.inc())
-  // console.log('seedPointer.inc()', seedPointer.inc())
-  // console.log('seedPointer.inc()', seedPointer.inc())
-  // console.log('seedPointer.inc()', seedPointer.inc())
-  // console.log('range,type', range,type)
   markovData.ngram = {...ngram}
   markovData.range = range
   markovData.type = type
