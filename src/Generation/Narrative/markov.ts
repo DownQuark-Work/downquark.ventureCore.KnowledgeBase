@@ -6,7 +6,7 @@ import { ngrams, ngramths } from './ngram.ts'
 import FROZEN_PIRATE from './_txt/FrozenPirate.ts'
 import THE_PIRATE from './_txt/ThePirate.ts'
 
-const _DEBUG = true
+const _DEBUG = false
 
 let nGramText = ''
 const markovReturnObj = {
@@ -29,19 +29,17 @@ const createNGram = () => {
     filter: [(_:string)=>true],
     map: []
   }
-  const _ng = ngrams({n:3, src:nGramText})
+  const _ng = ngrams({n:markovReturnObj.nGramValue, src:nGramText})
   // const _ng = ngrams({n:3, src:piggy+' '+bank}),
   // const _ng = ngrams({src:piggy+' '+bank}),
         // _ngth = ngramths({n:2, src:piggy+' '+bank, mutateFncs})
   mutateFncs['filter'].push(filterShort)
-  const _ngth = ngramths({n:3, src:nGramText, mutateFncs})
+  const _ngth = ngramths({n:markovReturnObj.nGramValue, src:nGramText, mutateFncs})
 
-        // console.log('_ng', _ng)
-        console.log('_ngth', _ngth)
+        console.log('_ng', _ng)
+        // console.log('_ngth', _ngth)
   console.log('create markov chain'); 
 }
-
-// createNGram()
 
 const determineMarkovText = async () => {
   const convertMarkovText = async () => {
@@ -53,8 +51,7 @@ const determineMarkovText = async () => {
       const curSrc = srcs.shift()
       try {
         let tryRead = await Deno.readTextFile(`./Narrative/_txt/${curSrc}.txt`) // must be relative from CLI
-        tryRead = `const rawText=\`${tryRead.replace(/`/g,'')}\`; export default rawText`
-        // console.log('tryRead', tryRead)
+        tryRead = `export const ${(curSrc as string).toUpperCase().replace(/\s/g,'_')}=\`${tryRead.replace(/`/g,'')}\``
         await Deno.writeTextFile(`./Narrative/_txt/_parsed/${curSrc}.ts`, tryRead)
         _DEBUG && console.log('file written: ', `./Narrative/_txt/${curSrc}.ts`)
         nGramText += tryRead + ' '
@@ -67,16 +64,14 @@ const determineMarkovText = async () => {
   }
   
 
-  const importedTexts: {[_:string]: string} = {}
+  const importedTexts: {[_:string]: any} = {}
   const srcs = [...markovReturnObj.sources]
   let errorless = true
   while(errorless && srcs.length) {
     const curSrc = srcs.shift()
     try {
       const tryLoad = await import(`./_txt/_parsed/${curSrc}.ts`)
-      console.log('tryLoad', tryLoad)
       importedTexts[(curSrc as string).toUpperCase().replace(/\s/g,'_')] = tryLoad
-      console.log('importedTexts', importedTexts)
     } catch (err) {
       errorless = false
       _DEBUG && console.log('LOAD ERROR: ', err)
@@ -84,10 +79,13 @@ const determineMarkovText = async () => {
   }
   
   if(!errorless && typeof Deno !== 'undefined'){ await convertMarkovText() }
-  if(!nGramText.length){ setDefaultMarkovObject() }
 
-  // createNGram() 
-  console.log('createNGram here', nGramText)
+  Object.entries(importedTexts).forEach(entry => {
+    nGramText += entry[1][entry[0]] + ' '
+  })
+
+  if(!nGramText.length){ setDefaultMarkovObject() }
+  createNGram() 
 }
 const instantiate = (props:any) => {
   console.log('props', props)
