@@ -108,22 +108,36 @@ export const ngramths = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutat
   }
   const ngramth = generateNgramth({n, text:src})
 
-  const [_sentenceFirsts, sentenceLasts] = getSentenceBookends({src})
+  const [sentenceFirsts, sentenceLasts] = getSentenceBookends({src})
+  // console.log('sentenceFirsts', sentenceFirsts)
+  const _bow:{[k:string]:number} = {}
   const _eow:{[k:string]:number} = {}
+  sentenceFirsts.forEach(firstWord => {
+    const firstChars = firstWord.substr(0,n).replace(/[\d\W_]/g,'')
+    if(firstChars.length === n) {
+      if(_bow[firstChars]) _bow[firstChars] = _bow[firstChars] + 1
+      else if(!_bow[firstChars]) _bow[firstChars] = 1
+    }
+  })
   sentenceLasts.forEach(lastWord => {
-    const lastChars = lastWord.substr(n*-1,n)
+    const lastChars = lastWord.substr(n*-1,n).replace(/[\d\W_]/g,'')
     if(lastChars.length === n) {
       if(_eow[lastChars]) _eow[lastChars] = _eow[lastChars] + 1
       else if(!_eow[lastChars]) _eow[lastChars] = 1
     }
   })
+  const bowSum = Object.values(_bow).reduce((a,c) => a+c, 0)
+  const bowLen = Object.values(_bow).length
   const eowSum = Object.values(_eow).reduce((a,c) => a+c, 0)
   const eowLen = Object.values(_eow).length
+  _bow['_length'] = bowLen
+  _bow['_sum'] = bowSum
   _eow['_length'] = eowLen
   _eow['_sum'] = eowSum
 
   return {
     ngramth,
-    _eow
+    _bow,
+    _eow,
   }
 }
