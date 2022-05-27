@@ -52,6 +52,39 @@ export const ngrams = ({n=1, src='', mutateFncs}:{n?:number, src:string, mutateF
 
     const ngramKey = txtArr.slice(0,n-1)
     ngramKey.unshift('ALLOWS_NON-CONDITIONAL_LOOP')
+
+    // TODO(@mlnck): refactor - all first level keys should be a single for efficiency / matching / lookup / etc
+    /* // for n =3 the obj would look like
+      {
+        one: {
+          'of the':2,
+          'of those':3
+        }
+        of: { // this whole block gets ignored
+          'the things':1,
+          'the others':3,
+          'those amazing':2,
+          'those birds':1,
+          'those bastards':2,
+        },
+        the: { // this key could match
+          'big house':1,
+          'summer sun':2,
+          'top one':1,
+        }
+        those: { // this key could match
+          'amazing kids':1,
+          'amazing fireballs':1,
+          'birds circled':1,
+          'bastards cried':2,
+          'bastards shouted':3,
+        }
+      }
+      // output could be:
+      - one of the summer sun
+      - one of those bastards shouted
+      - one of the top one of those birds circled
+    */
     
     const txtArrLen = txtArr.length
     for(let indx=n-1; indx<txtArrLen; indx++) {

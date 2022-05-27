@@ -22,7 +22,7 @@ const markovReturnObj = {
 
 const setDefaultMarkovObject = () => {
   nGramText = THE_PIRATE+' '+FROZEN_PIRATE
-  markovReturnObj.nGramValue = 1
+  markovReturnObj.nGramValue = 3
 }
 
 const createNGram = () => {

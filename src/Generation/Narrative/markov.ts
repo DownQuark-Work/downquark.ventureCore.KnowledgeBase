@@ -27,7 +27,6 @@ const createMarkovWord = () => {
   const startIndex = bOWArr.length > 2 // [ "_length", "_sum" ] will always be available
     ? bOWArr[Math.floor(beginningOfWord._length * (accumVal/100))]
     : ngramthArr[Math.floor(ngramth.stats._length * (accumVal/100))]
-  // const startIndex = ngramthArr[Math.floor(ngramth.stats._length * (accumVal/100))]
   let curNGramthKey = ngramth[startIndex]
   // console.log('startIndex', startIndex, curNGramthKey, rangeVal, nLen)
   markovData.MarkovReturn += startIndex
@@ -71,7 +70,7 @@ markovData.methods = {
 export const markovChain = (ngram:any, range=[3,7], type='markov') => {
   console.log('TODO: could be fun to replace words from other methods with those we generated');
   console.log('e.g. generate a few words, store in an array, replace ship, sword, and hat respectively');
-  
+  console.log('ngram', ngram)
   markovData.MarkovReturn = ''
   markovData.ngram = {...ngram}
   markovData.range = range
