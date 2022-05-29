@@ -23,6 +23,13 @@ RETURN DOCUMENT( ["users/XXX", "users/YYYY", "users/ZZZZ"] )
 
 FOR user IN users
   RETURN user
+
+# OR #
+arangosh> db._graphs.all()
+# ALSO #
+arangosh> db._graphs.any() // returns random result
+# AND *
+arangosh> db._graphs.count()
 ```
 
 ### QUERY ALL WITH SORT
