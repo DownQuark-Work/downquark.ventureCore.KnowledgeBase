@@ -44,7 +44,7 @@ FOR user IN users
 > NOTE: If we used `REPLACE` instead, the name attribute would be gone. 
 ```
 UPDATE "9915" WITH { age: 40 } IN users
-RETURN NEW
+RETURN [OLD, NEW]
 ```
 
 ### REMOVE
@@ -184,8 +184,9 @@ db._createStatement({ query }).execute()
 ### UPDATE (PATCH) AND RECEIVE RESULT
 > NOTE: If we used `REPLACE` instead, the name attribute would be gone. 
 ```
-query = `UPDATE "9915" WITH { age: 420 } IN users
-RETURN NEW`
+query = `UPDATE "11072" WITH { age: 5 }
+    IN users 
+    RETURN {prev:OLD, cur:NEW}`
 db._createStatement({ query }).execute()
 ```
 
