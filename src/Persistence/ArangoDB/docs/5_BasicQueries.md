@@ -234,3 +234,58 @@ query = `FOR user1 IN users
     }`
 db._createStatement({ query }).execute()
 ```
+
+### PARAMETER BINDING
+```
+# verbose
+query = `FOR i IN [ @one, @two ] RETURN i * 2`
+stmt = db._createStatement({ query })
+stmt.bind("one", 1)
+stmt.bind("two", 2)
+c = stmt.execute()
+
+# succinct
+bindVars = {one: 1, two: 2}
+query = `FOR i IN [ @one, @two ] RETURN i * 2`
+db._createStatement({ bindVars, query, }).execute()
+```
+
+### COUNT
+> nothing is returned if you did not specify the count attribute when creating the query
+```
+query = `FOR i IN [ 1, 2, 3, 4 ] RETURN i`
+db._createStatement( { query, count: true } ).execute().count()
+```
+
+### `getExtra()`
+> Appending `getExtra()` returns stats
+```
+query = `FOR user1 IN users
+  FOR user2 IN users
+    FILTER user1 != user2
+    LET sumOfAges = user1.age + user2.age
+    FILTER sumOfAges < 100
+    RETURN {
+        pair: [user1.name, user2.name],
+        sumOfAges: sumOfAges
+    }`
+db._createStatement({ query }).execute().getExtra()
+```
+
+### `getExtra()` & PROILE
+```
+query = `FOR user1 IN users
+  FOR user2 IN users
+    FILTER user1 != user2
+    LET sumOfAges = user1.age + user2.age
+    FILTER sumOfAges < 100
+    RETURN {
+        pair: [user1.name, user2.name],
+        sumOfAges: sumOfAges
+    }`
+db._createStatement({ query, options: {profile: true}}).execute().getExtra()
+```
+
+### QUERY VALIDATION
+> The _parse method of the db object can be used to parse and validate a query syntactically, without actually executing it.
+`db._parse( "FOR i IN [ 1, 2 ] RETURN i" )`
