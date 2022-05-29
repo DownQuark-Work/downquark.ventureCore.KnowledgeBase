@@ -196,6 +196,23 @@ RETURN LENGTH(airports) - 1`
 # # Resort to pattern matching instead
 ```
 ---
+## K Path
+```
+# Using shortest path val for _min_ and _max_
+> query = `FOR v IN 2..2 OUTBOUND K_PATHS 'airports/MIA' TO 'airports/JNU' flights RETURN DISTINCT CONCAT_SEPARATOR(' 🛬 ', v.vertices[*].name)`
+
+# Using shortest path as _min_ and shortest path +1 for _max_
+> query = `FOR v IN 2..3 OUTBOUND K_PATHS 'airports/MIA' TO 'airports/JNU' flights RETURN DISTINCT CONCAT_SEPARATOR(' 🛬 ', v.vertices[*].name)`
+```
+### Runtime Stats
+- `SHORTEST_PATH` returned _1 element_ in **0.598 ms**
+- `2..2 K_PATHS` returned the same _1 element_ in **12.003 ms**
+  - It took _~20.0719063545 **TIMES**_ longer to run `K_PATHS`
+- `2..3 K_PATHS` returned _34 elements_ in **150.103 s** (over 2 and a half _MINUTES_)
+  - It took _~12,508.5833333333 **TIMES**_ longer to run the second query than `2..2 K_PATHS`
+    - _**AND**_
+  - It took _~251,008.3612040134 **TIMES**_ longer to run the second query than `SHORTEST_PATH`
+---
 ## Pattern Matching
 
 
