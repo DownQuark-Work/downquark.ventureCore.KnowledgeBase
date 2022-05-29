@@ -158,7 +158,7 @@ query = `FOR airport, flight IN ANY 'airports/BIS' flights
       FOR dest, flight IN OUTBOUND orig flights
           FILTER flight.FlightNum IN [655, 53, 1103,1821,1061, 1777]
       RETURN [dest.name, flight._from, flight._to, flight.FlightNum, flight.Day]`
-  db._createStatement({ query, count:1 }).execute().count() # 95
+  db._createStatement({ query, count:true }).execute().count() # 95
 ```
 ---
 ## Traversal Options

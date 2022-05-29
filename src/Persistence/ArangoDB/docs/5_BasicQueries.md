@@ -296,3 +296,7 @@ db._createStatement({ query, options: {profile: true}}).execute().getExtra()
 ### QUERY VALIDATION
 > The _parse method of the db object can be used to parse and validate a query syntactically, without actually executing it.
 `db._parse( "FOR i IN [ 1, 2 ] RETURN i" )`
+
+### QUERY EXPLANATION
+> Explain what happens
+`db._createStatement("FOR i IN test FILTER i.value > 97 SORT i.value RETURN i.value").explain();`
