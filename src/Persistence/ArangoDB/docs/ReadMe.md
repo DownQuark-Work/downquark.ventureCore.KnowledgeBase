@@ -61,6 +61,7 @@ At signs @ in startup option arguments need to be escaped as @@. ArangoDB progra
 
 ## Learn
   - https://www.arangodb.com/learn/
+    - https://www.arangodb.com/learn/graphs/
   - https://www.arangodb.com/docs/stable/tutorials.html
   - https://www.arangodb.com/docs/stable/aql/tutorial.html
   - ## Graph
