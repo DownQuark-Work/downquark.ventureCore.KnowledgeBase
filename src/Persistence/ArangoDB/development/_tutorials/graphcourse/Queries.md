@@ -69,6 +69,7 @@ FOR vertex[, edge[, path]]
   - If not specified min defaults to 1 and `max` defaults to `min`
     - If min is set to `0` the traversal will include the start vertex
 - `OUTBOUND/INBOUND/ANY` defines the direction of your search
+- `startVertex`: the vertex key to begin tranversing on
 - `edgeCollection`: one or more names of collections holding the edges that we want to consider in the traversal (anonymous graph)
 ---
 ### Graph Query Syntax OPTIONS Explanation
@@ -96,9 +97,38 @@ FOR vertex[, edge[, path]]
 - Applies complex filter conditions in traversals taking the entire path into account
 - Allows for the discovery of specific patterns (combinations of vertices and edges in graphs) and is therefore called _**pattern matching**_.
 ---
+###
+> This is what I was missing when I first started. Start with something small before jumping into the planes. After it clicked, _SO_ many nicer things started happening.
+```
+# load this simple graph from arangosh
+> var examples = require("@arangodb/graph-examples/example-graph.js");
+> var g = examples.loadGraph("mps_graph");
+> # sanity
+> db.mps_verts.toArray();
+> db.mps_edges.toArray();
+# Go to the GUI and just play with the follwoing:
+FOR vrtx, edg, pth
+    IN 1..2 INBOUND 'mps_verts/C' mps_edges
+    RETURN edg
+    // RETURN {vrtx, edg} // swap which return is commented
+    // RETURN {vrtx, edg, pth} // and compare their outputs
+# back in arangosh Remove the collections when all finished
+> examples.dropGraph("mps_graph");
+```
 
 ## Graph Queries
 > Return the names of all airports one can reach directly (1 step) from Los Angeles International (LAX) following the flights edges:
+
+> Super simple way to validate the graph from the **GUI**
+- `FOR f IN flights RETURN f`
+> NOTE: It seems that the Graph will attempt to render when _only_ the edges are returned from the GUI. e.g:
+```
+FOR vrtx, edg, pth
+    IN 1..2 INBOUND 'vrtxs/C' edgs
+    RETURN edg
+```
+
+> Now back to the **CLI**
 ```
 > query = `FOR airport IN 1..1 OUTBOUND
     'airports/LAX' flights
@@ -196,7 +226,24 @@ RETURN LENGTH(airports) - 1`
 # # Resort to pattern matching instead
 ```
 ---
+## K SHORTEST PATHS
+> Every such path will be returned as a JSON object with three components:
+> - an array containing the vertices on the path
+> - an array containing the edges on the path
+> - the weight of the path, that is the sum of all edge weights
+>   - If no weightAttribute is given, the weight of the path is just its length.
+```
+FOR v IN OUTBOUND
+K_SHORTEST_PATHS 'airports/BIS' TO 'airports/JFK' flights 
+LIMIT 0,4 
+RETURN v
+```
 ## K Path
+> This type of query finds all paths between two given documents, startVertex and targetVertex in your graph. The paths are restricted by minimum and maximum length of the paths.
+> Every such path will be returned as a JSON object with two components:
+> - an array containing the vertices on the path
+> - an array containing the edges on the path
+
 ```
 # Using shortest path val for _min_ and _max_
 > query = `FOR v IN 2..2 OUTBOUND K_PATHS 'airports/MIA' TO 'airports/JNU' flights RETURN DISTINCT CONCAT_SEPARATOR(' 🛬 ', v.vertices[*].name)`
@@ -213,7 +260,16 @@ RETURN LENGTH(airports) - 1`
     - _**AND**_
   - It took _~251,008.3612040134 **TIMES**_ longer to run the second query than `SHORTEST_PATH`
 ---
+
 ## Pattern Matching
+> `SHORTEST_PATH` AND THE `K[_SHORTEST]_PATHS` are great for the _Down and Dirty_
+> You plug in the beginning and the end, and let it do it's thang.
+>
+> But what about if you want more control, or don't want to have to rely on the `FILTER` inefficiencies. The above methods **DO NOT** allow for that.
+>
+> Pattern Matching to the rescue.
+- _TLDR;_ take advantage of the third param when traversing the graph:
+  - `FOR vrtx, edg, pth IN ANY ...`
 
 
 RETURN CONCAT_SEPARATOR('->', p.vertices[*]._key)
