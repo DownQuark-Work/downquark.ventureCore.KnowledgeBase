@@ -6,6 +6,9 @@
 - [Knowledge Graph](https://github.com/arangoml/knowlegegraph-demo)
 - [Workshop](https://github.com/joerg84/Graph_Powered_ML_Workshop)
 
+## Search
+- [Detailed](https://www.arangodb.com/learn/search/tutorial/)
+
 ## Additional Lerning
 - https://github.com/arangodb/interactive_tutorials#readme
   - https://www.arangodb.com/learn/
