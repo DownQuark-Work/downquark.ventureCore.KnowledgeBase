@@ -262,15 +262,68 @@ RETURN v
 ---
 
 ## Pattern Matching
-> `SHORTEST_PATH` AND THE `K[_SHORTEST]_PATHS` are great for the _Down and Dirty_
-> You plug in the beginning and the end, and let it do it's thang.
+### Why not a Shortest Path Query?
+> In a shortest path query, it is not possible to apply filters because of the algorithm used under the hood to efficiently determine one shortest path between two vertices. However, you can use a shortest path query to determine the minimal length for such a path.
 >
-> But what about if you want more control, or don't want to have to rely on the `FILTER` inefficiencies. The above methods **DO NOT** allow for that.
->
-> Pattern Matching to the rescue.
+> Traversing a graph to find paths fulfilling complex conditions is called pattern matching.
+
 - _TLDR;_ take advantage of the third param when traversing the graph:
   - `FOR vrtx, edg, pth IN ANY ...`
 
+### To solve:
+> What are the best connections between the airports Bismarck Municipal (BIS) and John F. Kennedy International (JFK) determined by the lowest total travel time?
 
-RETURN CONCAT_SEPARATOR('->', p.vertices[*]._key)
+> Shortest path can be used to find the minimal traversal depth in a separate query.
+```
+RETURN LENGTH(
+  FOR v IN OUTBOUND
+  SHORTEST_PATH 'airports/BIS' TO 'airports/JFK' flights
+  RETURN v // returns 3
+)
+```
+shortest path minus the destination gives us our min/max (3-1 = 2)
+```
+FOR v, e, p IN 2 OUTBOUND 'airports/BIS' flights
+  FILTER v._id == 'airports/JFK'
+  FILTER p.edges[*].Month ALL == 1 // Limit to single date
+  FILTER p.edges[*].Day ALL == 1 // New Year's Works
+  LIMIT 5
+  RETURN p // Results in 2 paths to reach the deestination
+```
+`Date_Diff()` to determine flight time
+```
+FOR v, e, p IN 2 OUTBOUND 'airports/BIS' flights
+  FILTER v._id == 'airports/JFK'
+  FILTER p.edges[*].Month ALL == 1
+  FILTER p.edges[*].Day ALL == 1
+  FILTER DATE_ADD(p.edges[0].ArrTimeUTC, 20, 'minutes') < p.edges[1].DepTimeUTC // Prevents total flight time from being negative by ensuring the connecting flight does not depart until you have boarded
+  LET flightTime = DATE_DIFF(p.edges[0].DepTimeUTC, p.edges[1].ArrTimeUTC, 'i')
+  SORT flightTime ASC
+  LIMIT 5
+  RETURN { flight: p, time: flightTime }
+```
+> Above completed in _**285.506 ms**_
+- Click on COLLECTIONS in the ArangoDB WebUI
+- Open the flights collection
+- Click on the Indexes tab
+- Click the green button in the action column to add a new index
+- Set Type to Hash (or Persistent if RocksDB) Index
+- Type _from,Month,Day into Fields
+- Leave the index options Unique and Sparse unticked
+- Click the green Create button
+> The extra index allows the traverser to quickly lookup the outgoing edges of the departure airport (_from attribute) for a certain day (Month, Day attributes), which eliminates the need to fetch and filter out all edges with flights on different days. It reduces the number of edges that need checking with a cheap index lookup and saves quite some time.
 
+> Re-run query: Completed in _**46.863 ms**_
+
+### One more as Proof
+```
+FOR v, e, p IN 2 OUTBOUND 'airports/JFK' flights
+  FILTER v._id == 'airports/LAX'
+  FILTER p.edges[*].Month ALL == 1
+  FILTER p.edges[*].Day ALL == 7
+  FILTER DATE_ADD(p.edges[0].ArrTimeUTC, 20, 'minutes') < p.edges[1].DepTimeUTC // Prevents total flight time from being negative by ensuring the connecting flight does not depart until you have boarded
+  LET flightTime = DATE_DIFF(p.edges[0].DepTimeUTC, p.edges[1].ArrTimeUTC, 'i')
+  SORT flightTime ASC
+  LIMIT 25
+  RETURN DISTINCT { flight: p, time: flightTime }
+```
