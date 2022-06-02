@@ -1,0 +1,43 @@
+// https://en.wikipedia.org/wiki/Pseudorandom_number_generator
+// https://en.wikipedia.org/wiki/Category:Pseudorandom_number_generators
+// https://en.wikipedia.org/wiki/List_of_random_number_generators
+// https://github.com/bmurray7/mersenne-twister-examples/blob/master/javascript-mersenne-twister.js
+// https://github.com/bryc/code/blob/master/jshash/PRNGs.md
+
+/* https://github.com/bryc/code/blob/master/jshash/PRNGs.md // self calling seeds
+USAGE:
+function mwc(a, b) {
+    return function() {
+        a = 36969 * (a & 65535) + (a >>> 16);
+        b = 18000 * (b & 65535) + (b >>> 16);
+        var result = (a << 16) + (b & 65535) >>> 0;
+        return result / 4294967296;
+    }
+}
+const seedIt = mwc(13,42)
+seedIt() // runs witih above seed
+seedIt() // runs with ret from above
+seedIt() // runs with ret from above
+
+// https://gist.github.com/blixt/f17b47c62508be59987b
+var PRNG = function(seed){
+    this._seed = seed % 2147483647;
+    if (this._seed <= 0){ this._seed += 2147483646;}
+};
+
+PRNG.prototype.next = function(a,b){
+    this._seed = this._seed * 16807 % 2147483647;
+    if(arguments.length === 0){
+        return this._seed/2147483647;
+    }else if(arguments.length === 1){
+        return (this._seed/2147483647)*a;
+    }else{
+        return (this._seed/2147483647)*(b-a)+a;
+    }
+};
+
+var rng = new PRNG(1238473661);
+rng.next(10,100)
+let seededStr = ''
+for(var i = 0; i < 14; i++) seededStr += rng.next(10,100)
+*/
