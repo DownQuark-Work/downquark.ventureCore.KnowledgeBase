@@ -1,4 +1,39 @@
 brew install deno
+
+> parseArgs
+```
+# deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42 --fullword -b now too --and-another unmarked one 42
+
+import { parse } from "https://deno.land/std@0.120.0/flags/mod.ts"
+const parsedArgs = parse(Deno.args)
+console.log('parsedArgs', parsedArgs)
+
+/** outputs:
+  parsedArgs {
+    _: [ "too", "one", 42 ],
+    r: 13,
+    c: 13,
+    t: "RENDER_MAZE_AS.WALLED",
+    s: 42,
+    fullword: true,
+    b: "now",
+    "and-another": "unmarked"
+  }
+*/
+
+// Stop parsing early, after `--` everything is added to generic array
+# deno run Layouts/Maze/_base.ts -r 13 -c13 -t RENDER_MAZE_AS.WALLED -s 42 --fullword -b now -- too --and-another unmarked one 42
+parsedArgs {
+  _: [ "too", "--and-another", "unmarked", "one", "42" ],
+  r: 13,
+  c: 13,
+  t: "RENDER_MAZE_AS.WALLED",
+  s: 42,
+  fullword: true,
+  b: "now"
+
+```
+
 https://deno.land/manual
 - https://deno.land/manual@v1.17.1/examples
 https://deno.com/deploy/docs
@@ -9,6 +44,11 @@ https://doc.deno.land/
 
 https://deno.land/manual@v1.15.3/testing#testing
 
+https://deno.com/blog/every-web-api-in-deno
+
+
+> A microframework for Deno's HTTP server with zero third-party dependencies
+https://drash.land/drash/v2.x/getting-started/introduction
 
 std
 https://deno.land/std|https://deno.land/x/
@@ -74,3 +114,6 @@ https://deno.land/x/yolk@1.1.0
 https://github.com/denjucks/awesome-oak
 
 https://docs.rs/deno_core/latest/deno_core/
+
+
+~~https://alosaur.com/docs/intro~~

@@ -1,0 +1,17 @@
+<% extends("/views/_shell.html") %>
+
+<div>
+  <h3 class="text-5xl mb-5"><% generator.name %></h3>
+  <div id="game" style="position:relative"><p style="position:absolute; bottom:0">👇 Make a New Generation Below</p></div>
+  <div id="grid-config">
+    <% if (generator.name === "dungeon") { %>
+      <% include_partial("/views/partials/generated/controls_dungeon.html") %>
+      <a href="maze" >maze</a>
+    <% } %>
+    <% if (generator.name === "maze") { %>
+      <% include_partial("/views/partials/generated/controls_maze.html") %>
+      <a href="/">dungeon</a>
+    <% } %>
+</div>
+
+<script src="/_assets/js/_v1/landing-get.js"></script>

@@ -3,6 +3,9 @@
 - `$ deno run --watch run.ts 7 5 12 ` to update on file save
 `$  deno doc run.ts`
 
+-> not exactly CA - but a nice cavern-like touch?
+http://www.roguebasin.com/index.php/Basic_directional_dungeon_generation
+
 ---
 
 ## Node -> Deno cheatsheet
@@ -35,3 +38,8 @@ downloads and caches the code on first use.
 
 ³ `deno bench` subcommand is being considered, see
 https://github.com/denoland/deno/issues/9175
+
+```
+cellular_automata=$(deno run cellular_automata.ts 10 10 100 10)
+echo $cellular_automata
+```

@@ -1,0 +1,60 @@
+# OPERATIONS
+
+`FOR`
+- Iterate over a collection or View, all elements of an array or traverse a graph
+
+---
+`RETURN`
+- Produce the result of a query.
+
+---
+`FILTER`
+- Restrict the results to elements that match arbitrary logical conditions.
+
+---
+`SEARCH`
+- Query the (full-text) index of an ArangoSearch View
+
+---
+`SORT`
+- Force a sort of the array of already produced intermediate results.
+
+---
+`LIMIT`
+- Reduce the number of elements in the result to at most the specified number, optionally skip elements (pagination).
+
+---
+`LET`
+- Assign an arbitrary value to a variable.
+
+---
+`COLLECT`
+- Group an array by one or multiple group criteria. Can also count and aggregate.
+
+---
+`WINDOW`
+- Perform aggregations over related rows.
+
+---
+`REMOVE`
+- Remove documents from a collection.
+
+---
+`UPDATE`
+- Partially update documents in a collection.
+
+---
+`REPLACE`
+- Completely replace documents in a collection.
+
+---
+`INSERT`
+- Insert new documents into a collection.
+
+---
+`UPSERT`
+- Update/replace an existing document, or create it in the case it does not exist.
+
+---
+`WITH`
+- Specify collections used in a query (at query begin only).

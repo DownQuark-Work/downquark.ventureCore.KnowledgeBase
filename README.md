@@ -2,6 +2,9 @@
 
 This is a collection of documentation and development resources to be used as reference material and/or a guide when working in other repositories.
 
+> NOTE: This code is mainly meant to be used for learning and experimentation. The code may not be complete, optimized, working, or anything else that one would expect.
+> Use at your own risk and education.
+
 Inspired by [Build Your Own X](https://github.com/danistefanovic/build-your-own-x). And chances are the content from that link will be implemented.
 
 Here are some other resources that will be referenced throughout:

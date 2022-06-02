@@ -1,0 +1,1 @@
+// https://hbfs.wordpress.com/2017/11/21/the-middle-square-method-generating-random-sequences-viii/
