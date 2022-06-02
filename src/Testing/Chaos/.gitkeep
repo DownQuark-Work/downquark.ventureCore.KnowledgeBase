@@ -1,0 +1,6 @@
+The idea here is to create the chaos that will randomly sabatoge builds / queries / etc
+- randomly return nothing
+- randomly return way too much content
+etc
+
+Leave out an import / etc

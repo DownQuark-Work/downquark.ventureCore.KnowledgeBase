@@ -1,0 +1,36 @@
+# Narrative
+
+## Story Gen
+https://arxiv.org/pdf/1902.01109.pdf
+https://www.semanticscholar.org/paper/Planning-in-Narrative-Generation-%3A-A-Review-of-to-%2C-Young/c5e2d66939c2df6e4ef7f2bec4d9879e9b2151b2?p2df
+- https://www.semanticscholar.org/paper/When-intelligence-meets-data%3A-game-story-generation-Liu/c50ecf4ae8156bedbd63271b65d6263ae7419156 << << <<
+    - https://www.inderscienceonline.com/doi/abs/10.1504/IJCRC.2016.076071 < may need to torrent
+  - https://www.semanticscholar.org/paper/Evolutionary-generation-of-game-levels-Connor-Greig/05c799a86bd122d8e31f9be4ea815502cc5733dc
+    - https://eudl.eu/pdf/10.4108/eai.10-4-2018.155857
+  - https://www.semanticscholar.org/paper/Toward-Vignette-Based-Story-Generation-for-Drama-Riedl/acd58d6c21ac398b82e6b56be5406fc8252ca885
+    - https://faculty.cc.gatech.edu/~riedl/pubs/itis08.pdf
+  - https://www.semanticscholar.org/paper/A-Survey-on-Story-Generation-Techniques-for-Kybartas-Bidarra/a5c721f4e081b040d57676cf34c9c70b774656db
+    - https://ieeexplore.ieee.org/document/7439785 < may need to torrent
+- https://www.semanticscholar.org/paper/From-linear-story-generation-to-branching-story-Riedl-Young/9bc80b406606a334925e7ab467e0600f889c6ac1
+- https://www.semanticscholar.org/paper/Story-planning-as-exploratory-creativity%3A-for-the-Riedl-Young/5a2cf70737ef9bc1a71925ba634bfc518429a6fc
+
+
+## Markov Chain
+https://shiffman.net/a2z/markov/
+https://www.decontextualize.com/teaching/rwet/n-grams-and-markov-chains/
+http://chrisnatale.info/markov-models-in-javascript-part-ii-more-responsive-ui-with-hidden-markov-models/
+>> https://ai.googleblog.com/2006/08/all-our-n-gram-are-belong-to-you.html
+>> https://github.com/aparrish/rwet-examples
+https://rwet.decontextualize.com/
+
+## Natural Language
+
+https://www.theclickreader.com/open-source-nlp-projects-with-tutorials/ <<
+https://www.projectpro.io/article/nlp-projects-ideas-/452
+- https://www.projectpro.io/article/nlp-projects-ideas-/452#mcetoc_1fb661l4s1bc
+  > sentence autocomplete - used to autocomplete Markov Chains might be interesting
+-  Image-Caption Generator > scan random image of generic event/item that the player is obtaining to make the description
+  > could be anything from rats attacking to laser beams - could use it as an NFT card as well if they defaat a boss or something along those lines
+https://machinelearningknowledge.ai/nlp-datasets-beginners-should-use-for-nlp-projects/
+https://towardsdatascience.com/5-ideas-for-your-next-nlp-project-c6bf5b86935c
+https://analyticsindiamag.com/8-different-nlp-scenarios-one-can-take-up-for-a-project/

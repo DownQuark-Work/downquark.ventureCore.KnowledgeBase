@@ -1,0 +1,28 @@
+<h3 data-generator-type="<% generator.name %>"><% generator.name %> Settings</h3>
+    <p>
+      Width: <span contenteditable data-gen-attr="gw">30</span> 
+      Height: <span contenteditable data-gen-attr="gh">20</span> 
+      Seed: <span contenteditable data-gen-attr="sa"></span> 
+    </p>
+    <p>
+      Algorithm: <span data-match-to="maze-type" data-gen-attr="a">RENDER_MAZE.WITH_BACKTRACKER</span><br/>
+        <input id="mazetype1" checked="checked" type="radio" name="maze-type" value="RENDER_MAZE.WITH_BACKTRACKER" /> - <label for="mazetype1">RENDER_MAZE.WITH_BACKTRACKER</label><br/>
+        <input id="mazetype2" type="radio" name="maze-type" value="RENDER_MAZE.WITH_HUNT_AND_KILL" /> - <label for="mazetype2">RENDER_MAZE.WITH_HUNT_AND_KILL</label><br/>
+        <input id="mazetype3" type="radio" name="maze-type" value="RENDER_MAZE.WITH_PRIM" /> - <label for="mazetype3">RENDER_MAZE.WITH_PRIM</label><br/>
+        <input id="mazetype4" type="radio" name="maze-type" value="RENDER_MAZE.WITH_SIDEWINDER" /> - <label for="mazetype4">RENDER_MAZE.WITH_SIDEWINDER</label>
+    </p>
+    <p>
+      Maze Type: <span data-gen-attr="t">RENDER_MAZE_AS.PASSAGE</span> (only <i>passage</i> currently exists)
+    </p>
+  </div>
+  <button id="generate-button" data-type="<% generator.name %>">Generate <% generator.name %></button>
+  <button id="generate-random-button"  data-type="<% generator.name %>">Generate Random <% generator.name %> Seed</button>
+  <br/><br/>
+  <details>
+    <summary><strong>Interesting Seeds</strong></summary>
+    <small>(seed pointer bug exists: only first run of seed is guaranteed to render correctly)</small>
+    <ul data-ref="interesting-seeds">
+      <li>17 13 164</li>
+      <li>20 35 1647052162296</li>
+    </ul>
+  </details>
