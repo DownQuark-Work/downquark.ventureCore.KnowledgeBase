@@ -1,3 +1,14 @@
+import type { calculateHashType } from '../types.d.ts'
+
+export const calculateHash = async (cHash:calculateHashType): Promise<string> => {
+  const {index, previousHash, timestamp, data} = cHash
+  const d = index + (previousHash || '') + timestamp + data
+  return digestData(d).then(digestHex => {
+      console.log('digestHex', digestHex)
+      return digestHex
+    })
+}
+
 /**
  * @summary encodes data for SHA-256
  * @param data string to encode
@@ -15,3 +26,4 @@ export const digestData = async (data:string) => {
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
   return hashHex;
 }
+
