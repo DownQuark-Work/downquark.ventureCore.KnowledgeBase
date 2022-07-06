@@ -21,12 +21,12 @@ class Bloq {
 }
 
 // init
-const bc = getBlockchain()
-if (!bc.length) {
-  const genesisBlockData = { index: 0, previousHash: '', timestamp: new Date().getTime(), data: 'dq.bloq.genesis' }
-  const genesisBlockHash = await calculateHash(genesisBlockData)
-  const genesisBlock: Bloq = new Bloq({ ...genesisBlockData, hash: genesisBlockHash })
-  bc.push(genesisBlock)
-}
+// const bc = getBlockchain ? getBlockchain() : []
+// if (!bc.length) {
+//   const genesisBlockData = { index: 0, previousHash: '', timestamp: new Date().getTime(), data: 'dq.bloq.genesis' }
+//   const genesisBlockHash = await calculateHash(genesisBlockData)
+//   const genesisBlock: Bloq = new Bloq({ ...genesisBlockData, hash: genesisBlockHash })
+//   bc.push(genesisBlock)
+// }
 
 export { Bloq }

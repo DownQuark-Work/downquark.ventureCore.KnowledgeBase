@@ -1,33 +1,33 @@
 // https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
 
-import { getLatestBlock } from '../_v0/utils.bloqchain.ts'
+import { getLatestBlock, getBlockchain } from '../_v0/utils.bloqchain.ts';
 // import {addBlockToChain, Block, getBlockchain, getLatestBlock, isValidBlockStructure, replaceChain} from '../_v0/bloq.ts'
 
-// import type { enumMessageType } from '../types.d.ts'
+import type { BloqType } from '../types.d.ts';
 enum enumMessageType {
-    QUERY_LATEST = 0,
-    QUERY_ALL = 1,
-    RESPONSE_BLOCKCHAIN = 2,
+  QUERY_LATEST = 0,
+  QUERY_ALL = 1,
+  RESPONSE_BLOCKCHAIN = 2,
 }
 
 // const sockets: WebSocket[] = []
-let sockets: WebSocket[] = []
+let sockets: WebSocket[] = [];
 
 class Message {
-    public type: enumMessageType = 0;
-    public data: any
+  public type: enumMessageType|string = 0;
+  public data: any;
 }
 
 // export const initP2P = (p2pPort: number) => {
-    // const server: Server = new WebSocket.Server({port: p2pPort})
-    // server.on('connection', (ws: WebSocket) => {
-    //     initConnection(ws)
-    // })
-    // console.log('listening websocket p2p port on: ' + p2pPort)
+// const server: Server = new WebSocket.Server({port: p2pPort})
+// server.on('connection', (ws: WebSocket) => {
+//     initConnection(ws)
+// })
+// console.log('listening websocket p2p port on: ' + p2pPort)
 // }
 // Deno.upgradeWebSocket
-const getSockets = () => sockets
-const setSockets = (peers: WebSocket[]) => sockets = peers
+const getSockets = () => sockets;
+const setSockets = (peers: WebSocket[]) => (sockets = peers);
 
 const peers = new Map<number, WebSocket>();
 let peerId = 0;
@@ -35,69 +35,75 @@ const dispatch = (msg: string): void => {
   for (const peer of peers.values()) {
     peer.send(msg);
   }
-}
+};
 
 export const initConnection = (ws: WebSocket) => {
-    // sockets.push(ws)
-    // initMessageHandler(ws)
-    // initErrorHandler(ws)
-    // write(ws, queryChainLengthMsg())
-}
+  // sockets.push(ws)
+  initMessageHandler(ws);
+  // initErrorHandler(ws)
+  // write(ws, queryChainLengthMsg())
+};
 
-const JSONToObject = <T>(data: string): T => {
-    try {
-        return JSON.parse(data)
-    } catch (e) {
-        console.log(e)
-        return null as unknown as T
+const JSONToObject = <T>(data: any): T => {
+  try {
+    return JSON.parse(data as unknown as string);
+  } catch (e) {
+    console.log(e);
+    return null as unknown as T;
+  }
+};
+
+const write = (ws: WebSocket, message: Message): void =>
+  ws.send(JSON.stringify(message));
+const broadcast = (message: Message): void =>
+  sockets.forEach((socket) => write(socket, message));
+
+const initMessageHandler = (ws: WebSocket) => {
+  ws.onmessage = (dataMsg) => {
+    const { type, data } = dataMsg
+    const message: Message = {data, type}
+    if (message === null) {
+      console.log('could not parse received JSON message: ' + data);
+      return;
     }
-}
+    console.log('Received message ' + JSON.stringify(message));
+    switch (message.type) {
+      case enumMessageType.QUERY_LATEST:
+        write(ws, responseLatestMsg());
+        break;
+      case enumMessageType.QUERY_ALL:
+        write(ws, responseChainMsg());
+        break;
+      case enumMessageType.RESPONSE_BLOCKCHAIN:
+        const receivedBlocks: BloqType[] = JSONToObject<BloqType[]>(
+          message.data
+        );
+        if (receivedBlocks === null) {
+          console.log('invalid blocks received:');
+          console.log(message.data);
+          break;
+        }
+        // TODO:
+        // handleBlockchainResponse(receivedBlocks)
+        break;
+      default:
+        // console.log('DEFAULT: message - no action to take', message)
+    }
+  };
+};
 
-const write = (ws: WebSocket, message: Message): void => ws.send(JSON.stringify(message))
-const broadcast = (message: Message): void => sockets.forEach((socket) => write(socket, message))
+const queryAllMsg = (): Message => ({'type': enumMessageType.QUERY_ALL, 'data': null})
+const queryChainLengthMsg = (): Message => ({'type': enumMessageType.QUERY_LATEST, 'data': null})
 
-// export const initMessageHandler = (ws:WebSocket, data:any) => {
-//     // ws.on('message', (data: string) => {
-//         const message: Message = JSONToObject<Message>(data)
-//         if (message === null) {
-//             console.log('could not parse received JSON message: ' + data)
-//             return
-//         }
-//         console.log('Received message' + JSON.stringify(message))
-//         switch (message.type) {
-//             case enumMessageType.QUERY_LATEST:
-//                 write(ws, responseLatestMsg())
-//                 break
-//             case enumMessageType.QUERY_ALL:
-//                 write(ws, responseChainMsg())
-//                 break
-//             case enumMessageType.RESPONSE_BLOCKCHAIN:
-//                 const receivedBlocks: Block[] = JSONToObject<Block[]>(message.data)
-//                 if (receivedBlocks === null) {
-//                     console.log('invalid blocks received:')
-//                     console.log(message.data)
-//                     break
-//                 }
-//                 handleBlockchainResponse(receivedBlocks)
-//                 break
-//         }
-//     // })
-// }
+const responseChainMsg = (): Message => ({
+  type: enumMessageType.RESPONSE_BLOCKCHAIN,
+  data: JSON.stringify(getBlockchain()),
+});
 
-
-
-// const queryChainLengthMsg = (): Message => ({'type': MessageType.QUERY_LATEST, 'data': null})
-
-// const queryAllMsg = (): Message => ({'type': MessageType.QUERY_ALL, 'data': null})
-
-// const responseChainMsg = (): Message => ({
-//     'type': MessageType.RESPONSE_BLOCKCHAIN, 'data': JSON.stringify(getBlockchain())
-// })
-
-// const responseLatestMsg = (): Message => ({
-//     'type': MessageType.RESPONSE_BLOCKCHAIN,
-//     'data': JSON.stringify([getLatestBlock()])
-// })
+const responseLatestMsg = (): Message => ({
+  type: enumMessageType.RESPONSE_BLOCKCHAIN,
+  data: JSON.stringify([getLatestBlock()]),
+});
 
 // const initErrorHandler = (ws: WebSocket) => {
 //     const closeConnection = (myWs: WebSocket) => {
@@ -138,7 +144,7 @@ const broadcast = (message: Message): void => sockets.forEach((socket) => write(
 //     }
 // }
 
-export const broadcastLatest = (): void => {}
+export const broadcastLatest = (): void => {};
 // {    broadcast(responseLatestMsg())
 // }
 
@@ -153,21 +159,16 @@ export const broadcastLatest = (): void => {}
 // }
 
 export const p2pHandler = (ws: WebSocket) => {
-    const id = ++peerId;
-    peers.set(id, ws);
-    ws.onopen = () => {
-      // initConnection(ws)
-      dispatch(`Connected: [${id}]`);
-    };
-    ws.onmessage = (e) => {
-      console.log(`msg:${id}`, e.data);
-      // initMessageHandler
-      dispatch(`[${id}]: ${e.data}`);
-    };
-    ws.onclose = () => {
-      peers.delete(id);
-      dispatch(`Closed: [${id}]`);
-    };
+  const id = ++peerId
+  peers.set(id, ws)
+  ws.onopen = () => {
+    initConnection(ws)
+    dispatch(`Connected: [${id}]`)
   }
+  ws.onclose = () => {
+    peers.delete(id)
+    dispatch(`Closed: [${id}]`)
+  }
+}
 
 // export {connectToPeers, broadcastLatest, initP2PServer, getSockets}
