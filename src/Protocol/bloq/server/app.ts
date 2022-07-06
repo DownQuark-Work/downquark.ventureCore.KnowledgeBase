@@ -1,4 +1,5 @@
 import { crypto, serve } from  '../deps.ts'
+import { p2pHandler } from './p2p.ts'
 import { isWebsocketRequest, wsHandler } from './utils.websocket.ts'
 
 const port = 8080;
@@ -17,7 +18,7 @@ async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
   if (isWebsocketRequest(pathname)) { // must be a CURL (or otherwise headless) request
     const { socket, response } = Deno.upgradeWebSocket(req.request);
-    wsHandler(socket);
+    p2pHandler(socket);
     req.respondWith(response);
   }
   else {

@@ -29,6 +29,14 @@ class Message {
 const getSockets = () => sockets
 const setSockets = (peers: WebSocket[]) => sockets = peers
 
+const peers = new Map<number, WebSocket>();
+let peerId = 0;
+const dispatch = (msg: string): void => {
+  for (const peer of peers.values()) {
+    peer.send(msg);
+  }
+}
+
 export const initConnection = (ws: WebSocket) => {
     // sockets.push(ws)
     // initMessageHandler(ws)
@@ -48,33 +56,33 @@ const JSONToObject = <T>(data: string): T => {
 const write = (ws: WebSocket, message: Message): void => ws.send(JSON.stringify(message))
 const broadcast = (message: Message): void => sockets.forEach((socket) => write(socket, message))
 
-export const initMessageHandler = (ws:WebSocket, data:any) => {
-    // ws.on('message', (data: string) => {
-        const message: Message = JSONToObject<Message>(data)
-        if (message === null) {
-            console.log('could not parse received JSON message: ' + data)
-            return
-        }
-        console.log('Received message' + JSON.stringify(message))
-        switch (message.type) {
-            case enumMessageType.QUERY_LATEST:
-                write(ws, responseLatestMsg())
-                break
-            case enumMessageType.QUERY_ALL:
-                write(ws, responseChainMsg())
-                break
-            case enumMessageType.RESPONSE_BLOCKCHAIN:
-                const receivedBlocks: Block[] = JSONToObject<Block[]>(message.data)
-                if (receivedBlocks === null) {
-                    console.log('invalid blocks received:')
-                    console.log(message.data)
-                    break
-                }
-                handleBlockchainResponse(receivedBlocks)
-                break
-        }
-    // })
-}
+// export const initMessageHandler = (ws:WebSocket, data:any) => {
+//     // ws.on('message', (data: string) => {
+//         const message: Message = JSONToObject<Message>(data)
+//         if (message === null) {
+//             console.log('could not parse received JSON message: ' + data)
+//             return
+//         }
+//         console.log('Received message' + JSON.stringify(message))
+//         switch (message.type) {
+//             case enumMessageType.QUERY_LATEST:
+//                 write(ws, responseLatestMsg())
+//                 break
+//             case enumMessageType.QUERY_ALL:
+//                 write(ws, responseChainMsg())
+//                 break
+//             case enumMessageType.RESPONSE_BLOCKCHAIN:
+//                 const receivedBlocks: Block[] = JSONToObject<Block[]>(message.data)
+//                 if (receivedBlocks === null) {
+//                     console.log('invalid blocks received:')
+//                     console.log(message.data)
+//                     break
+//                 }
+//                 handleBlockchainResponse(receivedBlocks)
+//                 break
+//         }
+//     // })
+// }
 
 
 
@@ -143,5 +151,23 @@ export const broadcastLatest = (): void => {}
 //         console.log('connection failed')
 //     })
 // }
+
+export const p2pHandler = (ws: WebSocket) => {
+    const id = ++peerId;
+    peers.set(id, ws);
+    ws.onopen = () => {
+      // initConnection(ws)
+      dispatch(`Connected: [${id}]`);
+    };
+    ws.onmessage = (e) => {
+      console.log(`msg:${id}`, e.data);
+      // initMessageHandler
+      dispatch(`[${id}]: ${e.data}`);
+    };
+    ws.onclose = () => {
+      peers.delete(id);
+      dispatch(`Closed: [${id}]`);
+    };
+  }
 
 // export {connectToPeers, broadcastLatest, initP2PServer, getSockets}

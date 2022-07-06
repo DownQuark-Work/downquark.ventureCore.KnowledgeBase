@@ -1,5 +1,3 @@
-import { initConnection, initMessageHandler } from './p2p.ts'
-
 const WEBSOCKET_PATH = '/ws/'
 
 export const isWebsocketRequest = (pName:string):boolean => {
@@ -17,12 +15,10 @@ export const wsHandler = (ws: WebSocket) => {
   const id = ++peerId;
   peers.set(id, ws);
   ws.onopen = () => {
-    // initConnection(ws)
     dispatch(`Connected: [${id}]`);
   };
   ws.onmessage = (e) => {
     console.log(`msg:${id}`, e.data);
-    initMessageHandler
     dispatch(`[${id}]: ${e.data}`);
   };
   ws.onclose = () => {
