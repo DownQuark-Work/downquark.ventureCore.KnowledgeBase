@@ -5,18 +5,29 @@ const isValidTimestamp = (newBlock: BloqType, previousBlock: BloqType): boolean 
       && newBlock.timestamp - 60 < new Date().getTime();
 };
 
-const hasValidHash = (block: BloqType): boolean => {
+// const hashMatchesBlockContent = (block: BloqType): boolean => {
+//   const blockHash: string = calculateHashForBlock(block);
+//   return blockHash === block.hash;
+// };
 
-  // if (!hashMatchesBlockContent(block)) {
-  //     console.log('invalid hash, got:' + block.hash);
-  //     return false;
-  // }
+// const hashMatchesDifficulty = (hash: string, difficulty: number): boolean => {
+//   const hashInBinary: string = hexToBinary(hash);
+//   const requiredPrefix: string = '0'.repeat(difficulty);
+//   return hashInBinary.startsWith(requiredPrefix);
+// };
 
-  // if (!hashMatchesDifficulty(block.hash, block.difficulty)) {
-  //     console.log('block difficulty not satisfied. Expected: ' + block.difficulty + 'got: ' + block.hash);
-  // }
-  return true;
-};
+
+// const hasValidHash = (block: BloqType): boolean => {
+//   if (!hashMatchesBlockContent(block)) {
+//       console.log('invalid hash, got:' + block.hash);
+//       return false;
+//   }
+
+//   if (!hashMatchesDifficulty(block.hash, block.difficulty)) {
+//       console.log('block difficulty not satisfied. Expected: ' + block.difficulty + 'got: ' + block.hash);
+//   }
+//   return true;
+// };
 const isValidBlockStructure = (block: BloqType): boolean => {
   return typeof block.index === 'number'
       && typeof block.hash === 'string'
