@@ -1,4 +1,4 @@
-import { genesisBlock } from './bloq.ts'
+import { getGenesisBlock } from './utils.bloqchain.ts'
 import { calculateHashForBlock } from './utils.hash.ts'
 
 import { BloqType } from "../types.d.ts"
@@ -21,10 +21,10 @@ const hashMatchesBlockContent = async (block: BloqType): Promise<boolean> => {
 
 
 const hasValidHash = (block: BloqType): boolean => {
-  // if (!hashMatchesBlockContent(block)) {
-  //     console.log('invalid hash, got:' + block.hash)
-  //     return false
-  // }
+  if (!hashMatchesBlockContent(block)) {
+      console.log('invalid hash, got:' + block.hash)
+      return false
+  }
 
   // if (!hashMatchesDifficulty(block.hash, block.difficulty)) {
   //     console.log('block difficulty not satisfied. Expected: ' + block.difficulty + 'got: ' + block.hash)
@@ -39,7 +39,7 @@ const isValidBlockStructure = (block: BloqType): boolean => {
 }
 
 export const isValidChain = (blockchainToValidate: BloqType[]): boolean => {
-  const isValidGenesis = (block: BloqType): boolean => JSON.stringify(block) === JSON.stringify(genesisBlock)
+  const isValidGenesis = (block: BloqType): boolean => JSON.stringify(block) === JSON.stringify(getGenesisBlock)
   if (!isValidGenesis(blockchainToValidate[0])) return false
   for (let i = 1; i < blockchainToValidate.length; i++) {
       if (!isValidNewBlock(blockchainToValidate[i], blockchainToValidate[i - 1])) return false

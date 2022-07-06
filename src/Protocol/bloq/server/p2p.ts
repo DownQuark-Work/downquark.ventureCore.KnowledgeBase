@@ -1,3 +1,5 @@
+// https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
+
 // import * as WebSocket from 'ws'
 // import {Server} from 'ws'
 // import {addBlockToChain, Block, getBlockchain, getLatestBlock, isValidBlockStructure, replaceChain} from './blockchain'

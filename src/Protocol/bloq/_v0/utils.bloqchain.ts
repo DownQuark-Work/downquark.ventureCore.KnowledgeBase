@@ -6,14 +6,10 @@ import { isValidNewBlock, isValidChain } from './utils.validity.ts'
 import { BloqType } from "../types.d.ts"
 import type { calculateHashType } from '../types.d.ts'
 
-let blqChain:Array<BloqType>
-export const bloqchain = (arr:Bloq):Array<BloqType> => {
-  blqChain = [...blqChain, arr]
-  return blqChain
-}
-
-const getBlockchain = (): BloqType[] => blqChain
-const getLatestBlock = (): BloqType => blqChain[blqChain.length - 1]
+let bloqchain:Array<BloqType> = []
+export const getBlockchain = (): BloqType[] => bloqchain
+export const getGenesisBlock = (): BloqType => bloqchain[0]
+export const getLatestBlock = (): BloqType => bloqchain[bloqchain.length - 1]
 
 const generateNextBlock = async (blockData: string) => {
   const previousBlock = getLatestBlock()
@@ -34,9 +30,9 @@ const generateNextBlock = async (blockData: string) => {
   return newBlock
 }
 
-const addBlockToChain = (newBlock: BloqType) => {
+export const addBlockToChain = (newBlock: BloqType) => {
   if (isValidNewBlock(newBlock, getLatestBlock())) {
-      blqChain.push(newBlock)
+      bloqchain.push(newBlock)
       return true
   }
   return false
@@ -45,7 +41,7 @@ const addBlockToChain = (newBlock: BloqType) => {
 const replaceChain = (newBlocks: BloqType[]) => {
   if (isValidChain(newBlocks) && newBlocks.length > getBlockchain().length) {
       console.log('Received blockchain is valid. Replacing current blockchain with received blockchain')
-      blqChain = newBlocks
+      bloqchain = newBlocks
       broadcastLatest()
   } else {
       console.log('Received blockchain invalid')

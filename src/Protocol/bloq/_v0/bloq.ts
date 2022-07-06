@@ -1,3 +1,4 @@
+import { addBlockToChain, getBlockchain } from './utils.bloqchain.ts'
 import { calculateHash } from './utils.hash.ts'
 
 import type { qonstructorType } from '../types.d.ts'
@@ -20,11 +21,12 @@ class Bloq {
 }
 
 // init
-const genesisBlockData = { index: 0, previousHash: '', timestamp: new Date().getTime(), data: 'dq.bloq.genesis' }
-const genesisBlockHash = await calculateHash(genesisBlockData)
-export const genesisBlock: Bloq = new Bloq({ ...genesisBlockData, hash: genesisBlockHash })
-
-// const bloqchain: Bloq[] = [genesisBlock]
-// console.log('bloqchain', bloqchain)
+const bc = getBlockchain()
+if (!bc.length) {
+  const genesisBlockData = { index: 0, previousHash: '', timestamp: new Date().getTime(), data: 'dq.bloq.genesis' }
+  const genesisBlockHash = await calculateHash(genesisBlockData)
+  const genesisBlock: Bloq = new Bloq({ ...genesisBlockData, hash: genesisBlockHash })
+  bc.push(genesisBlock)
+}
 
 export { Bloq }
