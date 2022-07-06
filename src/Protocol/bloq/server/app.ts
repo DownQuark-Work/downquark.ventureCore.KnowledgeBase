@@ -1,7 +1,5 @@
 import { crypto, serve } from  '../deps.ts'
 import { isWebsocketRequest, wsHandler } from './utils.websocket.ts'
-import { reqHandlerWebSocket } from './app.websocket.ts'
-import { initP2P } from './p2p.ts'
 
 const port = 8080;
 
