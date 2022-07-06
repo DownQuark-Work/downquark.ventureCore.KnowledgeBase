@@ -1,3 +1,6 @@
+import { genesisBlock } from './bloq.ts'
+import { calculateHashForBlock } from './utils.hash.ts'
+
 import { BloqType } from "../types.d.ts"
 
 const isValidTimestamp = (newBlock: BloqType, previousBlock: BloqType): boolean => {
@@ -5,10 +8,10 @@ const isValidTimestamp = (newBlock: BloqType, previousBlock: BloqType): boolean 
       && newBlock.timestamp - 60 < new Date().getTime()
 }
 
-// const hashMatchesBlockContent = (block: BloqType): boolean => {
-//   const blockHash: string = calculateHashForBlock(block)
-//   return blockHash === block.hash
-// }
+const hashMatchesBlockContent = async (block: BloqType): Promise<boolean> => {
+  const blockHash: string = await calculateHashForBlock(block)
+  return blockHash === block.hash
+}
 
 // const hashMatchesDifficulty = (hash: string, difficulty: number): boolean => {
 //   const hashInBinary: string = hexToBinary(hash)
@@ -30,28 +33,25 @@ const hasValidHash = (block: BloqType): boolean => {
 }
 
 const isValidBlockStructure = (block: BloqType): boolean => {
-  return typeof block.index === 'number'
-      && typeof block.hash === 'string'
-      && typeof block.previousHash === 'string'
-      && typeof block.timestamp === 'number'
-      && typeof block.data === 'object'
+  return typeof block.index === 'number' && typeof block.hash === 'string'
+    && typeof block.previousHash === 'string' && typeof block.timestamp === 'number'
+    && typeof block.data === 'object'
 }
-const isValidNewBlock = (newBlock: BloqType, previousBlock: BloqType): boolean => {
-  if (!isValidBlockStructure(newBlock)) {
-      console.log('invalid block structure: %s', JSON.stringify(newBlock))
-      return false
+
+export const isValidChain = (blockchainToValidate: BloqType[]): boolean => {
+  const isValidGenesis = (block: BloqType): boolean => JSON.stringify(block) === JSON.stringify(genesisBlock)
+  if (!isValidGenesis(blockchainToValidate[0])) return false
+  for (let i = 1; i < blockchainToValidate.length; i++) {
+      if (!isValidNewBlock(blockchainToValidate[i], blockchainToValidate[i - 1])) return false
   }
-  if (previousBlock.index + 1 !== newBlock.index) {
-      console.log('invalid index')
-      return false
-  } else if (previousBlock.hash !== newBlock.previousHash) {
-      console.log('invalid previoushash')
-      return false
-  } else if (!isValidTimestamp(newBlock, previousBlock)) {
-      console.log('invalid timestamp')
-      return false
-  } else if (!hasValidHash(newBlock)) {
-      return false
-  }
+  return true
+}
+
+export const isValidNewBlock = (newBlock: BloqType, previousBlock: BloqType): boolean => {
+  if (!isValidBlockStructure(newBlock)) { console.log('invalid block structure: %s', JSON.stringify(newBlock)); return false }
+  if (previousBlock.index + 1 !== newBlock.index) { console.log('invalid index'); return false }
+  if (previousBlock.hash !== newBlock.previousHash) { console.log('invalid previoushash'); return false }
+  if (!isValidTimestamp(newBlock, previousBlock)) { console.log('invalid timestamp'); return false }
+  if (!hasValidHash(newBlock)) return false
   return true
 }
