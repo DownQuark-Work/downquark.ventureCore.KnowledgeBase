@@ -40,7 +40,7 @@ const dispatch = (msg: string): void => {
 export const initConnection = (ws: WebSocket) => {
   // sockets.push(ws)
   initMessageHandler(ws);
-  // initErrorHandler(ws)
+  initErrorHandler(ws)
   // write(ws, queryChainLengthMsg())
 };
 
@@ -105,14 +105,14 @@ const responseLatestMsg = (): Message => ({
   data: JSON.stringify([getLatestBlock()]),
 });
 
-// const initErrorHandler = (ws: WebSocket) => {
-//     const closeConnection = (myWs: WebSocket) => {
-//         console.log('connection failed to peer: ' + myWs.url)
-//         sockets.splice(sockets.indexOf(myWs), 1)
-//     }
-//     ws.on('close', () => closeConnection(ws))
-//     ws.on('error', () => closeConnection(ws))
-// }
+const initErrorHandler = (ws: WebSocket) => {
+  const closeConnection = (wskt: WebSocket) => {
+    console.log('connection failed to peer: ' + wskt.url)
+    sockets.splice(sockets.indexOf(wskt), 1)
+  }
+  ws.onclose = () => closeConnection(ws)
+  ws.onerror = () => closeConnection(ws)
+}
 
 // const handleBlockchainResponse = (receivedBlocks: Block[]) => {
 //     if (receivedBlocks.length === 0) {
@@ -164,10 +164,6 @@ export const p2pHandler = (ws: WebSocket) => {
   ws.onopen = () => {
     initConnection(ws)
     dispatch(`Connected: [${id}]`)
-  }
-  ws.onclose = () => {
-    peers.delete(id)
-    dispatch(`Closed: [${id}]`)
   }
 }
 
