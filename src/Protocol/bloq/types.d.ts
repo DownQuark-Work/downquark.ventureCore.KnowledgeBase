@@ -2,7 +2,7 @@
 export type qonstructorType = {
   index: number,
   hash: string,
-  previousHash: string,
+  previousHash: string
   timestamp: number,
   data: string,
 }
