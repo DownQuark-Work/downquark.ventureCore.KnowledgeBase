@@ -20,7 +20,7 @@ function handleError(e: Event | ErrorEvent) {
 console.log("Connecting to server ...");
 try {
   // const ws = new WebSocket("ws://localhost:8000");
-  const ws = new WebSocket("ws://localhost:8080");
+  const ws = new WebSocket("ws://localhost:8080/ws/");
   ws.onopen = () => handleConnected(ws);
   ws.onmessage = (m) => handleMessage(ws, m.data);
   ws.onclose = () => logError("Disconnected from server ...");
