@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2015",
+    "sourceMap": true
+  },
+  "include": [
+    "_v0/bloq.ts",
+    "server/appblock.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -81,39 +81,8 @@ https://dev.to/diguifi/meet-the-world-s-tiniest-8bit-mmorpg-3kj6
 `$ deno run --allow-net --allow-read https://deno.land/std/examples/flags.ts -a -b c --anything`
 
 
-## Scaffolding
-### SIMPLE modules
-ALIAS _denoMod_ IS CREATED FOR BELOW (usage): `$ denoMod dq_deno`
-```
-# mod is a command line tool to quickly scaffold a new Deno module.
-# It creates app and dependency entrypoints, a .gitignore file,
-# and has options to add a test-driven setup and/or include a basic CI pipeline.
-deno run https://deno.land/x/mod/mod.ts --help
-#
-deno run \
---allow-read=my_deno_module \
---allow-run=git \
---allow-write=my_deno_module \
-https://deno.land/x/mod/mod.ts \
---name my_deno_module
-# OR
-deno run --A https://deno.land/x/mod/mod.ts -n my_deno_module --ci
-deno run --A https://deno.land/x/mod/mod.ts -n my_deno_module --js
-```
-
-### COMPLEX APPS
-> Deprecated, ut a great start and structure: /Users/mlnck/Desktop/tmp/denotmp/server.js
-https://deno.land/x/yolk@1.1.0
-`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js createproject``
-- add another applet
-`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js createapplet secondaryapplet`
-- run it
-`deno run -A --no-check --unstable https://deno.land/x/yolk@1.1.0/yolk.js run`
-
-
-https://github.com/denjucks/awesome-oak
-
 https://docs.rs/deno_core/latest/deno_core/
 
+> misc rebuild
 
-~~https://alosaur.com/docs/intro~~
+https://github.com/lhartikk/AstroBuild/blob/master/astro_build.py
