@@ -41,7 +41,7 @@ export const initConnection = (ws: WebSocket) => {
   // sockets.push(ws)
   initMessageHandler(ws);
   initErrorHandler(ws)
-  // write(ws, queryChainLengthMsg())
+  write(ws, queryChainLengthMsg())
 };
 
 const JSONToObject = <T>(data: any): T => {
