@@ -7,9 +7,9 @@ import { BloqType } from "../types.d.ts"
 import type { calculateHashType } from '../types.d.ts'
 
 let bloqchain:Array<BloqType> = []
-export const getBlockchain = (): BloqType[] => bloqchain
-export const getGenesisBlock = (): BloqType => bloqchain[0]
-export const getLatestBlock = (): BloqType => bloqchain[bloqchain.length - 1]
+const getBlockchain = (): BloqType[] => bloqchain
+const getGenesisBlock = (): BloqType => bloqchain[0]
+const getLatestBlock = (): BloqType => bloqchain[bloqchain.length - 1]
 
 const generateNextBlock = async (blockData: string) => {
   const previousBlock = getLatestBlock()
@@ -30,7 +30,7 @@ const generateNextBlock = async (blockData: string) => {
   return newBlock
 }
 
-export const addBlockToChain = (newBlock: BloqType) => {
+const addBlockToChain = (newBlock: BloqType) => {
   if (isValidNewBlock(newBlock, getLatestBlock())) {
       bloqchain.push(newBlock)
       return true
@@ -46,4 +46,13 @@ const replaceChain = (newBlocks: BloqType[]) => {
   } else {
       console.log('Received blockchain invalid')
   }
+}
+
+export {
+  addBlockToChain,
+  generateNextBlock,
+  getBlockchain,
+  getGenesisBlock,
+  getLatestBlock,
+  replaceChain,
 }
