@@ -49,47 +49,13 @@ function handleMessage(ws: WebSocket, data: string) {
 function handleError(e: Event | ErrorEvent) {
   console.log(e instanceof ErrorEvent ? e.message : e.type);
 }
-console.log("Connecting to server ...");
-try {
-  const ws = new WebSocket("ws://localhost:8000");
-  ws.onopen = () => handleConnected(ws);
-  ws.onmessage = (m) => handleMessage(ws, m.data);
-  ws.onclose = () => logError("Disconnected from server ...");
-  ws.onerror = (e) => handleError(e);
-} catch (err) {
-  logError("Failed to connect to server ... exiting");
-}
 
-/**
- * import { crypto, serve } from  '../deps.ts'
-import { isWebsocketRequest, wsHandler } from './utils.websocket.ts'
-import { initP2P } from './p2p.ts'
-
-const port = 8080;
-
-const handleWebsocketRequest = (req:any) => {
-  console.log('req', req, req.headers)
-  if (req.headers.get("upgrade") != "websocket") {
-    return new Response(null, { status: 501 });
-  }
-  const { socket, response } = Deno.upgradeWebSocket(req);
-  console.log('socket, response', socket, response)
-  wsHandler(socket);
-  return new Response('body', { status: 200 });
-  // return req.respondWith(response);
-}
-
-const handler = (request: Request): Response => {
-  console.log('request', request)
-  const body = `Your user-agent is:\n\n${
-    request.headers.get("user-agent") ?? "Unknown"
-  } :: ${isWebsocketRequest(new URLPattern(request.url))}`
-  console.log('request.headers', request.headers)
-  return request.method === 'GET' && isWebsocketRequest(new URLPattern(request.url))
-    ? handleWebsocketRequest(request)
-    : new Response(body, { status: 200 });
-};
-
-console.log(`HTTP webserver running. Access it at: http://localhost:8080/`);
-await serve(handler, { port });
- */
+// try {
+//   const ws = new WebSocket("ws://localhost:8080");
+//   ws.onopen = () => handleConnected(ws);
+//   ws.onmessage = (m) => handleMessage(ws, m.data);
+//   ws.onclose = () => logError("Disconnected from server ...");
+//   ws.onerror = (e) => handleError(e);
+// } catch (err) {
+//   logError("Failed to connect to server ... exiting");
+// }

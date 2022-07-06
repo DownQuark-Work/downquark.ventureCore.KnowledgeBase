@@ -4,6 +4,10 @@ _&&_
 _&&||_
 `$ deno run --allow-read --allow-net _v0/bloq.ts`
 
+> To test websocket routes:
+> ` $ deno run --allow-read --allow-net server/app.ts` [terminal 1]
+> ` $ deno run --allow-read --allow-net server/app.websocket.client.ts` [terminal 2]
+
 https://docs.w3cub.com/dom/subtlecrypto/digest
 
 https://medium.com/@lhartikk/a-blockchain-in-200-lines-of-code-963cc1cc0e54

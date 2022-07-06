@@ -18,8 +18,7 @@ function handleMessage(ws: WebSocket, data: string) {
 function handleError(e: Event | ErrorEvent) {
   console.log(e instanceof ErrorEvent ? e.message : e.type);
 }
-async function reqHandler(req: Request) {
-  console.log('req.headers', req.headers)
+export const reqHandlerWebSocket = async (req: Request) => {
   if (req.headers.get("upgrade") != "websocket") {
     return new Response(null, { status: 501 });
   }
@@ -31,4 +30,4 @@ async function reqHandler(req: Request) {
   return response;
 }
 console.log("Waiting for client ...");
-serve(reqHandler, { port: 8080 });
+serve(reqHandlerWebSocket, { port: 8080 });
