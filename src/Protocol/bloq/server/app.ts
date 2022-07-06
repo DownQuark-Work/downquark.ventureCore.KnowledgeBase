@@ -17,7 +17,7 @@ console.log('{server}', {server})
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  if (pathname ==='/ws/') { // must be a CURL (or otherwise headless) request
+  if (isWebsocketRequest(pathname)) { // must be a CURL (or otherwise headless) request
     const { socket, response } = Deno.upgradeWebSocket(req.request);
     wsHandler(socket);
     req.respondWith(response);

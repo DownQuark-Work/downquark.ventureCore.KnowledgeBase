@@ -1,6 +1,6 @@
 const WEBSOCKET_PATH = '/ws/'
-export const isWebsocketRequest = (urlPattern:URLPattern):boolean => {
-  return /\/ws\/?$/i.test(urlPattern.pathname)
+export const isWebsocketRequest = (pName:string):boolean => {
+  return /\/ws\/?$/i.test(pName)
 }
 
 const peers = new Map<number, WebSocket>();
@@ -26,10 +26,6 @@ export const wsHandler = (ws: WebSocket) => {
   };
 }
 
-// const { socket, response } = Deno.upgradeWebSocket(req.request);
-//     wsHandler(socket);
-//     req.respondWith(response);
-
 function logError(msg: string) {
   console.log(msg);
   Deno.exit(1);
@@ -49,13 +45,3 @@ function handleMessage(ws: WebSocket, data: string) {
 function handleError(e: Event | ErrorEvent) {
   console.log(e instanceof ErrorEvent ? e.message : e.type);
 }
-
-// try {
-//   const ws = new WebSocket("ws://localhost:8080");
-//   ws.onopen = () => handleConnected(ws);
-//   ws.onmessage = (m) => handleMessage(ws, m.data);
-//   ws.onclose = () => logError("Disconnected from server ...");
-//   ws.onerror = (e) => handleError(e);
-// } catch (err) {
-//   logError("Failed to connect to server ... exiting");
-// }
