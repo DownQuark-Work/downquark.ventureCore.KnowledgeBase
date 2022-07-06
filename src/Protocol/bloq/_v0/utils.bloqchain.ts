@@ -4,7 +4,6 @@ import { calculateHash} from './utils.hash.ts'
 import { isValidNewBlock, isValidChain } from './utils.validity.ts'
 
 import { BloqType } from "../types.d.ts"
-import type { calculateHashType } from '../types.d.ts'
 
 let bloqchain:Array<BloqType> = []
 const getBlockchain = (): BloqType[] => bloqchain
@@ -24,9 +23,8 @@ const generateNextBlock = async (blockData: string) => {
       previousHash: previousBlock.hash,
       timestamp: nextTimestamp, data: blockData
   })
-  // addBlock(newBlock) && broadcastLatest()
-  // addBlock(newBlock)
-  // broadcastLatest()
+  
+  addBlockToChain(newBlock) && broadcastLatest()
   return newBlock
 }
 

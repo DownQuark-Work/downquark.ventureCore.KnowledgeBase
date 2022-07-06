@@ -1,4 +1,6 @@
 `$ deno run --allow-read --allow-net server/app.ts`
+_&&_
+`$ deno run --allow-read --allow-net server/app.websocket.ts`
 _&&||_
 `$ deno run --allow-read --allow-net _v0/bloq.ts`
 

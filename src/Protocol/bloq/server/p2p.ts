@@ -4,26 +4,22 @@
 // import {Server} from 'ws'
 // import {addBlockToChain, Block, getBlockchain, getLatestBlock, isValidBlockStructure, replaceChain} from './blockchain'
 
-// const sockets: WebSocket[] = []
+import { enumMessageType } from '../types.d.ts'
 
-// enum MessageType {
-//     QUERY_LATEST = 0,
-//     QUERY_ALL = 1,
-//     RESPONSE_BLOCKCHAIN = 2,
-// }
+// const sockets: WebSocket[] = []
 
 // class Message {
 //     public type: MessageType
 //     public data: any
 // }
 
-// const initP2PServer = (p2pPort: number) => {
-//     const server: Server = new WebSocket.Server({port: p2pPort})
-//     server.on('connection', (ws: WebSocket) => {
-//         initConnection(ws)
-//     })
-//     console.log('listening websocket p2p port on: ' + p2pPort)
-// }
+export const initP2P = (p2pPort: number) => {
+    // const server: Server = new WebSocket.Server({port: p2pPort})
+    // server.on('connection', (ws: WebSocket) => {
+    //     initConnection(ws)
+    // })
+    console.log('listening websocket p2p port on: ' + p2pPort)
+}
 // Deno.upgradeWebSocket
 // const getSockets = () => sockets
 
