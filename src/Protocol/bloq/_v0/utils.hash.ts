@@ -4,7 +4,7 @@ export const calculateHash = async (cHash:calculateHashType): Promise<string> =>
   const {index, previousHash, timestamp, data} = cHash
   const d = index + (previousHash || '') + timestamp + data
   return digestData(d).then(digestHex => {
-      console.log('digestHex', digestHex)
+      // console.log('digestHex', digestHex)
       return digestHex
     })
 }

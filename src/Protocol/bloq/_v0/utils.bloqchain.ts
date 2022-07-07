@@ -46,6 +46,19 @@ const replaceChain = (newBlocks: BloqType[]) => {
   }
 }
 
+const createGenesisBlock = async () => {
+  const bc = getBlockchain ? getBlockchain() : []
+  if (!bc.length) {
+    const genesisBlockData = { index: 0, previousHash: '', timestamp: new Date().getTime(), data: 'dq.bloq.genesis' }
+    const genesisBlockHash = await calculateHash(genesisBlockData)
+    const genesisBlock: Bloq = new Bloq({ ...genesisBlockData, hash: genesisBlockHash })
+    bc.push(genesisBlock)
+    console.log('Genesis Bloq on Chain: ', bc);
+    
+  }
+}
+createGenesisBlock()
+
 export {
   addBlockToChain,
   generateNextBlock,
