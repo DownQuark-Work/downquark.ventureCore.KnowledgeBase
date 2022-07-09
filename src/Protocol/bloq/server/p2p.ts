@@ -1,6 +1,8 @@
 // https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
 
-import { getLatestBlock, getBlockchain } from '../_v0/utils.bloqchain.ts';
+import { getLatestBlock, getBlockchain } from '../_v0/utils.bloqchain.ts'
+import { addBlockToChain, replaceChain } from '../_v0/utils.bloqchain.ts'
+import { isValidBlockStructure } from '../_v0/utils.validity.ts'
 // import {addBlockToChain, Block, getBlockchain, getLatestBlock, isValidBlockStructure, replaceChain} from '../_v0/bloq.ts'
 
 import type { BloqType } from '../types.d.ts';
@@ -10,7 +12,6 @@ enum enumMessageType {
   RESPONSE_BLOCKCHAIN = 2,
 }
 
-// const sockets: WebSocket[] = []
 let sockets: WebSocket[] = [];
 
 class Message {
@@ -18,14 +19,6 @@ class Message {
   public data: any;
 }
 
-// export const initP2P = (p2pPort: number) => {
-// const server: Server = new WebSocket.Server({port: p2pPort})
-// server.on('connection', (ws: WebSocket) => {
-//     initConnection(ws)
-// })
-// console.log('listening websocket p2p port on: ' + p2pPort)
-// }
-// Deno.upgradeWebSocket
 const getSockets = () => sockets;
 const setSockets = (peers: WebSocket[]) => (sockets = peers);
 
@@ -38,7 +31,6 @@ const dispatch = (msg: string): void => {
 };
 
 export const initConnection = (ws: WebSocket) => {
-  // sockets.push(ws)
   initMessageHandler(ws);
   initErrorHandler(ws)
   write(ws, queryChainLengthMsg())
@@ -53,12 +45,12 @@ const JSONToObject = <T>(data: any): T => {
   }
 };
 
-const write = (ws: WebSocket, message: Message): void =>
-  ws.send(JSON.stringify(message));
+const write = (ws: WebSocket, message: Message): void => {ws.send(JSON.stringify(message));}
 const broadcast = (message: Message): void =>
   sockets.forEach((socket) => write(socket, message));
 
 const initMessageHandler = (ws: WebSocket) => {
+  console.log('INIT MESSAGE HANDLER')
   ws.onmessage = (dataMsg) => {
     const { type, data } = dataMsg
     const message: Message = {data, type}
@@ -83,11 +75,10 @@ const initMessageHandler = (ws: WebSocket) => {
           console.log(message.data);
           break;
         }
-        // TODO:
-        // handleBlockchainResponse(receivedBlocks)
+        handleBlockchainResponse(receivedBlocks)
         break;
       default:
-        // console.log('DEFAULT: message - no action to take', message)
+        console.log('DEFAULT: message - no action to take', message)
     }
   };
 };
@@ -114,49 +105,41 @@ const initErrorHandler = (ws: WebSocket) => {
   ws.onerror = () => closeConnection(ws)
 }
 
-// const handleBlockchainResponse = (receivedBlocks: Block[]) => {
-//     if (receivedBlocks.length === 0) {
-//         console.log('received block chain size of 0')
-//         return
-//     }
-//     const latestBlockReceived: Block = receivedBlocks[receivedBlocks.length - 1]
-//     if (!isValidBlockStructure(latestBlockReceived)) {
-//         console.log('block structuture not valid')
-//         return
-//     }
-//     const latestBlockHeld: Block = getLatestBlock()
-//     if (latestBlockReceived.index > latestBlockHeld.index) {
-//         console.log('blockchain possibly behind. We got: '
-//             + latestBlockHeld.index + ' Peer got: ' + latestBlockReceived.index)
-//         if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
-//             if (addBlockToChain(latestBlockReceived)) {
-//                 broadcast(responseLatestMsg())
-//             }
-//         } else if (receivedBlocks.length === 1) {
-//             console.log('We have to query the chain from our peer')
-//             broadcast(queryAllMsg())
-//         } else {
-//             console.log('Received blockchain is longer than current blockchain')
-//             replaceChain(receivedBlocks)
-//         }
-//     } else {
-//         console.log('received blockchain is not longer than received blockchain. Do nothing')
-//     }
-// }
+const handleBlockchainResponse = (receivedBlocks: BloqType[]) => {
+  console.log('handleBlockchainResponse', handleBlockchainResponse)
+    if (receivedBlocks.length === 0) {
+        console.log('received block chain size of 0')
+        return
+    }
+    const latestBlockReceived: BloqType = receivedBlocks[receivedBlocks.length - 1]
+    if (!isValidBlockStructure(latestBlockReceived)) {
+        console.log('block structuture not valid')
+        return
+    }
+    const latestBlockHeld: BloqType = getLatestBlock()
+    if (latestBlockReceived.index > latestBlockHeld.index) {
+        console.log('blockchain possibly behind. We got: '
+            + latestBlockHeld.index + ' Peer got: ' + latestBlockReceived.index)
+        if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
+            if (addBlockToChain(latestBlockReceived)) {
+                broadcast(responseLatestMsg())
+            }
+        } else if (receivedBlocks.length === 1) {
+            console.log('We have to query the chain from our peer')
+            broadcast(queryAllMsg())
+        } else {
+            console.log('Received blockchain is longer than current blockchain')
+            replaceChain(receivedBlocks)
+        }
+    } else {
+        console.log('received blockchain is not longer than received blockchain. Do nothing')
+    }
+}
 
 export const broadcastLatest = (): void => {};
 // {    broadcast(responseLatestMsg())
 // }
 
-// const connectToPeers = (newPeer: string): void => {
-//     const ws: WebSocket = new WebSocket(newPeer)
-//     ws.on('open', () => {
-//         initConnection(ws)
-//     })
-//     ws.on('error', () => {
-//         console.log('connection failed')
-//     })
-// }
 
 export const p2pHandler = (ws: WebSocket) => {
   const id = ++peerId

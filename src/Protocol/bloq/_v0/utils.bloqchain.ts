@@ -57,10 +57,10 @@ const createGenesisBlock = async () => {
     
   }
 }
-createGenesisBlock()
 
 export {
   addBlockToChain,
+  createGenesisBlock,
   generateNextBlock,
   getBlockchain,
   getGenesisBlock,

@@ -32,7 +32,7 @@ const hasValidHash = (block: BloqType): boolean => {
   return true
 }
 
-const isValidBlockStructure = (block: BloqType): boolean => {
+export const isValidBlockStructure = (block: BloqType): boolean => {
   return typeof block.index === 'number' && typeof block.hash === 'string'
     && typeof block.previousHash === 'string' && typeof block.timestamp === 'number'
     && typeof block.data === 'object'
