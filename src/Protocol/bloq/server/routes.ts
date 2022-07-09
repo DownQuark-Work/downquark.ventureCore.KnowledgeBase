@@ -1,3 +1,4 @@
+import { getBlockchain } from '../_v0/utils.bloqchain.ts'
 /*
 const initHttpServer = ( myHttpPort: number ) => {
     const app = express();
@@ -23,3 +24,7 @@ const initHttpServer = ( myHttpPort: number ) => {
     });
 };
 */
+// export const bloqchain
+export const apiRoutes:{[k:string]: () => string} = {
+    blocks: () => JSON.stringify(getBlockchain())
+}

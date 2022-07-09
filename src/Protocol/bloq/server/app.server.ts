@@ -1,6 +1,7 @@
 import { PORT } from '../_utils/constants.ts'
 import { crypto, serve } from  '../deps.ts'
 // import { p2pHandler } from './p2p.ts'
+import { apiRoutes } from './routes.ts'
 import { createGenesisBlock } from '../_v0/utils.bloqchain.ts'
 import { wsHandlerServer } from './utils.websocket.ts'
 
@@ -13,7 +14,7 @@ const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  console.log('pathname', pathname)
+  // console.log('req', {...req})
   if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request)
     // p2pHandler(socket) // <-- I do not think this line should be firing on the serer files - (move to `client`?)
@@ -21,7 +22,11 @@ async function requestHandler(req: Deno.RequestEvent) {
     req.respondWith(response)
   }
   else if (isApiRequest(pathname)) // pathname must begin with '/api/v#/'
-    { req.respondWith( new Response('stdout', { status: 200, headers: { "content-type": "text/html", }, }), ) }
+    { // example usage: `$ curl http://localhost:8080/api/v0/blocks`
+      const apiParts = pathname.split('/')
+      apiParts.splice(0,3); console.log('apiParts', apiParts, '\n\n NOTE: api response should be available in secondary terminal window')
+      await req.respondWith( new Response(apiRoutes[apiParts[0]](), { status: 200, headers: { "content-type": "text/html", }, }), )
+    }
   else { // file-server
     let filepath = decodeURIComponent(pathname)
     filepath = filepath === '/' ? '/index.html' : filepath
