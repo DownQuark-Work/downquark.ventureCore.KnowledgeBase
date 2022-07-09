@@ -1,12 +1,11 @@
-`$ deno run --allow-read --allow-net server/app.ts`
+`$ deno run --allow-read --allow-net server/app.server.ts`
 _&&_
 `$ deno run --allow-read --allow-net server/app.websocket.ts`
-_&&||_
-`$ deno run --allow-read --allow-net _v0/bloq.ts`
+
 
 > To test websocket routes:
-> ` $ deno run --allow-read --allow-net server/app.ts` [terminal 1]
-> ` $ deno run --allow-read --allow-net server/app.websocket.client.ts` [terminal 2]
+> ` $ deno run --allow-read --allow-net server/app.server.ts` [terminal 1]
+> ` $ deno run --allow-read --allow-net server/app.websocket.ts` [terminal 2]
 
 https://docs.w3cub.com/dom/subtlecrypto/digest
 
