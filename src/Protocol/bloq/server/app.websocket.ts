@@ -1,7 +1,7 @@
 import { WEBSOCKET_URL } from '../_utils/constants.ts'
 import { wsHandlerClient } from './utils.websocket.ts'
 
-console.log("Connecting to server ...");
+console.log("Connecting Websocket to server ...");
 try {
   const ws = new WebSocket(WEBSOCKET_URL);
   ws.onopen = () => wsHandlerClient.handleConnected(ws);

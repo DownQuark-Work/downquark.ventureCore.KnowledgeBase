@@ -1,6 +1,6 @@
 import { WEBSOCKET_URL } from '../_utils/constants.ts'
 
-export const isWebsocketRequest = (pName:string):boolean => /\/ws\/?$/i.test(pName)
+export const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 const peers = new Map<number, WebSocket>();
 let peerId = 0;

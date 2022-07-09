@@ -6,12 +6,12 @@ import { isWebsocketRequest, wsHandlerServer } from './utils.websocket.ts'
 
 const server = Deno.listen({ port: PORT });
 console.log(`server starting on :${PORT}....`);
-console.log('{server}', {server})
 createGenesisBlock() // may as well as soon as the server spins up
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  if (isWebsocketRequest(pathname)) { // must be a CURL (or otherwise headless) request
+  console.log('pathname', pathname)
+  if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request);
     // p2pHandler(socket); // <-- I do not think this line should be firing on the serer files - (move to `client`?)
     wsHandlerServer(socket)
