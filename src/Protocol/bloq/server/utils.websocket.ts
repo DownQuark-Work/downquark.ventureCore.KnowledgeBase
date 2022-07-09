@@ -1,4 +1,4 @@
-const WEBSOCKET_PATH = '/ws/'
+import { WEBSOCKET_URL } from '../_utils/constants.ts'
 
 export const isWebsocketRequest = (pName:string):boolean => {
   return /\/ws\/?$/i.test(pName)
@@ -11,7 +11,7 @@ const dispatch = (msg: string): void => {
     peer.send(msg);
   }
 }
-export const wsHandler = (ws: WebSocket) => {
+export const wsHandlerServer = (ws: WebSocket) => {
   const id = ++peerId;
   peers.set(id, ws);
   ws.onopen = () => {
@@ -27,15 +27,14 @@ export const wsHandler = (ws: WebSocket) => {
   };
 }
 
-function logError(msg: string) {
+const logError = (msg: string) => {
   console.log(msg);
   Deno.exit(1);
 }
-function handleConnected(ws: WebSocket) {
-  console.log("Connected to server ...");
-  handleMessage(ws, "Welcome!");
+const handleConnected = (ws: WebSocket) => {
+  handleMessage(ws, `Client Websocket: ${WEBSOCKET_URL}`);
 }
-function handleMessage(ws: WebSocket, data: string) {
+const handleMessage = (ws: WebSocket, data: string) => {
   console.log("SERVER >> " + data);
   const reply = prompt("Client >> ") || "No reply";
   if (reply === "exit") {
@@ -43,6 +42,13 @@ function handleMessage(ws: WebSocket, data: string) {
   }
   ws.send(reply as string);
 }
-function handleError(e: Event | ErrorEvent) {
+const handleError = (e: Event | ErrorEvent) => {
   console.log(e instanceof ErrorEvent ? e.message : e.type);
+}
+
+export const wsHandlerClient = {
+  logError,
+  handleConnected,
+  handleMessage,
+  handleError,
 }

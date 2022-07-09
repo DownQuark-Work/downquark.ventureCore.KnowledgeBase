@@ -1,32 +1,34 @@
-function logError(msg: string) {
-  console.log(msg);
-  Deno.exit(1);
-}
-function handleConnected(ws: WebSocket) {
-  console.log("Connected to server ...");
-  handleMessage(ws, "Welcome!");
-}
-function handleMessage(ws: WebSocket, data: string) {
-  console.log("SERVER >> " + data);
-  const reply = prompt("Client >> ") || "No reply";
-  if (reply === "exit") {
-    return ws.close();
-  }
-  ws.send(reply as string);
-}
-function handleError(e: Event | ErrorEvent) {
-  console.log(e instanceof ErrorEvent ? e.message : e.type);
-}
+import { WEBSOCKET_URL } from '../_utils/constants.ts'
+import { wsHandlerClient } from './utils.websocket.ts'
+// function logError(msg: string) {
+//   console.log(msg);
+//   Deno.exit(1);
+// }
+// function handleConnected(ws: WebSocket) {
+//   console.log("Connected to server ...");
+//   handleMessage(ws, "Welcome!");
+// }
+// function handleMessage(ws: WebSocket, data: string) {
+//   console.log("SERVER >> " + data);
+//   const reply = prompt("Client >> ") || "No reply";
+//   if (reply === "exit") {
+//     return ws.close();
+//   }
+//   ws.send(reply as string);
+// }
+// function handleError(e: Event | ErrorEvent) {
+//   console.log(e instanceof ErrorEvent ? e.message : e.type);
+// }
+
 console.log("Connecting to server ...");
 try {
-  // const ws = new WebSocket("ws://localhost:8000");
-  const ws = new WebSocket("ws://localhost:8080/ws/");
-  ws.onopen = () => handleConnected(ws);
-  ws.onmessage = (m) => handleMessage(ws, m.data);
-  ws.onclose = () => logError("Disconnected from server ...");
-  ws.onerror = (e) => handleError(e);
+  const ws = new WebSocket(WEBSOCKET_URL);
+  ws.onopen = () => wsHandlerClient.handleConnected(ws);
+  ws.onmessage = (m) => wsHandlerClient.handleMessage(ws, m.data);
+  ws.onclose = () => wsHandlerClient.logError("Disconnected from server ...");
+  ws.onerror = (e) => wsHandlerClient.handleError(e);
 } catch (err) {
-  logError("Failed to connect to server ... exiting");
+  wsHandlerClient.logError("Failed to connect to server ... exiting");
 }
 
 // import { serve } from "../deps.ts";
