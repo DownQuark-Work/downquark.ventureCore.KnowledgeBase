@@ -4,12 +4,6 @@ import { crypto, serve } from  '../deps.ts'
 import { createGenesisBlock } from '../_v0/utils.bloqchain.ts'
 import { isWebsocketRequest, wsHandlerServer } from './utils.websocket.ts'
 
-const handler = (request: Request): Response => {
-  const body = `Your user-agent is:\n\n${
-  request.headers.get("user-agent") ?? "Unknown"}`
-  return new Response(body, { status: 200 })
-}
-
 const server = Deno.listen({ port: PORT });
 console.log(`server starting on :${PORT}....`);
 console.log('{server}', {server})
