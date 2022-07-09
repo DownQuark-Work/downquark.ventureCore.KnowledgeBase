@@ -1,5 +1,5 @@
 import { crypto, serve } from  '../deps.ts'
-import { p2pHandler } from './p2p.ts'
+// import { p2pHandler } from './p2p.ts'
 import { createGenesisBlock } from '../_v0/utils.bloqchain.ts'
 import { isWebsocketRequest, wsHandler } from './utils.websocket.ts'
 
@@ -21,10 +21,7 @@ async function requestHandler(req: Deno.RequestEvent) {
   if (isWebsocketRequest(pathname)) { // must be a CURL (or otherwise headless) request
     const { socket, response } = Deno.upgradeWebSocket(req.request);
     // p2pHandler(socket); // <-- I do not think this line should be firing on the serer files - (move to `client`?)
-    wsHandler(socket) // <-- looks much better as the server handler
-    // TODO: move genesis block to above location// TODO: move genesis block to above location
-    // TODO: move genesis block to above location // TODO: move genesis block to above location
-    // TODO: move genesis block to above location
+    wsHandler(socket)
     req.respondWith(response);
   }
   else {
