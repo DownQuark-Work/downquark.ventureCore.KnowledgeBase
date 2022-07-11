@@ -25,6 +25,8 @@ const initHttpServer = ( myHttpPort: number ) => {
 };
 */
 // export const bloqchain
-export const apiRoutes:{[k:string]: () => string} = {
-    blocks: () => JSON.stringify(getBlockchain())
+export const apiRoutes:{[k:string]: {[k:string]: () => string}} = {
+    POST: {
+        blocks: () => JSON.stringify(getBlockchain())
+    }
 }

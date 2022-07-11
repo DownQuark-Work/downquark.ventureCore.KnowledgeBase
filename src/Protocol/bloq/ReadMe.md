@@ -1,6 +1,8 @@
 `$ deno run --allow-read --allow-net server/app.server.ts`
 _&&_
 `$ deno run --allow-read --allow-net server/app.websocket.ts`
+_&&_
+`$ curl http://localhost:8080/api/v0/blocks`
 
 
 > To test websocket routes:
