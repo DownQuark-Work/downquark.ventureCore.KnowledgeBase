@@ -5,6 +5,14 @@ _&&_
 `$ curl http://localhost:8080/api/v0/blocks`
 
 
+T1: `% deno run --allow-read --allow-net server/app.server.ts`
+T2: `% deno run --allow-read --allow-net server/app.websocket.ts`
+T3: `% deno run --allow-read --allow-net server/app.websocket.ts`
+T4: `% curl -X POST http://localhost:8080/api/v0/mineBlock/eyJhIjoiYiIsImIiOjF9`
+T4: `% curl -i -X POST -H "Content-Type: application/json" -d "key1=value1" http://localhost:8080/api/v0/mineBlock`
+T4: `% curl -X POST http://localhost:8080/api/v0/addPeer`
+
+
 > To test websocket routes:
 > ` $ deno run --allow-read --allow-net server/app.server.ts` [terminal 1]
 > ` $ deno run --allow-read --allow-net server/app.websocket.ts` [terminal 2]
