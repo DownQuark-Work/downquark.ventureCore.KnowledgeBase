@@ -47,7 +47,7 @@ export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
     blocks: () => JSON.stringify(getBlockchain()),
     peers: () => {
       const peerObj: {[k: string]:WebSocket} = {}
-      getPeers().forEach((value, key) => peerObj[key] = value)
+      getPeers().forEach((value, key, map) => peerObj[key] = value)
       return JSON.stringify(peerObj)
     }, // extend this to return usable object from map
   },
