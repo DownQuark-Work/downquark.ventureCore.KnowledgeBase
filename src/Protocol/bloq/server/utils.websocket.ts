@@ -31,6 +31,7 @@ export const wsHandlerServer = (ws: WebSocket) => {
   peers.set(id, ws);
   ws.onopen = () => {
     dispatch(`Connected: [${id}]`);
+    ws.send('-x>'+JSON.stringify(peers))
   };
   ws.onmessage = (e) => {
     console.log(`msg:${id}`, e.data);
@@ -42,7 +43,7 @@ export const wsHandlerServer = (ws: WebSocket) => {
   };
 }
 
-// client(peer) websocket events
+// client(peer) websocket listener events
 const logError = (msg: string) => {
   console.log(msg);
   Deno.exit(1);
@@ -50,11 +51,14 @@ const logError = (msg: string) => {
 const handleConnected = (ws: WebSocket) => {
   handleMessage(ws, `Client Websocket: ${WEBSOCKET_URL}`);
 }
-const handleMessage = (ws: WebSocket, data: string) => {
-  console.log("SERVER >> " + data);
+const handleMessage = (ws: WebSocket, data: string) => { // currently unused
+  console.log("WEBSOCKET: >> " + data)
+}
+const handleChatMessage = (ws: WebSocket, data: string) => { // currently unused
+  console.log("SERVER >> " + data)
   const reply = prompt("Client >> ") || "No reply";
   if (reply === "exit") {
-    return ws.close();
+    return ws.close()
   }
   // TODO: Append P2P on message function here 
   ws.send(reply as string);
@@ -62,6 +66,10 @@ const handleMessage = (ws: WebSocket, data: string) => {
 const handleError = (e: Event | ErrorEvent) => {
   console.log(e instanceof ErrorEvent ? e.message : e.type);
 }
+
+// data
+export const getPeers = () => peers;
+
 
 export const wsHandlerClient = {
   logError,

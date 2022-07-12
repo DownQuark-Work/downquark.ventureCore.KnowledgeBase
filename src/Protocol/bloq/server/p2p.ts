@@ -1,10 +1,14 @@
 // PEER TO PPER (websocket)
 // // https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
 
-import { getLatestBlock, getBlockchain } from '../_v0/utils.bloqchain.ts'
-import { addBlockToChain, replaceChain } from '../_v0/utils.bloqchain.ts'
+// import { addBlockToChain,
+//   createGenesisBlock,
+//   generateNextBlock,
+//   getBlockchain,
+//   getGenesisBlock,
+//   getLatestBlock,
+//   replaceChain, } from '../_v0/utils.bloqchain.ts'
 import { isValidBlockStructure } from '../_v0/utils.validity.ts'
-// import {addBlockToChain, Block, getBlockchain, getLatestBlock, isValidBlockStructure, replaceChain} from '../_v0/bloq.ts'
 
 import type { BloqType, MessageType } from '../types.d.ts'
 // import { enumMessageType } from '../types.d.ts'
@@ -137,7 +141,7 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
 //     }
 // }
 
-// export const broadcastLatest = (): void => {};
+export const broadcastLatest = (): void => {};
 // // {    broadcast(responseLatestMsg())
 // // }
 
