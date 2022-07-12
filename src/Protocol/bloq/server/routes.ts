@@ -48,7 +48,7 @@ export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
     peers: () => {
       const peerObj: {[k: string]:WebSocket} = {}
       getPeers().forEach((value, key) => peerObj[key] = value)
-      return peerObj
+      return JSON.stringify(peerObj)
     }, // extend this to return usable object from map
   },
   /// curl -d "user=user1&pass=abcd" -X POST https://example.com/login
