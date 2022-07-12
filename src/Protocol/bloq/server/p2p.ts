@@ -109,7 +109,7 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
 //   // return ws
 // }
 
-// const queryAllMsg = (): MessageType => ({'type': enumMessageType.QUERY_ALL, 'data': null})
+const queryAllMsg = (): MessageType => ({'type': enumMessageType.QUERY_ALL, 'data': null})
 const queryChainLengthMsg = (): MessageType => ({'type': enumMessageType.QUERY_LATEST, 'data': null})
 
 const responseChainMsg = (): MessageType => ({
@@ -131,36 +131,36 @@ const responseLatestMsg = (): MessageType => ({
 //   ws.onerror = () => closeConnection(ws)
 // }
 
-// const handleBlockchainResponse = (receivedBlocks: BloqType[]) => {
-//   console.log('handleBlockchainResponse', handleBlockchainResponse)
-//     if (receivedBlocks.length === 0) {
-//         console.log('received block chain size of 0')
-//         return
-//     }
-//     const latestBlockReceived: BloqType = receivedBlocks[receivedBlocks.length - 1]
-//     if (!isValidBlockStructure(latestBlockReceived)) {
-//         console.log('block structuture not valid')
-//         return
-//     }
-//     const latestBlockHeld: BloqType = getLatestBlock()
-//     if (latestBlockReceived.index > latestBlockHeld.index) {
-//         console.log('blockchain possibly behind. We got: '
-//             + latestBlockHeld.index + ' Peer got: ' + latestBlockReceived.index)
-//         if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
-//             if (addBlockToChain(latestBlockReceived)) {
-//                 broadcast(responseLatestMsg())
-//             }
-//         } else if (receivedBlocks.length === 1) {
-//             console.log('We have to query the chain from our peer')
-//             broadcast(queryAllMsg())
-//         } else {
-//             console.log('Received blockchain is longer than current blockchain')
-//             replaceChain(receivedBlocks)
-//         }
-//     } else {
-//         console.log('received blockchain is not longer than received blockchain. Do nothing')
-//     }
-// }
+const handleBlockchainResponse = (receivedBlocks: BloqType[]) => {
+  console.log('handleBlockchainResponse', handleBlockchainResponse)
+    if (receivedBlocks.length === 0) {
+        console.log('received block chain size of 0')
+        return
+    }
+    const latestBlockReceived: BloqType = receivedBlocks[receivedBlocks.length - 1]
+    if (!isValidBlockStructure(latestBlockReceived)) {
+        console.log('block structuture not valid')
+        return
+    }
+    const latestBlockHeld: BloqType = getLatestBlock()
+    if (latestBlockReceived.index > latestBlockHeld.index) {
+        console.log('blockchain possibly behind. We got: '
+            + latestBlockHeld.index + ' Peer got: ' + latestBlockReceived.index)
+        if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
+            if (addBlockToChain(latestBlockReceived)) {
+                broadcast(responseLatestMsg())
+            }
+        } else if (receivedBlocks.length === 1) {
+            console.log('We have to query the chain from our peer')
+            broadcast(queryAllMsg())
+        } else {
+            console.log('Received blockchain is longer than current blockchain')
+            replaceChain(receivedBlocks)
+        }
+    } else {
+        console.log('received blockchain is not longer than received blockchain. Do nothing')
+    }
+}
 
 export const broadcastLatest = (): void => {    broadcast(responseLatestMsg()) }
 
