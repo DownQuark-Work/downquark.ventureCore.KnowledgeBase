@@ -1,5 +1,6 @@
 import { PORT } from '../_utils/constants.ts'
 import { crypto, serve } from  '../deps.ts'
+// import { crypto, readAll, serve } from  '../deps.ts'
 // import { p2pHandler } from './p2p.ts'
 import { apiRoutes } from './routes.ts'
 import { createGenesisBlock } from '../_v0/utils.bloqchain.ts'
@@ -14,6 +15,7 @@ const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
+  // if (req.request?.body) console.log("Body:", new TextDecoder().decode(await readAll(req.request.body)));
   console.log('XZ req', {...req})
   if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request)
