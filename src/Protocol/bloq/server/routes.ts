@@ -45,7 +45,11 @@ const initHttpServer = ( myHttpPort: number ) => {
 export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
   GET: {
     blocks: () => JSON.stringify(getBlockchain()),
-    peers: () => getPeers(), // extend this to return usable object from map
+    peers: () => {
+      const peerObj: {[k: string]:WebSocket} = {}
+      getPeers().forEach((value, key) => peerObj[key] = value)
+      return peerObj
+    }, // extend this to return usable object from map
   },
   /// curl -d "user=user1&pass=abcd" -X POST https://example.com/login
   /// curl -X POST http://localhost:8080/api/v0/addPeer
