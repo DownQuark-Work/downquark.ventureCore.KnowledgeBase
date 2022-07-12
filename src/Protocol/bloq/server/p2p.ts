@@ -27,6 +27,8 @@ export const peers = Object.assign(peersObj, {
   const id = ++peers.peerId;
 
 const JSONToObject = <T>(data: any): T => {
+  console.log('_data__', data)
+  console.log('Object.values(data)', data)
   try {
     return JSON.parse(data as unknown as string);
   } catch (e) {
@@ -46,20 +48,25 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
       return;
     }
     console.log('Received message ', message);
-    const msgDataType = message.data?.replace(/:.*$/,'')
+    const msgDataType = message.data?.replace(/:.*$/,'').replace('[','').replace(']','')
     console.log('msgDataType', msgDataType)
     const switchType = msgDataType || message.type
     switch (switchType) {
       case 0:
+      case '0':
         case 'Connected':
         console.log('zero case');
       case enumMessageType.QUERY_LATEST:
         console.log('QUERY_LATEST', responseLatestMsg())
         write(ws, responseLatestMsg());
         break;
+      case 1:
+      case '1':
       case enumMessageType.QUERY_ALL:
         write(ws, responseChainMsg());
         break;
+      case 2:
+      case '2':
       case enumMessageType.RESPONSE_BLOCKCHAIN:
         const receivedBlocks: BloqType[] = JSONToObject<BloqType[]>(
           message.data
@@ -69,7 +76,7 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
           console.log(message.data);
           break;
         }
-        // handleBlockchainResponse(receivedBlocks)
+        handleBlockchainResponse(receivedBlocks)
         break;
       default:
         console.log('DEFAULT: MessageType - no action to take', message)
@@ -121,4 +128,4 @@ const handleBlockchainResponse = (receivedBlocks: BloqType[]) => {
     }
 }
 
-export const broadcastLatest = (): void => {    broadcast(responseLatestMsg()) }
+export const broadcastLatest = (): void => { broadcast(responseLatestMsg()) }

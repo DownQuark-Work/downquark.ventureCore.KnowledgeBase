@@ -1,5 +1,5 @@
 import { Bloq } from './bloq.ts'
-// import { broadcastLatest } from '../server/p2p.ts'
+import { broadcastLatest } from '../server/p2p.ts'
 import { calculateHash} from './utils.hash.ts'
 import { isValidNewBlock, isValidChain } from './utils.validity.ts'
 
@@ -23,8 +23,8 @@ const generateNextBlock = async (blockData: string) => {
       previousHash: previousBlock.hash,
       timestamp: nextTimestamp, data: blockData
   })
-  await addBlockToChain(newBlock)
-  // addBlockToChain(newBlock) && broadcastLatest()
+  // await addBlockToChain(newBlock)
+  addBlockToChain(newBlock) && broadcastLatest()
   return getBlockchain()
 }
 
@@ -41,7 +41,7 @@ const replaceChain = (newBlocks: BloqType[]) => {
   if (isValidChain(newBlocks) && newBlocks.length > getBlockchain().length) {
       console.log('Received blockchain is valid. Replacing current blockchain with received blockchain')
       bloqchain = newBlocks
-      // broadcastLatest()
+      broadcastLatest()
   } else {
       console.log('Received blockchain invalid')
   }

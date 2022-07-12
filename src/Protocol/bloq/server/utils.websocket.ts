@@ -2,6 +2,7 @@ import { WEBSOCKET_URL } from '../_utils/constants.ts'
 import { addPeer } from './app.websocket.ts'
 import { p2pMessageHandler, peers } from './p2p.ts'
 
+// import { enumMessageType } from '../types.d.ts';
 export type MessageClassType = InstanceType<typeof Message>
 
 enum enumMessageType {
@@ -10,6 +11,8 @@ enum enumMessageType {
   RESPONSE_BLOCKCHAIN = 2,
 }
 
+// const peers = new Map<number, WebSocket>();
+// let peerId = 0;
 const dispatch = (msg: string): void => {
   for (const peer of peers.values()) {
     peer.send(msg);
@@ -51,6 +54,7 @@ const handleConnected = (ws: WebSocket) => {
 }
 const handleMessage = (ws: WebSocket, data: string) => { // currently unused
   console.log("WEBSOCKET: >> " + data)
+  if (p2pMessageHandler) p2pMessageHandler(ws, data)
 }
 const handleChatMessage = (ws: WebSocket, data: string) => { // currently unused
   console.log("SERVER >> " + data)
@@ -76,6 +80,6 @@ export const connectToPeers = () => {
 export const wsHandlerClient = {
   logError,
   handleConnected,
-  handleMessage: p2pMessageHandler,
+  handleMessage,
   handleError,
 }
