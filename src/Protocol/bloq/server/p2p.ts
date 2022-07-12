@@ -2,17 +2,14 @@
 // // https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
 
 import { addBlockToChain,
-//   createGenesisBlock,
-//   generateNextBlock,
   getBlockchain,
-//   getGenesisBlock,
   getLatestBlock,
   replaceChain, } from '../_v0/utils.bloqchain.ts'
 import { isValidBlockStructure } from '../_v0/utils.validity.ts'
 import { write, broadcast } from './utils.websocket.ts'
 
 import type { BloqType, MessageType } from '../types.d.ts'
-// import { enumMessageType } from '../types.d.ts'
+
 enum enumMessageType {
   QUERY_LATEST = 0,
   QUERY_ALL = 1,
@@ -98,7 +95,6 @@ const responseLatestMsg = (): MessageType => ({
 });
 
 const handleBlockchainResponse = (receivedBlocks: BloqType[]) => {
-  console.log('handleBlockchainResponse', handleBlockchainResponse)
     if (receivedBlocks.length === 0) {
         console.log('received block chain size of 0')
         return

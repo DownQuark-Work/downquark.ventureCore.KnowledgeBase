@@ -1,7 +1,6 @@
 import { PORT } from '../_utils/constants.ts'
 import { crypto, serve } from  '../deps.ts'
 // import { crypto, readAll, serve } from  '../deps.ts'
-// import { p2pHandler } from './p2p.ts'
 import { apiRoutes } from './routes.ts'
 import { createGenesisBlock } from '../_v0/utils.bloqchain.ts'
 import { wsHandlerServer } from './utils.websocket.ts'
@@ -15,11 +14,8 @@ const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  // if (req.request?.body) console.log('Body:', new TextDecoder().decode(await readAll(req.request.body)));
-  // console.log('XZ req', {...req})
   if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request)
-    // p2pHandler(socket) // <-- I do not think this line should be firing on the serer files - (move to `client`?)
     wsHandlerServer(socket)
     req.respondWith(response)
   }
@@ -27,13 +23,10 @@ async function requestHandler(req: Deno.RequestEvent) {
     { // example usage: `$ curl http://localhost:8080/api/v0/blocks`
       const apiParts = pathname.split('/')
       apiParts.splice(0,3); console.log('apiParts', apiParts, '\n\n NOTE: api response should be available in secondary terminal window')
-      // console.log('req', req)
       try {
-        // console.log('apiRoutes[req.request.method][apiParts[0]]', apiRoutes[req.request.method][apiParts[0]])
         const apiData = apiParts[1] ? JSON.parse(atob(apiParts[1])) : null
         await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](apiData), { status: 200, headers: { 'content-type': 'text/html', }, }), )
       } catch {
-        // console.log('req', req)
         req.respondWith(new Response('Invalid API Request', { status: 500 }))
       }
     }
