@@ -59,8 +59,8 @@ export const apiRoutes: { [k: string]: { [k: string]: (req?:any) => any } } = {
     addPeer: () => connectToPeers(),
     mineBlock: req => {
       const newBlock: any = generateNextBlock(req)
-      console.log('newBlock', JSON.stringify(newBlock))
       addBlockToChain(newBlock)
+      return JSON.stringify(getBlockchain())
     },
   }
 };
