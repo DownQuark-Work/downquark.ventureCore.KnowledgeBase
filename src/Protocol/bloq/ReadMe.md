@@ -1,3 +1,6 @@
+https://docs.walletconnect.com/
+https://github.com/nambrot/dapptools-template
+
 `$ deno run --allow-read --allow-net server/app.server.ts`
 _&&_
 `$ deno run --allow-read --allow-net server/app.websocket.ts`
