@@ -35,9 +35,16 @@ const initHttpServer = ( myHttpPort: number ) => {
 };
 */
 // export const bloqchain
-export const apiRoutes: { [k: string]: { [k: string]: () => string } } = {
+// function logMapElements(value: any, key: any, map: any) {
+//   console.log(`m[${key}] = ${value}`);
+// }
+// peers: () => JSON.stringify(getPeers().forEach(logMapElements)),
+export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
   GET: {
     blocks: () => JSON.stringify(getBlockchain()),
-    peers: () => JSON.stringify(getPeers()),
+    peers: () => getPeers(),
   },
+  POST: {
+    
+  }
 };
