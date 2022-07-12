@@ -58,7 +58,7 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
         write(ws, responseLatestMsg());
         break;
       case enumMessageType.QUERY_ALL:
-        // write(ws, responseChainMsg());
+        write(ws, responseChainMsg());
         break;
       case enumMessageType.RESPONSE_BLOCKCHAIN:
         const receivedBlocks: BloqType[] = JSONToObject<BloqType[]>(
