@@ -53,6 +53,7 @@ export const apiRoutes: { [k: string]: { [k: string]: (req?:any) => any } } = {
   },
   /// curl -X POST http://localhost:8080/api/v0/addPeer
   /// curl -d "user=user1&pass=abcd" -X POST http://localhost:8080/api/v0/mineBlock
+    // -> btoa(JSON.stringify({ a:'b', b:1 })) ==> eyJhIjoiYiIsImIiOjF9
   // curl -X POST http://localhost:8080/api/v0/mineBlock/eyJhIjoiYiIsImIiOjF9
   POST: {
     addPeer: () => connectToPeers(),
