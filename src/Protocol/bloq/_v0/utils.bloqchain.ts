@@ -23,14 +23,15 @@ const generateNextBlock = async (blockData: string) => {
       previousHash: previousBlock.hash,
       timestamp: nextTimestamp, data: blockData
   })
-  
+  await addBlockToChain(newBlock)
   // addBlockToChain(newBlock) && broadcastLatest()
-  return newBlock
+  return getBlockchain()
 }
 
 const addBlockToChain = (newBlock: BloqType) => {
   if (isValidNewBlock(newBlock, getLatestBlock())) {
       bloqchain.push(newBlock)
+      console.log('bloqchain', bloqchain)
       return true
   }
   return false

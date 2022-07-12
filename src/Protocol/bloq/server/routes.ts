@@ -40,9 +40,9 @@ const initHttpServer = ( myHttpPort: number ) => {
 // }
 // peers: () => JSON.stringify(getPeers().forEach(logMapElements)),
 
-//
+import type { BloqType } from '../types.d.ts'
 
-export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
+export const apiRoutes: { [k: string]: { [k: string]: (req?:any) => any } } = {
   GET: {
     blocks: () => JSON.stringify(getBlockchain()),
     peers: () => {
@@ -51,10 +51,15 @@ export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
       return JSON.stringify(peerObj)
     }, // extend this to return usable object from map
   },
-  /// curl -d "user=user1&pass=abcd" -X POST https://example.com/login
   /// curl -X POST http://localhost:8080/api/v0/addPeer
+  /// curl -d "user=user1&pass=abcd" -X POST http://localhost:8080/api/v0/mineBlock
+  // curl -X POST http://localhost:8080/api/v0/mineBlock/eyJhIjoiYiIsImIiOjF9
   POST: {
     addPeer: () => connectToPeers(),
-    mineBlock: () => connectToPeers(),
+    mineBlock: req => {
+      console.log('...123req', req)
+      const newBlock: any = generateNextBlock(req)
+      console.log('newBlock', JSON.stringify(newBlock))
+    },
   }
 };

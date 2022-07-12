@@ -14,7 +14,7 @@ const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  // console.log('req', {...req})
+  console.log('XZ req', {...req})
   if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request)
     // p2pHandler(socket) // <-- I do not think this line should be firing on the serer files - (move to `client`?)
@@ -28,8 +28,10 @@ async function requestHandler(req: Deno.RequestEvent) {
       console.log('req', req)
       try {
         console.log('apiRoutes[req.request.method][apiParts[0]]', apiRoutes[req.request.method][apiParts[0]])
-        await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](), { status: 200, headers: { "content-type": "text/html", }, }), )
+        const apiData = apiParts[1] ? JSON.parse(atob(apiParts[1])) : null
+        await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](apiData), { status: 200, headers: { "content-type": "text/html", }, }), )
       } catch {
+        console.log('req', req)
         req.respondWith(new Response("Invalid API Request", { status: 500 }))
       }
     }

@@ -22,3 +22,7 @@ https://lhartikk.github.io/jekyll/update/2017/07/15/chapter0.html
 https://medium.com/learning-lab/proof-of-what-understand-the-distributed-consensuses-in-blockchain-1d9304ae4afe
 
 ~~https://hackernoon.com/how-to-launch-your-own-production-ready-cryptocurrency-ab97cb773371~~ pre-hardhat
+
+// https://examples.deno.land/uuids
+curl -d 'id=9&name=baeldung'
+curl -X POST -H "Content-Type: application/json" -d "{ \"key1\": \"value1\" }" http://localhost:808/api/v0/mineBlock
