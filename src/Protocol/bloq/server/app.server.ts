@@ -15,8 +15,8 @@ const isWebsocketRequest = (pName:string):boolean => /^\/ws\//i.test(pName)
 
 async function requestHandler(req: Deno.RequestEvent) {
   const pathname = new URL(req.request.url).pathname
-  // if (req.request?.body) console.log("Body:", new TextDecoder().decode(await readAll(req.request.body)));
-  console.log('XZ req', {...req})
+  // if (req.request?.body) console.log('Body:', new TextDecoder().decode(await readAll(req.request.body)));
+  // console.log('XZ req', {...req})
   if (isWebsocketRequest(pathname)) { // pathname must begin with '/ws/'
     const { socket, response } = Deno.upgradeWebSocket(req.request)
     // p2pHandler(socket) // <-- I do not think this line should be firing on the serer files - (move to `client`?)
@@ -27,14 +27,14 @@ async function requestHandler(req: Deno.RequestEvent) {
     { // example usage: `$ curl http://localhost:8080/api/v0/blocks`
       const apiParts = pathname.split('/')
       apiParts.splice(0,3); console.log('apiParts', apiParts, '\n\n NOTE: api response should be available in secondary terminal window')
-      console.log('req', req)
+      // console.log('req', req)
       try {
-        console.log('apiRoutes[req.request.method][apiParts[0]]', apiRoutes[req.request.method][apiParts[0]])
+        // console.log('apiRoutes[req.request.method][apiParts[0]]', apiRoutes[req.request.method][apiParts[0]])
         const apiData = apiParts[1] ? JSON.parse(atob(apiParts[1])) : null
-        await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](apiData), { status: 200, headers: { "content-type": "text/html", }, }), )
+        await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](apiData), { status: 200, headers: { 'content-type': 'text/html', }, }), )
       } catch {
-        console.log('req', req)
-        req.respondWith(new Response("Invalid API Request", { status: 500 }))
+        // console.log('req', req)
+        req.respondWith(new Response('Invalid API Request', { status: 500 }))
       }
     }
   else { // file-server
@@ -42,9 +42,9 @@ async function requestHandler(req: Deno.RequestEvent) {
     filepath = filepath === '/' ? '/index.html' : filepath
     let file
     try {
-      file = await Deno.open("./ui/" + filepath, { read: true })
+      file = await Deno.open('./ui/' + filepath, { read: true })
     } catch {
-      await req.respondWith(new Response("404 Not Found", { status: 404 }))
+      await req.respondWith(new Response('404 Not Found', { status: 404 }))
       return
     }
     const readableStream = file.readable // stream instead of wait for full load

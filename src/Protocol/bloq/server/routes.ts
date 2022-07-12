@@ -1,6 +1,5 @@
 import {
   addBlockToChain,
-  createGenesisBlock,
   generateNextBlock,
   getBlockchain,
   getGenesisBlock,

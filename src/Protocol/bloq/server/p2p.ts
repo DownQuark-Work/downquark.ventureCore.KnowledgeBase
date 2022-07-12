@@ -1,14 +1,15 @@
 // PEER TO PPER (websocket)
 // // https://github.com/denoland/deno_std/blob/main/examples/chat/server.ts
 
-// import { addBlockToChain,
+import { addBlockToChain,
 //   createGenesisBlock,
 //   generateNextBlock,
-//   getBlockchain,
+  getBlockchain,
 //   getGenesisBlock,
-//   getLatestBlock,
-//   replaceChain, } from '../_v0/utils.bloqchain.ts'
+  getLatestBlock,
+  replaceChain, } from '../_v0/utils.bloqchain.ts'
 import { isValidBlockStructure } from '../_v0/utils.validity.ts'
+import { write, broadcast } from './utils.websocket.ts'
 
 import type { BloqType, MessageType } from '../types.d.ts'
 // import { enumMessageType } from '../types.d.ts'
@@ -57,6 +58,7 @@ const JSONToObject = <T>(data: any): T => {
 // const initMessageHandler = (ws: WebSocket) => {
 export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
   console.log('INIT MESSAGE HANDLER')
+  write(ws, queryChainLengthMsg())
   ws.onmessage = (dataMsg) => {
     const { type, data } = dataMsg
     const message: MessageType = {data, type}
@@ -64,10 +66,12 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
       console.log('could not parse received JSON message: ' + data);
       return;
     }
-    console.log('Received message ' + JSON.stringify(message));
+    console.log('Received message ', message);
     switch (message.type) {
+      case 0:
       case enumMessageType.QUERY_LATEST:
-        // write(ws, responseLatestMsg());
+        console.log('QUERY_LATEST', responseLatestMsg())
+        write(ws, responseLatestMsg());
         break;
       case enumMessageType.QUERY_ALL:
         // write(ws, responseChainMsg());
@@ -106,17 +110,17 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
 // }
 
 // const queryAllMsg = (): MessageType => ({'type': enumMessageType.QUERY_ALL, 'data': null})
-// const queryChainLengthMsg = (): MessageType => ({'type': enumMessageType.QUERY_LATEST, 'data': null})
+const queryChainLengthMsg = (): MessageType => ({'type': enumMessageType.QUERY_LATEST, 'data': null})
 
-// const responseChainMsg = (): MessageType => ({
-//   type: enumMessageType.RESPONSE_BLOCKCHAIN,
-//   data: JSON.stringify(getBlockchain()),
-// });
+const responseChainMsg = (): MessageType => ({
+  type: enumMessageType.RESPONSE_BLOCKCHAIN,
+  data: JSON.stringify(getBlockchain()),
+});
 
-// const responseLatestMsg = (): MessageType => ({
-//   type: enumMessageType.RESPONSE_BLOCKCHAIN,
-//   data: JSON.stringify([getLatestBlock()]),
-// });
+const responseLatestMsg = (): MessageType => ({
+  type: enumMessageType.RESPONSE_BLOCKCHAIN,
+  data: JSON.stringify([getLatestBlock()]),
+});
 
 // const initErrorHandler = (ws: WebSocket) => {
 //   const closeConnection = (wskt: WebSocket) => {
@@ -158,9 +162,7 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
 //     }
 // }
 
-export const broadcastLatest = (): void => {};
-// // {    broadcast(responseLatestMsg())
-// // }
+export const broadcastLatest = (): void => {    broadcast(responseLatestMsg()) }
 
 /*
 // export const p2pHandler = (ws: WebSocket) => {
