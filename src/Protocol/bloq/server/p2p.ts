@@ -23,6 +23,7 @@ let peerId = 0;
 export const peers = Object.assign(peersObj, {
   peerId
 })
+  const id = ++peers.peerId;
 
 // let sockets: WebSocket[] = [];
 
@@ -39,12 +40,6 @@ export const peers = Object.assign(peersObj, {
 //   }
 // };
 */
-
-// export const initConnection = (ws: WebSocket) => {
-//   initMessageHandler(ws);
-//   initErrorHandler(ws)
-//   write(ws, queryChainLengthMsg())
-// };
 
 const JSONToObject = <T>(data: any): T => {
   try {
@@ -93,6 +88,22 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
     }
   };
 };
+
+// export const initConnection = (ws: WebSocket) => {
+//   initMessageHandler(ws);
+//   initErrorHandler(ws)
+//   write(ws, queryChainLengthMsg())
+// };
+// export const connectToPeers = (newPeer: string): WebSocket => {
+//   console.log('newPeer', newPeer)
+//   // const ws: WebSocket = new WebSocket(newPeer);
+//   // console.log('ws', ws)
+//   // // ws.onopen = () => {
+//   // //   // initConnection(ws);
+//   // // }
+//   // ws.onerror = () => { console.log('connection failed'); }
+//   // return ws
+// }
 
 // const queryAllMsg = (): MessageType => ({'type': enumMessageType.QUERY_ALL, 'data': null})
 // const queryChainLengthMsg = (): MessageType => ({'type': enumMessageType.QUERY_LATEST, 'data': null})

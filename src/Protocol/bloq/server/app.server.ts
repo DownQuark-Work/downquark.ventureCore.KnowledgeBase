@@ -25,7 +25,9 @@ async function requestHandler(req: Deno.RequestEvent) {
     { // example usage: `$ curl http://localhost:8080/api/v0/blocks`
       const apiParts = pathname.split('/')
       apiParts.splice(0,3); console.log('apiParts', apiParts, '\n\n NOTE: api response should be available in secondary terminal window')
+      console.log('req', req)
       try {
+        console.log('apiRoutes[req.request.method][apiParts[0]]', apiRoutes[req.request.method][apiParts[0]])
         await req.respondWith( new Response(apiRoutes[req.request.method][apiParts[0]](), { status: 200, headers: { "content-type": "text/html", }, }), )
       } catch {
         req.respondWith(new Response("Invalid API Request", { status: 500 }))

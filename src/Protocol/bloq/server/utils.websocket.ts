@@ -1,4 +1,5 @@
 import { WEBSOCKET_URL } from '../_utils/constants.ts'
+import { addPeer } from './app.websocket.ts'
 import { p2pMessageHandler, peers } from './p2p.ts'
 
 // import { enumMessageType } from '../types.d.ts';
@@ -69,6 +70,10 @@ const handleError = (e: Event | ErrorEvent) => {
 
 // data
 export const getPeers = () => peers;
+export const connectToPeers = (newPeer: string): void => {
+  console.log('newPeer', newPeer)
+  addPeer()
+}
 
 
 export const wsHandlerClient = {

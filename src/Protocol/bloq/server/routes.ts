@@ -7,7 +7,7 @@ import {
   getLatestBlock,
   replaceChain,
 } from '../_v0/utils.bloqchain.ts';
-import { getPeers } from './utils.websocket.ts';
+import { connectToPeers, getPeers } from './utils.websocket.ts';
 import { broadcastLatest } from './p2p.ts';
 /*
 const initHttpServer = ( myHttpPort: number ) => {
@@ -39,12 +39,17 @@ const initHttpServer = ( myHttpPort: number ) => {
 //   console.log(`m[${key}] = ${value}`);
 // }
 // peers: () => JSON.stringify(getPeers().forEach(logMapElements)),
+
+//
+
 export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
   GET: {
     blocks: () => JSON.stringify(getBlockchain()),
-    peers: () => getPeers(),
+    peers: () => getPeers(), // extend this to return usable object from map
   },
+  /// curl -d "user=user1&pass=abcd" -X POST https://example.com/login
+  /// curl -X POST http://localhost:8080/api/v0/addPeer
   POST: {
-    
+    addPeer: () => connectToPeers('newone')
   }
 };
