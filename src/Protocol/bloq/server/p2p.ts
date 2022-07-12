@@ -46,8 +46,13 @@ export const p2pMessageHandler = (ws: WebSocket, _data:any) => {
       return;
     }
     console.log('Received message ', message);
-    switch (message.type) {
+    const msgDataType = message.data?.replace(/:.*$/,'')
+    console.log('msgDataType', msgDataType)
+    const switchType = msgDataType || message.type
+    switch (switchType) {
       case 0:
+        case 'Connected':
+        console.log('zero case');
       case enumMessageType.QUERY_LATEST:
         console.log('QUERY_LATEST', responseLatestMsg())
         write(ws, responseLatestMsg());

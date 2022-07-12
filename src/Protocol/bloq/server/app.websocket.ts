@@ -14,6 +14,7 @@ try { // usage: CLI
 
 export const addPeer = () => {
   try { // usage: API
+    console.log('adding Peer')
     const ws = new WebSocket(WEBSOCKET_URL);
     ws.onopen = () => wsHandlerClient.handleConnected(ws);
     ws.onmessage = (m) => wsHandlerClient.handleMessage(ws, m.data);
