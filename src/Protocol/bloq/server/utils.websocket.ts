@@ -70,9 +70,9 @@ const handleError = (e: Event | ErrorEvent) => {
 
 // data
 export const getPeers = () => peers;
-export const connectToPeers = (newPeer: string): void => {
-  console.log('newPeer', newPeer)
+export const connectToPeers = () => {
   addPeer()
+  return peers
 }
 
 

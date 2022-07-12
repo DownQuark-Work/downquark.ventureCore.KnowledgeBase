@@ -24,7 +24,7 @@ const initHttpServer = ( myHttpPort: number ) => {
     √ app.get('/peers', (req, res) => {
         res.send(getSockets().map(( s: any ) => s._socket.remoteAddress + ':' + s._socket.remotePort));
     });
-    app.post('/addPeer', (req, res) => {
+    √ app.post('/addPeer', (req, res) => {
         connectToPeers(req.body.peer);
         res.send();
     });
@@ -50,6 +50,7 @@ export const apiRoutes: { [k: string]: { [k: string]: () => any } } = {
   /// curl -d "user=user1&pass=abcd" -X POST https://example.com/login
   /// curl -X POST http://localhost:8080/api/v0/addPeer
   POST: {
-    addPeer: () => connectToPeers('newone')
+    addPeer: () => connectToPeers(),
+    mineBlock: () => connectToPeers(),
   }
 };
