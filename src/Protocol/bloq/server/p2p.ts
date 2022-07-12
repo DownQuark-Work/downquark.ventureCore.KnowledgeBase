@@ -18,6 +18,12 @@ enum enumMessageType {
   RESPONSE_BLOCKCHAIN = 2,
 }
 
+const peersObj = new Map<number, WebSocket>();
+let peerId = 0;
+export const peers = Object.assign(peersObj, {
+  peerId
+})
+
 // let sockets: WebSocket[] = [];
 
 ///////////// THE BELOW METHODS SHOULD BE MOCED TO UTILS/WESOCKETS

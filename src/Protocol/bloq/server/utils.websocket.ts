@@ -1,5 +1,5 @@
 import { WEBSOCKET_URL } from '../_utils/constants.ts'
-import { p2pMessageHandler } from './p2p.ts'
+import { p2pMessageHandler, peers } from './p2p.ts'
 
 // import { enumMessageType } from '../types.d.ts';
 export type MessageClassType = InstanceType<typeof Message>
@@ -10,8 +10,8 @@ enum enumMessageType {
   RESPONSE_BLOCKCHAIN = 2,
 }
 
-const peers = new Map<number, WebSocket>();
-let peerId = 0;
+// const peers = new Map<number, WebSocket>();
+// let peerId = 0;
 const dispatch = (msg: string): void => {
   for (const peer of peers.values()) {
     peer.send(msg);
@@ -27,7 +27,7 @@ const broadcast = (message: Message): void => { for (const peer of peers.values(
 // const broadcast = (message: Message): void => sockets.forEach((socket) => write(socket, message));
 
 export const wsHandlerServer = (ws: WebSocket) => {
-  const id = ++peerId;
+  const id = ++peers.peerId;
   peers.set(id, ws);
   ws.onopen = () => {
     dispatch(`Connected: [${id}]`);
