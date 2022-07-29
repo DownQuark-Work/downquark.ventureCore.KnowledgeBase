@@ -231,3 +231,8 @@ $(canvas).on('handleClick', function(e, mouse) {
     context.restore();
 });
 ```
+http://www.html5canvastutorials.com/
+
+also: https://boardgame.io/#/
+
+https://reference.codeproject.com/dom/document/cookie/simple_document.cookie_framework
