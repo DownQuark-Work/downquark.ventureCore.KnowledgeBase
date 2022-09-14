@@ -1,0 +1,66 @@
+The repositories in this directory will be used as [gitmodules](https://git-scm.com/docs/gitmodules) and imported into the main branches of the `downquark.templateCore.ProjectSqeleton` directory
+
+> Git does not allow the .gitmodules file within a working tree to be a symbolic link, and will refuse to check out such a tree entry.
+
+The following need to be:
+- Relocated
+  - [ ] downquark.templateCore.ProjectSqeleton/_sqeleton/qore/web/plugins/workers >> for cleanliness see webworkers below
+- Created
+  - [ ] https://github.com/mdn/dom-examples/tree/master/streams
+  - [ ] https://github.com/mdn/dom-examples/tree/master/web-crypto
+
+
+  ---
+
+  ## WEB WORKERS
+  [START](https://serviceworke.rs)
+
+https://github.com/mdn/serviceworker-cookbook
+
+https://github.com/GoogleChrome/samples/tree/gh-pages/service-worker
+
+https://github.com/mdn/dom-examples/tree/master/web-workers
+
+--- 
+
+This should suffice for the first round:
+
+https://web.dev/new-pwa-training/
+
+https://web.dev/progressive-web-apps/
+
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
+
+- https://mdn.github.io/dom-examples/web-workers/simple-web-worker/
+
+- https://github.com/mdn/dom-examples/tree/master/web-workers
+
+- https://github.com/mdn/dom-examples/tree/master/streams
+
+---
+
+https://web.dev/promote-install/
+
+https://web.dev/customize-install/
+
+---
+
+TLDR: https://web.dev/reliable/
+
+[notifications](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API)
+
+[install](https://web.dev/service-worker-lifecycle/#install-2)
+
+https://web.dev/learn/pwa/installation-prompt/
+
+[update](https://web.dev/learn/pwa/update/)
+
+ensure PWA websocket connection
+
+https://web.dev/two-way-communication-guide/
+
+https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
+
+https://github.com/homam/service-workers-example/blob/master/resources.md
+
+https://jakearchibald.com/2014/offline-cookbook/

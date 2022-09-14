@@ -12,6 +12,7 @@ Quick Switch off of `_System` via:
 ---
 ## Basic Queries
 > Initial sanity check query
+`db.users.all().toArray();` // from shell
 ```
 query = `FOR airport IN airports FILTER airport.vip LIMIT 5 RETURN airport`
 db._createStatement({ query }).execute()
@@ -36,6 +37,7 @@ db._createStatement({ query }).execute()
 ---
 ## Knowledge Check #1
 ```
+> # query = `RETURN DOCUMENT('airports',['LAX','MCO'])`
 > query = `RETURN DOCUMENT('airports/LAX')`
 > query = `FOR a IN airports FILTER a.city == 'Los Angeles' RETURN a`
 > query = `FOR a IN airports FILTER a.state == 'ND' RETURN a.name`
