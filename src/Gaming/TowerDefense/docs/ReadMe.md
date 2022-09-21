@@ -9,3 +9,8 @@ https://developer.mozilla.org/en-US/docs/Games
 
 Maybe Django to mix it up a bit
 - https://www.w3schools.com/django/index.php
+
+https://developer.ibm.com/tutorials/wa-build2dphysicsengine/
+- https://developer.ibm.com/tutorials/wa-build2dphysicsengine/#physics-loop-step
+
+https://opengameart.org/

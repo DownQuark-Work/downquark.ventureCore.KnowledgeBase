@@ -1,5 +1,6 @@
 https://itch.io/jam/procjam
 https://procgen.space/resources
+https://deep-fold.itch.io/pixel-planet-generator !!
 
 
 [holistic](http://entropicparticles.com/climates-of-mars) <--!!!
@@ -50,3 +51,5 @@ In a different direction - use this to generate mock data for testing/etc
 
 Insp:
 - [https://www.reddit.com/r/proceduralgeneration/comments/sxmvz8/inspired_by_other_posts_here_i_tried_my_hand_at_a/](spellboook generator)
+- [miscellaneous](http://cr31.co.uk/stagecast/wang/intro.html)
+- https://www.procjam.com/tutorials/

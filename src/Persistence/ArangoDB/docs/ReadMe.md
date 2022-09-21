@@ -59,11 +59,14 @@ At signs @ in startup option arguments need to be escaped as @@. ArangoDB progra
 ## Foxx
   - https://www.arangodb.com/docs/stable/foxx-getting-started.html
 
+### Typings
+- https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/arangodb/index.d.ts
+
 ## Learn
 > See `../development/_tutorials/ReadMe.md`
 
   ### Data
   - https://github.com/arangodb/example-datasets
 
-### Cmmunity
+### Community
 - https://www.arangodb.com/projects-and-integrations/

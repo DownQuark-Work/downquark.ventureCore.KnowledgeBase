@@ -1,0 +1,11 @@
+https://lisperator.net/pltut/
+- IDEATION:
+  - Create a **_Logging_ AST** that we can then  compile from the created language to _multiple_ others.
+    - WRITE once, compile for javascript/deno, solidity, iOS, Android, SQL, AQL, etc
+  - Create a **_Testing_ AST** that we can then  compile from the created language to _multiple_ others.
+    - WRITE once, compile for TAP, Playwright, etc
+
+https://marijnhaverbeke.nl/
+https://marijnhaverbeke.nl/parse-js/
+- https://codemirror.net/
+- https://lezer.codemirror.net/

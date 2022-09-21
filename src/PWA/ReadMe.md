@@ -24,3 +24,29 @@ https://web.dev/offline-cookbook/
 
 https://github.com/GoogleChromeLabs/gulliver << PWA EXAMPLES
 https://github.com/GoogleChromeLabs/tasklets
+
+https://reference.codeproject.com/dom/document_object_model/traversing_an_html_table_with_javascript_and_dom_interfaces
+
+https://reference.codeproject.com/dom/web_workers_api/functions_and_classes_available_to_workers
+https://html.spec.whatwg.org/multipage/web-messaging.html#examples-5
+
+https://github.com/trekhleb/javascript-algorithms
+https://developer.mozilla.org/en-US/docs/WebAssembly/Using_the_JavaScript_API
+https://github.com/mdn/webassembly-examples
+
+
+Dynamic module loading - (from example.mjs)
+```
+// `import('..').then(_=>{})
+triangleBtn.addEventListener('click', () => {
+  import('./modules/triangle.js').then((Module) => {
+    let triangle1 = new Module.Triangle(myCanvas.ctx, myCanvas.listId, 100, 75, 190, 'yellow');
+    triangle1.draw();
+    triangle1.reportArea();
+    triangle1.reportPerimeter();
+  })
+});
+```
+
+Fun `Reflect` usage:
+`Reflect.ownKeys(Reflect)`
