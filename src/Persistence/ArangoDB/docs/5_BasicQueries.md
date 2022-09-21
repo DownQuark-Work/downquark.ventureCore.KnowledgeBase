@@ -165,8 +165,7 @@ query = `RETURN DOCUMENT( ["users/XXX", "users/YYYY", "users/ZZZZ"] )`
 
 # OR #
 
-query = `FOR user IN users
-  RETURN user`
+query = `FOR user IN users RETURN user`
 db._createStatement({ query }).execute()
 ```
 
