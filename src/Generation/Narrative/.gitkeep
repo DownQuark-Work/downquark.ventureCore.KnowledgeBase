@@ -1,5 +1,23 @@
 # Narrative
 
+## ideas:
+1. Decorated Tagged template literal to handle shape/flow/feel of generated text. e.g.
+> Taking the same grouping of words. (_cloud_, _fire_, _food_) you can apply different logic behind the scenes to obtain completely different results.
+> **Tagged Templates** define the category, **decorators** set the tone.
+```
+@happy
+const charDesc = character`He ate ${food} in front of the ${fire} under the ${cloud}`
+// decorator and tag transform the string
+console.log(charDesc) // The delectable food, pulled fresh from the fire, gave a peaceful presence to day with no cloud in the sky
+
+@angry @strong
+const enemEncounter = enemy`The orc had ${fire}, called us ${food}, and <CHARACTER> was wrapped in a ${cloud}`
+console.log(enemEncounter) // Bellowing from hunger, the orc hurled a stick of ${fire} at <CHARACTER>, who was to be his ${food}, a ${cloud} of dust settled as it impacted and shook the wall.
+
+// ...etc
+```
+
+
 ## Story Gen
 https://arxiv.org/pdf/1902.01109.pdf
 https://www.semanticscholar.org/paper/Planning-in-Narrative-Generation-%3A-A-Review-of-to-%2C-Young/c5e2d66939c2df6e4ef7f2bec4d9879e9b2151b2?p2df
