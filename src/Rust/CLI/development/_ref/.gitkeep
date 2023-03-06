@@ -1,0 +1,3 @@
+have to make this in downtime between asssignments at work. jumping branhces too ofter to keep it going at the job.. using this as a place to keep tabs on it as I chip away whenever I can find the time.
+
+let mockInMem = Deno.readTextFileSync('./tmpDbMock/TEMP_tmp.sql')

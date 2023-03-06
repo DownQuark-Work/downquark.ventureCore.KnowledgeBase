@@ -31,3 +31,6 @@ And finally, a couple miscellaneous links
 -  https://github.com/actions/toolkit
 -  https://www.codeproject.com/Articles/359654/11-important-database-designing-rules-which-I-fo-2
 - https://edupops.com/
+
+### Languages Resource
+- https://github.com/github/linguist/blob/master/lib/linguist/languages.yml

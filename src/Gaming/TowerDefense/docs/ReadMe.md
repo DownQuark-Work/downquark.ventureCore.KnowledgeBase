@@ -7,6 +7,8 @@ https://developer.mozilla.org/en-US/docs/Games
 - https://developer.mozilla.org/en-US/docs/Games/Anatomy
 - https://developer.mozilla.org/en-US/docs/Games/Examples
 
+https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps << should be high on the list
+
 Maybe Django to mix it up a bit
 - https://www.w3schools.com/django/index.php
 

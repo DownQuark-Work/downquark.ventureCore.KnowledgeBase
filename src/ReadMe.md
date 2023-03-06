@@ -4,6 +4,8 @@
 - list all of _DownQuark-Work_ organization's repositories:
   - `$ gh api orgs/downquark-work/repos | grep -o 'git@[^"]*'`
 
+https://blog.maximeheckel.com/posts/building-a-design-system-from-scratch/
+
 - set the source files to have the correct structure
 > make sure to run from the `src` directory
 > - it can be run at any time and will not affect any pre-existing folders or files
