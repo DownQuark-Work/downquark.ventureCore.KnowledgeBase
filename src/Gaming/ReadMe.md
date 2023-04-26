@@ -15,3 +15,6 @@ https://reference.codeproject.com/dom/document/cookie/simple_document.cookie_fra
 Software:
 https://orama-interactive.itch.io/pixelorama
 https://www.mapeditor.org/
+
+Interesting:
+https://github.com/WardCunningham/cave-wiki/blob/master/advdat.77-03-31.txt

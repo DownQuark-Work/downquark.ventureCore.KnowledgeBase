@@ -1,24 +1,26 @@
-CREATE SCHEMA `+mockmydb`;
+-- SQL dump generated using DBML (dbml-lang.org)
+-- Database: MySQL
+-- Generated at: 2023-03-12T06:57:41.531Z
 
-CREATE SCHEMA `-mockmydb`;
+CREATE SCHEMA `MockDbWrite`;
 
-CREATE SCHEMA `@`;
+CREATE SCHEMA `MockDbAggregate`;
 
-CREATE TABLE `+mockmydb`.`[Account] Users` (
-  `id` int PRIMARY KEY AUTO_INCREMENT COMMENT '@initial',
+CREATE SCHEMA `[@ARANGO]Graph`;
+
+CREATE SCHEMA `[@]`;
+
+CREATE SCHEMA `[@Name]`;
+
+CREATE TABLE `MockDbWrite`.`Users` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
   `created` datetime DEFAULT (now()),
   `username` varchar(18) UNIQUE NOT NULL,
-  `email` varchar(30) UNIQUE NOT NULL
+  `email` varchar(30) UNIQUE NOT NULL,
+  `infoForMockDbUseOnly` blob COMMENT '@INITIAL - anything else can be added'
 );
 
-CREATE TABLE `+mockmydb`.`[Content] Avatars` (
-  `id` int PRIMARY KEY COMMENT 'A one to one mapping on the id makes these keys identical',
-  `color_bg` varchar(15) COMMENT 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc',
-  `color_content` varchar(15) COMMENT 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc',
-  `content` tinytext COMMENT 'defaults to a random emoji'
-);
-
-CREATE TABLE `+mockmydb`.`[Content] Comment` (
+CREATE TABLE `MockDbWrite`.`Comment` (
   `apply_to` int COMMENT 'this is the `id` of the item the comment was is directed towards',
   `apply_to_type` ENUM ('user', 'pet') DEFAULT null COMMENT '> `null` is when a comment is replying to another comment',
   `reply_to` int PRIMARY KEY AUTO_INCREMENT COMMENT 'this is the `id` of the current comment',
@@ -26,174 +28,118 @@ CREATE TABLE `+mockmydb`.`[Content] Comment` (
   `comment` varchar(255) NOT NULL,
   `created` datetime DEFAULT (now()),
   `edited` datetime DEFAULT null COMMENT 'will aggregate as a special character if `true`',
-  PRIMARY KEY (`apply_to`, `apply_to_type`)
+  `applyingGirlPower` set in the note COMMENT 'if this table had any fields that matched what is defined with the at rule: [@APPLY Girl-Power]'
 );
 
-CREATE TABLE `+mockmydb`.`[Content] Comment::Revisions` (
+CREATE TABLE `MockDbWrite`.`Comment»Revisions` (
   `comment_id` int UNIQUE NOT NULL COMMENT 'many-to-one allows grabbing all revisions with single key',
-  `revised_at` datetime COMMENT 'will be CC.edited OR CC.created depending on revision amount',
+  `revised_at` datetime COMMENT 'will be WC.edited OR WC.created depending on revision amount',
   `comment_before_revision` varchar(255) NOT NULL
 );
 
-CREATE TABLE `+mockmydb`.`[Content] Pets` (
+CREATE TABLE `MockDbWrite`.`Pets` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `type` ENUM ('dog', 'cat', 'goldfish', 'rock') DEFAULT null COMMENT '> `null` is when user has no pet',
   `name` varchar(12),
   `age` tinyint(2)
 );
 
-CREATE TABLE `+mockmydb`.`[join] User:Friend:Type` (
+CREATE TABLE `MockDbWrite`.`User>Friend>Type` (
   `user` int,
   `friend` int,
   `type` ENUM ('friend', 'family', 'frenemy') COMMENT '> `frenemy` is member who was blocked or removed from friends/family list'
 );
 
-CREATE TABLE `+mockmydb`.`[join] User:Pet` (
+CREATE TABLE `MockDbWrite`.`User>Pet` (
   `user` int,
   `pet` int
 );
 
-CREATE TABLE `-mockmydb`.`[Account] Users` (
+CREATE TABLE `MockDbAggregate`.`Users` (
   `id` uuid PRIMARY KEY,
   `username` varchar(18) UNIQUE NOT NULL,
   `email` varchar(30) UNIQUE NOT NULL
 );
 
-CREATE TABLE `-mockmydb`.`[Content] Avatars` (
-  `id` uuid PRIMARY KEY COMMENT 'A one to one mapping on the id makes these keys identical
-\'No reason to have the avatar a separate commentable entity. Comment on the avatar and it shows up as a comment to the user.\'',
-  `color_bg` varchar(15) COMMENT 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc',
-  `color_content` varchar(15) COMMENT 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc',
-  `content` tinytext COMMENT 'defaults to a random emoji'
-);
-
-CREATE TABLE `-mockmydb`.`[Content] Comment` (
+CREATE TABLE `MockDbAggregate`.`Comment` (
   `apply_to` uuid COMMENT 'apply_to_type is no longer needed since uuid is unique',
-  `reply_to` uuid COMMENT 'this is the `id` of the current comment',
-  `commenter` uuid,
+  `reply_to` uuid PRIMARY KEY COMMENT 'this is the `id` of the current comment',
+  `commenter` varchar(18) COMMENT 'match commenter name based on row number of write db
+[@AGGREGATE
+  agg = MockDbWrite.Users.filter(com => MockDbWrite.Users.id === com.commenter) // go from here
+  _OR_ (not sure which will be the easiest)
+  SELECT "username"
+    FROM "MockDbWrite"."Users"
+    WHERE "MockDbWrite".ROWNUM() = COUNT("MockDbAggregate"."Comment"."reply_to")
+    ]',
   `comment` varchar(255) NOT NULL,
   `created` datetime DEFAULT (now()),
-  `edited_count` tinyint(2) DEFAULT null COMMENT 'aggregate will display amount of times the comment was edited. No other info leakable
-[@ aggregate rule]sql::
+  `edited_count` tinyint(2) DEFAULT 0 COMMENT 'aggregate will display amount of times the comment was edited. No other info leakable
+[@AGGREGATE
   SELECT COUNT(comment_id) as `edited_count`
-  FROM "[+Content] Comment::Revisions"
-  WHERE comment_id = apply_to
-[@]',
-  PRIMARY KEY (`apply_to`)
+  FROM "[+Content] Comment»Revisions"
+  WHERE comment_id = reply_to
+]'
 );
 
-CREATE TABLE `-mockmydb`.`[Content] Pets` (
-  `id` uuid PRIMARY KEY,
-  `type` ENUM ('dog', 'cat', 'goldfish', 'rock') DEFAULT null COMMENT '> `null` is when user has no pet',
-  `name` varchar(12),
-  `age` tinyint(2)
+CREATE TABLE `MockDbAggregate`.`Acquaintances` (
+  `uuid` uuid PRIMARY KEY COMMENT 'User or Pet UUID',
+  `humanimals` varchar(255) COMMENT 'array of human names, OR name and type of pet -- Array<USER_NAME|Array<PET_TYPE,PET_NAME>>',
+  `frens` varchar(255) COMMENT 'UUID[]'
 );
 
-CREATE TABLE `-mockmydb`.`[join] User:Friend:Type` (
-  `user` uuid,
-  `friend` uuid,
-  `type` ENUM ('friend', 'family', 'frenemy')
+CREATE TABLE `[@ARANGO]Graph`.`BadBlood` (
+  `type` ENUM ('undirected', 'directed', 'directed_acyclic_graph') DEFAULT "undirected" COMMENT 'ArangoDB type databases MUST implement _only_ the `type`, `vertex`, and `edge` keys.
+Create Composite keys to allow Bridge to work successfully',
+  `human` uuid,
+  `pet` uuid,
+  `frenemy` uuid
 );
 
-CREATE TABLE `-mockmydb`.`[aggregate] Individual:Family` (
-  `individual` uuid PRIMARY KEY,
-  `@aggregate` ruleset COMMENT '[
-     [sql::
-       SELECT user as ind,GROUP_CONCAT(pet) as fam
-       FROM `[+join] User:Pet`
-       GROUP_CONCAT(pet)] => humans
-     [sql::
-       SELECT pet as ind,GROUP_CONCAT(user) as fam
-       FROM `[+join] User:Pet`
-       GROUP_CONCAT(pet)] => pets
-    [js::
-      (humans,pets) => [..humans,...pets]]',
-  `family` mediumtext COMMENT 'this will be a stringified json value of all other
-owners and pets associated with the queried individual
-(basically, the result of running and parsing teh join query from the write db)'
-);
-
-CREATE TABLE `@`.`[cnfg] Project` (
-  `PROJECT_DEFAULT_OVERRIDES` @ DEFAULT "applies to all tables and fields",
-  `RANGE_ALLOWS_NULL` @ DEFAULT "[5..12]" COMMENT 'range values should follow rust syntax',
-  `MOCK_ORDER` @ DEFAULT "([+]-[-]-[graph])" COMMENT 'parenthesis allow for more dynamic 
-`([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
-but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
-or the primary  starts and the secondary creates more mutations after the primary:
-  `([+]-[-])([+]-[graph])([-]-[graph])`',
-  `[+]-[-]` any_writedb_to_readdb_changes COMMENT 'would be defined here',
-  `[-]-[graph]` any_read_db_to_graphdb_changes COMMENT 'would be defined here',
-  `[+]-[graph]` any_write_db_to_graphdb_changes COMMENT 'would be defined here',
-  `@varchar` @ COMMENT 'this will match all fields with a varchar of ANY length',
-  `@varchar(100)` @ COMMENT 'this will match all fields with a varchar ONLY if the length is 100'
-);
-
-CREATE TABLE `@`.`[cnfg] Database` (
-  `mock-order` int DEFAULT "([+]-[-]-[graph])" COMMENT 'parenthesis allow for more dynamic 
-`([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
-but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
-or the primary  starts and the secondary creates more mutations after the primary:
-  `([+]-[-])([+]-[graph])([-]-[graph])`',
-  `[+]-[-]` any_writedb_to_readdb_changes COMMENT 'would be defined here',
+CREATE TABLE `[@]`.`Project` (
+  `PROJECT_DEFAULT_OVERRIDES` [@] DEFAULT "applies to all tables and fields" COMMENT 'db to db changes can ONLY affect a lower priority db (as defined on the `database-flow` key)',
+  `RANGE_ALLOWS_NULL` [@] DEFAULT "[5..12]" COMMENT 'range values should follow rust syntax',
+  `[+]-[-]` any_MockDbWrite_to_readdb_changes COMMENT 'would be defined here',
   `[-]-[graph]` any_read_db_to_graphdb_changes COMMENT 'would be defined here',
   `[+]-[graph]` any_write_db_to_graphdb_changes COMMENT 'would be defined here'
 );
 
-CREATE TABLE `@`.`[Named-Overide] Girl-Power` (
+CREATE TABLE `[@Name]`.`Girl-Power` (
   `name` fakerjs_definitions_person DEFAULT "female_prefix",
   `first_name` fakerjs_definitions_person DEFAULT "female_first_name",
   `last_name` fakerjs_definitions_person DEFAULT "female_first_name"
 );
 
-CREATE TABLE `@`.`[graph] structure` (
-  `type` ENUM ('undirected', 'directed', 'directed_acyclic_graph') DEFAULT "undirected",
-  `vertex` ENUM ('user', 'pet') DEFAULT ""[-Account] Users","[-join] User:Friend:Type"",
-  `edge` ENUM ('enum_type_friend', 'enum_type_pet') DEFAULT ""[-Account] Pets""
-);
+CREATE INDEX `fk_comment_creator` ON `MockDbWrite`.`Comment` (`commenter`);
 
-CREATE INDEX `fk_comment_creator` ON `+mockmydb`.`[Content] Comment` (`commenter`);
+CREATE INDEX `fk_comment_creator` ON `MockDbAggregate`.`Comment` (`commenter`);
 
-CREATE INDEX `fk_comment_creator` ON `-mockmydb`.`[Content] Comment` (`commenter`);
+CREATE INDEX `@vertex` ON `[@ARANGO]Graph`.`BadBlood` (`human`, `pet`);
 
-ALTER TABLE `[Content] Avatars` COMMENT = 'DBML IS NOT applying the schema name to table notes - for now just harcode where needed. then fix it in ';
+CREATE INDEX `@edge` ON `[@ARANGO]Graph`.`BadBlood` (`human`, `frenemy`);
 
-ALTER TABLE `[Content] Comment` COMMENT = '
-    if this table had any fields that matched what is defined below
-    [@][Named-Overide] Girl-Power[@]
-    then they would have the new overrides attached to their account as well
-  ';
+ALTER TABLE `MockDbWrite`.`Comment` ADD FOREIGN KEY (`apply_to`) REFERENCES `MockDbWrite`.`Comment` (`reply_to`);
 
-ALTER TABLE `[Content] Avatars` COMMENT = 'This is a note of this tableTESTING';
+ALTER TABLE `MockDbWrite`.`Comment` ADD FOREIGN KEY (`commenter`) REFERENCES `MockDbWrite`.`Users` (`id`);
 
-ALTER TABLE `[cnfg] Database` COMMENT = 'db to db changes can ONLY affect a lower priority db (as defined on the `database-flow` key)';
+ALTER TABLE `MockDbWrite`.`Comment»Revisions` ADD FOREIGN KEY (`comment_id`) REFERENCES `MockDbWrite`.`Comment` (`reply_to`);
 
-ALTER TABLE `[graph] structure` COMMENT = '
-    this is still somewhat TBD until the logic can be created
-    should give some sort of intuitive structure to allow automated graphdb instantiation
-  ';
+ALTER TABLE `MockDbWrite`.`User>Friend>Type` ADD FOREIGN KEY (`user`) REFERENCES `MockDbWrite`.`Users` (`id`);
 
-ALTER TABLE `+mockmydb`.`[Content] Avatars` ADD FOREIGN KEY (`id`) REFERENCES `+mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `MockDbWrite`.`User>Friend>Type` ADD FOREIGN KEY (`friend`) REFERENCES `MockDbWrite`.`Users` (`id`);
 
-ALTER TABLE `+mockmydb`.`[Content] Comment` ADD FOREIGN KEY (`commenter`) REFERENCES `+mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `MockDbWrite`.`User>Pet` ADD FOREIGN KEY (`user`) REFERENCES `MockDbWrite`.`Users` (`id`);
 
-ALTER TABLE `+mockmydb`.`[Content] Comment::Revisions` ADD FOREIGN KEY (`comment_id`) REFERENCES `+mockmydb`.`[Content] Comment` (`reply_to`);
+ALTER TABLE `MockDbWrite`.`User>Pet` ADD FOREIGN KEY (`pet`) REFERENCES `MockDbWrite`.`Pets` (`id`);
 
-ALTER TABLE `+mockmydb`.`[join] User:Friend:Type` ADD FOREIGN KEY (`user`) REFERENCES `+mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `MockDbAggregate`.`Users` ADD CONSTRAINT `[@bridge id_to_uuid]` FOREIGN KEY (`id`) REFERENCES `MockDbWrite`.`Users` (`id`);
 
-ALTER TABLE `+mockmydb`.`[join] User:Friend:Type` ADD FOREIGN KEY (`friend`) REFERENCES `+mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `MockDbAggregate`.`Users` ADD FOREIGN KEY (`id`) REFERENCES `MockDbAggregate`.`Acquaintances` (`uuid`);
 
-ALTER TABLE `+mockmydb`.`[join] User:Pet` ADD FOREIGN KEY (`user`) REFERENCES `+mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `MockDbAggregate`.`Comment` ADD FOREIGN KEY (`apply_to`) REFERENCES `MockDbAggregate`.`Comment` (`reply_to`);
 
-ALTER TABLE `+mockmydb`.`[join] User:Pet` ADD FOREIGN KEY (`pet`) REFERENCES `+mockmydb`.`[Content] Pets` (`id`);
+ALTER TABLE `MockDbAggregate`.`Comment` ADD FOREIGN KEY (`commenter`) REFERENCES `MockDbAggregate`.`Users` (`username`);
 
-ALTER TABLE `-mockmydb`.`[Content] Avatars` ADD FOREIGN KEY (`id`) REFERENCES `-mockmydb`.`[Account] Users` (`id`);
+ALTER TABLE `[@ARANGO]Graph`.`BadBlood` ADD CONSTRAINT `[@bridge graph_edge]` FOREIGN KEY (`human`, `frenemy`) REFERENCES `MockDbAggregate`.`Acquaintances` (`uuid`, `frens`);
 
-ALTER TABLE `-mockmydb`.`[Content] Comment` ADD FOREIGN KEY (`commenter`) REFERENCES `-mockmydb`.`[Account] Users` (`id`);
-
-ALTER TABLE `-mockmydb`.`[join] User:Friend:Type` ADD FOREIGN KEY (`user`) REFERENCES `-mockmydb`.`[Account] Users` (`id`);
-
-ALTER TABLE `-mockmydb`.`[join] User:Friend:Type` ADD FOREIGN KEY (`friend`) REFERENCES `-mockmydb`.`[Account] Users` (`id`);
-
-ALTER TABLE `-mockmydb`.`[aggregate] Individual:Family` ADD FOREIGN KEY (`individual`) REFERENCES `-mockmydb`.`[Account] Users` (`id`);
-
-ALTER TABLE `-mockmydb`.`[aggregate] Individual:Family` ADD FOREIGN KEY (`individual`) REFERENCES `-mockmydb`.`[Content] Pets` (`id`);
+ALTER TABLE `[@ARANGO]Graph`.`BadBlood` ADD CONSTRAINT `[@bridge graph_vertex]` FOREIGN KEY (`human`, `pet`) REFERENCES `MockDbAggregate`.`Acquaintances` (`uuid`, `humanimals`);

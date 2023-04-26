@@ -1,3 +1,7 @@
+PRE-UPGRADED DENO VERSION: deno 1.31.1
+If needed - keep a reference to it with:
+`deno upgrade --version 1.31.1 --output $HOME/deno-version/`
+
 https://awesomeapp.org/
 
 https://doc.rust-lang.org/rust-by-example/ <<-- easiest reference

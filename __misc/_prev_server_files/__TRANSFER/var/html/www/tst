@@ -1,0 +1,7 @@
+Certificate Name: qrx.downquark.work
+    Serial Number: 3509b35eeda6bebee8648ea9d47300fe759
+    Key Type: RSA
+    Domains: qrx.downquark.work blog.downquark.work
+    Expiry Date: 2023-07-24 06:54:34+00:00 (VALID: 89 days)
+    Certificate Path: /etc/letsencrypt/live/qrx.downquark.work/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/qrx.downquark.work/privkey.pem

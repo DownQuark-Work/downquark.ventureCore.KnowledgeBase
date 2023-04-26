@@ -1,4 +1,9 @@
 # DownQuark's Centralized Knowledge Base
+## Found it! the [quick wiki](http://marc.tries.fed.wiki/view/c2-for-me/ward.eu.wiki.org/c2-for-me)
+- http://marc.tries.fed.wiki/view/frame-script-survey
+> I wanted to look into that years ago ... now we may have time.
+## http://start.fed.wiki/view/welcome-visitors/view/ward-cunningham/view/start-playing-wiki
+> https://github.com/WardCunningham/assets/blob/master/pages/smallest-wiki-revisited/start.js
 
 This is a collection of documentation and development resources to be used as reference material and/or a guide when working in other repositories.
 

@@ -1,49 +1,46 @@
 // -- DATABASE::WRITE
-Table "WriteDB"."Users" as U {
-  id int [pk, increment, note:"@initial"] // auto-increment
+Table "MockDbWrite"."Users" as U {
+  id int [pk, increment] // auto-increment
   created datetime [default: `now()`]
   username varchar(18) [not null, unique]
   email varchar(30) [not null, unique]
+  infoForMockDbUseOnly blob [note:'[@INITIAL] - anything else can be added']
 }
 
-Table "WriteDB"."Comment" as WC {
-  apply_to int [ref: > WriteDB.Comment.reply_to, note:'this is the `id` of the item the comment was is directed towards']
+Table "MockDbWrite"."Comment" as WC {
+  apply_to int [ref: > MockDbWrite.Comment.reply_to, note:'this is the `id` of the item the comment was is directed towards']
   apply_to_type enum__type_comment_applied_to [default:null, note: '> `null` is when a comment is replying to another comment']
   reply_to int [pk, increment, note: 'this is the `id` of the current comment']
   commenter int [ref: > U.id]
   comment varchar(255) [not null]
   created datetime [default: `now()`]
   edited datetime [default: null, note:'will aggregate as a special character if `true`']
+  "applyingGirlPower" "set in the note" [note:'if this table had any fields that matched what is defined with the at rule: [@APPLY Girl-Power]']
   Indexes {
     commenter [name: 'fk_comment_creator']
   }
-  Note {'
-    if this table had any fields that matched what is defined below
-    [@Name Girl-Power]
-    then they would have the new overrides attached to their account as well
-  '}
 }
-Table "WriteDB"."Comment::Revisions" {
+Table "MockDbWrite"."Comment»Revisions" {
   comment_id int  [not null, unique, ref: > WC.reply_to, note: 'many-to-one allows grabbing all revisions with single key']
   revised_at datetime [note: 'will be WC.edited OR WC.created depending on revision amount']
   comment_before_revision varchar(255) [not null]
 }
 
-Table "WriteDB"."Pets" as P {
+Table "MockDbWrite"."Pets" as P {
   id int [pk, increment]
   type enum__type_pet [default:null, note: '> `null` is when user has no pet']
   name varchar(12)
   age tinyint(2)
- }
- 
+}
+
 // joins
-Table "WriteDB"."User:Friend:Type" {
+Table "MockDbWrite"."User>Friend>Type" {
   user int [ref: > U.id]
   friend int [ref: > U.id]
   type enum__type_friend [note: '> `frenemy` is member who was blocked or removed from friends/family list']
 }
 
-Table "WriteDB"."User:Pet" {
+Table "MockDbWrite"."User>Pet" {
   user int [ref: > U.id]
   pet int [ref: > P.id]
 }
@@ -52,23 +49,32 @@ Table "WriteDB"."User:Pet" {
 
 // -- DATABASE::READ
 /// _RDBMS_
-Table "AggregateDB"."Users" {
-  id uuid [pk, ref: - AggregateDB.Acquaintances.uuid]
+Table "MockDbAggregate"."Users" {
+  id uuid [pk, ref: - MockDbAggregate.Acquaintances.uuid]
   username varchar(18) [not null, unique]
   email varchar(30) [not null, unique]
 }
-Table "AggregateDB"."Comment" as A_CC {
-  apply_to uuid [ref: > AggregateDB.Comment.reply_to, note: 'apply_to_type is no longer needed since uuid is unique']
-  reply_to uuid  [note: 'this is the `id` of the current comment']
-  commenter uuid [ref: > AggregateDB.Users.id,note: '@aggregate user name']
+Table "MockDbAggregate"."Comment" as A_CC {
+  apply_to uuid [ref: > MockDbAggregate.Comment.reply_to, note: 'apply_to_type is no longer needed since uuid is unique']
+  reply_to uuid  [pk, note: 'this is the `id` of the current comment']
+  commenter varchar(18) [ref: > MockDbAggregate.Users.username, note: '''
+    match commenter name based on row number of write db
+    [@AGGREGATE
+      agg = MockDbWrite.Users.filter(com => MockDbWrite.Users.id === com.commenter) // go from here
+      _OR_ (not sure which will be the easiest)
+      SELECT "username"
+        FROM "MockDbWrite"."Users"
+        WHERE "MockDbWrite".ROWNUM() = COUNT("MockDbAggregate"."Comment"."reply_to")
+        ]
+  ''']
   comment varchar(255) [not null]
   created datetime [default: `now()`]
   edited_count tinyint(2) [default: 0, note: '''
     aggregate will display amount of times the comment was edited. No other info leakable
-    [@ aggregate rule]sql::
+    [@AGGREGATE
       SELECT COUNT(comment_id) as `edited_count`
-      FROM "[+Content] Comment::Revisions"
-      WHERE comment_id = apply_to
+      FROM "DbWrite.Comment»Revisions"
+      WHERE comment_id = reply_to
     ]
   ''']
   Indexes {
@@ -76,7 +82,7 @@ Table "AggregateDB"."Comment" as A_CC {
   }
 }
 
-Table "AggregateDB"."Acquaintances" {
+Table "MockDbAggregate"."Acquaintances" {
   uuid uuid [pk, note: 'User or Pet UUID']
   humanimals varchar(255) [note: 'array of human names, OR name and type of pet -- Array<USER_NAME|Array<PET_TYPE,PET_NAME>>']
   frens varchar(255) [note:'UUID[]']
@@ -107,17 +113,16 @@ Enum enum__type_pet {
 // // non-rdbms type have certain restictions.
 // for Arango (see Note)
 Table "[@ARANGO]Graph"."BadBlood" {
-  type enum__type_graph [default:'undirected']
+  type enum__type_graph [default:'undirected', note:'''
+    ArangoDB type databases MUST implement _only_ the `type`, `vertex`, and `edge` keys.
+    Create Composite keys to allow Bridge to work successfully
+  ''']
   human uuid
   pet uuid
   frenemy uuid
-  Note {'
-    ArangoDB type databases MUST implement _only_ the `type`, `vertex`, and `edge` keys.
-    Create Composite keys to allow Bridge to work successfully
-  '}
   Indexes {
-    (human, pet) [name: 'vertex'] // composite key defines datastore
-    (human, frenemy) [name: 'edge']
+    (human, pet) [name: '@vertex'] // composite key defines datastore
+    (human, frenemy) [name: '@edge']
   }
 }
 // END GRAPH
@@ -133,25 +138,25 @@ Enum enum__type_graph {
 /// DataBase BRIDGES
 // - These keys are _NOT_ created in the sql
 // must be encapsulated with `@bridge` then name does not matter
-Ref "[@bridge id_to_uuid]": WriteDB.Users.id < AggregateDB.Users.id
-Ref "[@bridge graph_edge]": AggregateDB.Acquaintances.(uuid, frens) - "[@ARANGO]Graph"."BadBlood".(human,frenemy)
-Ref "[@bridge graph_vertex]": AggregateDB.Acquaintances.(uuid, humanimals) - "[@ARANGO]Graph"."BadBlood".(human,pet)
+Ref "[@bridge id_to_uuid]": MockDbWrite.Users.id < MockDbAggregate.Users.id
+Ref "[@bridge graph_edge]": MockDbAggregate.Acquaintances.(uuid, frens) - "[@ARANGO]Graph"."BadBlood".(human,frenemy)
+Ref "[@bridge graph_vertex]": MockDbAggregate.Acquaintances.(uuid, humanimals) - "[@ARANGO]Graph"."BadBlood".(human,pet)
 /// END  DataBase BRIDGES
 
 
 /// ORGANIZATION
 TableGroup relational_write {
-  "WriteDB"."Users"
-  "WriteDB"."Comment"
-  "WriteDB"."Comment::Revisions"
-  "WriteDB"."Pets"
-  "WriteDB"."User:Friend:Type"
-  "WriteDB"."User:Pet"
+  "MockDbWrite"."Users"
+  "MockDbWrite"."Comment"
+  "MockDbWrite"."Comment»Revisions"
+  "MockDbWrite"."Pets"
+  "MockDbWrite"."User>Friend>Type"
+  "MockDbWrite"."User>Pet"
 }
 
 TableGroup relational_read {
-  "AggregateDB"."Users"
-  "AggregateDB"."Comment"
+  "MockDbAggregate"."Users"
+  "MockDbAggregate"."Comment"
 }
 
 TableGroup graph_associations {
@@ -160,7 +165,7 @@ TableGroup graph_associations {
 
 TableGroup configuration {
   "[@]"."Project"
-  "[@]"."Girl-Power"
+  "[@Name]"."Girl-Power"
 }
 
 
@@ -169,35 +174,13 @@ TableGroup configuration {
 /// MOCK_CONFIGURATIONS
 // NOTE: a schema name of "[@]" will not be rendered and is used to extend/overwrite settings/configs/etc
 Table "[@]"."Project" {
-  PROJECT_DEFAULT_OVERRIDES "[@]" [default: 'applies to all tables and fields']
+  PROJECT_DEFAULT_OVERRIDES "[@]" [default: 'applies to all tables and fields', note: 'db to db changes can ONLY affect a lower priority db (as defined on the `database-flow` key)']
   RANGE_ALLOWS_NULL "[@]" [default:'[5..12]', note:'range values should follow rust syntax']
-  MOCK_ORDER "[@]" [default:'([+]-[-]-[graph])', note: '''
-    parenthesis allow for more dynamic 
-    `([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
-    but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
-    or the primary  starts and the secondary creates more mutations after the primary:
-      `([+]-[-])([+]-[graph])([-]-[graph])`
-  ''']
-  "[+]-[-]" any_writedb_to_readdb_changes [note: 'would be defined here']
+  "[+]-[-]" any_MockDbWrite_to_readdb_changes [note: 'would be defined here']
   "[-]-[graph]" any_read_db_to_graphdb_changes  [note: 'would be defined here']
   "[+]-[graph]" any_write_db_to_graphdb_changes  [note: 'would be defined here']
-  "@varchar" "[@]" [note: 'this will match all fields with a varchar of ANY length']
-  "@varchar(100)" "[@]" [note: 'this will match all fields with a varchar ONLY if the length is 100']
 }
-Table "[@]"."Database" {
-  "mock-order" int [default:'([+]-[-]-[graph])', note: '''
-    parenthesis allow for more dynamic 
-    `([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
-    but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
-    or the primary  starts and the secondary creates more mutations after the primary:
-      `([+]-[-])([+]-[graph])([-]-[graph])`
-  ''']
-  "[+]-[-]" any_writedb_to_readdb_changes [note: 'would be defined here']
-  "[-]-[graph]" any_read_db_to_graphdb_changes  [note: 'would be defined here']
-  "[+]-[graph]" any_write_db_to_graphdb_changes  [note: 'would be defined here']
-  Note: 'db to db changes can ONLY affect a lower priority db (as defined on the `database-flow` key)'
-}
-Table "[@]"."Girl-Power" {
+Table "[@Name]"."Girl-Power" {
   name fakerjs_definitions_person [default: 'female_prefix']
   first_name fakerjs_definitions_person [default: 'female_first_name']
   last_name fakerjs_definitions_person [default: 'female_first_name']

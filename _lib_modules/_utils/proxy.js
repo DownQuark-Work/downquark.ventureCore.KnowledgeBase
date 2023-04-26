@@ -35,6 +35,7 @@ const console = new Proxy(window.console,{
   },
   set:(target,prop,val) => target[prop] = !!val
 })
+// console._debug = process.env.NODE_ENV === 'development'
 console._debug = /^(127|(0\.){3}|localhost)/g.test(window.location.host)
 /*
   console === window.console // false
@@ -44,9 +45,9 @@ console._debug = /^(127|(0\.){3}|localhost)/g.test(window.location.host)
   console.log(Math.PI) // <no output>
   - all original methods are accounted for (e.g.):
   console.trace(1/0)
-  ```
+```
   console.groupCollapsed('group name')
   console.log('a');console.log('a');console.log('a');console.log('a');
   console.groupEnd()
-  ```
+```
 */

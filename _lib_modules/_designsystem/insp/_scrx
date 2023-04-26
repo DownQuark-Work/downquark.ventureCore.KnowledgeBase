@@ -2,6 +2,7 @@ Below is for use with quant-ux.
 Using the Goldman Sachs color ramps to define the initial design system color tokens.
 > Can only be run from the mongo shell
 > Assumes there is a project named _\_DesignSystem_
+> > QuantUx will have to be restarted (if running)
 
 ```
 db.quantux_app.updateOne({name: '_DesignSystem'},{$set:{designtokens:{
