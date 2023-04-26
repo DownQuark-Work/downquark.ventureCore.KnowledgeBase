@@ -1,3 +1,6 @@
+// TODO: integrate the `tsconfig.json` file so that these can all be writted as typescript
+// // USING THE `// @ts-check` work-around for now
+
 The repositories in this directory will be used as [gitmodules](https://git-scm.com/docs/gitmodules) and imported into the main branches of the `downquark.templateCore.ProjectSqeleton` directory
 
 > Git does not allow the .gitmodules file within a working tree to be a symbolic link, and will refuse to check out such a tree entry.
@@ -64,3 +67,20 @@ https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
 https://github.com/homam/service-workers-example/blob/master/resources.md
 
 https://jakearchibald.com/2014/offline-cookbook/
+
+
+--- 
+Work in MapMyDb too?
+ APIs to populate data maybe:
+- https://pokeapi.co/docs/v2#info
+  - https://pokeapi.co/api/v2/evolution-chain/13/
+- https://restcountries.com/#rest-countries
+  - https://restcountries.com/v3.1/alpha?codes=col,pe,at
+- https://random-data-api.com/documentation
+  - https://random-data-api.com/api/v2/beers
+- https://api.nasa.gov/
+  - https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
+- https://jsonplaceholder.typicode.com/
+  - https://jsonplaceholder.typicode.com/photos
+- https://openweathermap.org/api
+  - https://api.openweathermap.org/data/2.5/solar_radiation?lat=53.2734&lon=-7.77832031&appid={API key}

@@ -1,0 +1,101 @@
+// https://designsystemssurvey.seesparkbox.com/2022/
+// colors
+$color-doctor: rgb(250, 249, 245);
+$color-white: rgb(255, 255, 255);
+$color-dust-to-dust: rgb(191, 187, 187);
+$color-lead: rgb(34, 32, 32);
+
+// typography 
+$font-1: normal normal 200 32px/32px "Sole Sans Hairline", serif;
+$font-2: normal normal 200 28px/28px "Sole Sans", sans-serif;
+$font-3: normal normal 200 28px/42px "Sole Sans", sans-serif;
+$font-4: normal normal 200 26px/31.2px "Sole Sans Hairline", serif;
+$font-5: normal normal 200 26px/32.5px "Sole Sans Hairline", serif;
+$font-6: normal normal 200 24px/28.8px "Sole Sans Hairline", serif;
+$font-7: normal normal 200 24px/18px "Sole Sans", sans-serif;
+$font-8: normal normal 200 24px/36px "Sole Sans", sans-serif;
+$font-9: normal normal 200 20px/28px "Sole Sans Hairline", serif;
+$font-10: normal normal 400 20px/30px "Sole Sans", sans-serif;
+$font-11: normal normal 200 20px/30px "Sole Sans", sans-serif;
+$font-12: normal normal 400 20px/22px "Sole Sans", sans-serif;
+$font-13: normal normal 200 20px/20px "Sole Sans", sans-serif;
+$font-14: normal normal 200 20px/normal Arial;
+$font-15: normal normal 200 18px/25.2px "Sole Sans Hairline", serif;
+$font-16: normal normal 200 18px/27px "Sole Sans", sans-serif;
+$font-17: normal normal 400 18px/27px "Sole Sans", sans-serif;
+$font-18: normal normal 200 18px/27px "Sole Sans", sans-serif;
+$font-19: normal normal 200 17px/25.5px "Sole Sans", sans-serif;
+$font-20: normal normal 200 17px/20.4px "Sole Sans", sans-serif;
+$font-21: normal normal 400 16px/normal Times;
+$font-22: normal normal 400 16px/24px "Sole Sans", sans-serif;
+$font-23: normal normal 200 16px/14px "Sole Sans", sans-serif;
+$font-24: normal normal 400 16px/20px "Sole Sans", sans-serif;
+$font-25: normal normal 400 16px/12px "Sole Sans", sans-serif;
+$font-26: normal normal 400 16px/12px "Sole Sans", sans-serif;
+$font-27: normal normal 200 15px/18px "Sole Sans", sans-serif;
+$font-28: normal normal 400 15px/18px "Sole Sans", sans-serif;
+$font-29: italic normal 200 14px/16.8px "Sole Sans", sans-serif;
+$font-30: normal normal 200 14px/21px "Sole Sans", sans-serif;
+$font-31: normal normal 400 14px/10.5px "Sole Sans", sans-serif;
+$font-32: normal normal 200 0px/0px "Sole Sans Hairline", serif;
+$font-33: normal normal 100 0px/0px "Sole Sans", sans-serif;
+$font-34: normal normal 200 0px/0px "Sole Sans", sans-serif;
+$font-35: normal normal 200 0px/0px "Sole Sans", sans-serif;
+
+// vertical spacing
+$vspace-1: 2%;
+$vspace-2: 100%;
+$vspace-3: 0.25rem;
+$vspace-4: 0.25em;
+$vspace-5: 8px;
+$vspace-6: 0.5rem;
+$vspace-7: 1rem;
+$vspace-8: 16px;
+$vspace-9: 1em;
+$vspace-10: 1.75rem;
+$vspace-11: 2rem;
+$vspace-12: 32px;
+$vspace-13: 4rem;
+$vspace-14: 64px;
+$vspace-15: 6rem;
+$vspace-16: max(10vh, 12rem);
+$vspace-17: 192px;
+$vspace-18: 288px;
+$vspace-19: max(20vh, 18rem);
+$vspace-20: unset;
+
+// horizontal spacing
+$hspace-1: 2px;
+$hspace-2: 0.25rem;
+$hspace-3: 0.25em;
+$hspace-4: 8px;
+$hspace-5: 1rem;
+$hspace-6: 24px;
+$hspace-7: -24px;
+$hspace-8: -3rem;
+$hspace-9: 4rem;
+$hspace-10: unset;
+
+// border radii
+$border-radius-1: 50%;
+$border-radius-2: unset;
+$border-radius-3: 2px;
+
+// shadows
+$shadow-1: rgb(34, 32, 32) 0px 0px 0px 0px, rgb(146, 139, 139) 0px 0px 0px 0px;
+$shadow-2: rgb(34, 32, 32) -16px 0px 0px 0px;
+
+// motions
+$transition-1: text-decoration-color 150ms ease-in-out 0s;
+$transition-2: -webkit-text-decoration-color 150ms ease-in-out 0s;
+$transition-3: -moz-text-decoration-color 150ms ease-in-out 0s;
+$transition-4: box-shadow 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-5: -webkit-box-shadow 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-6: opacity 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-7: color 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-8: border-bottom-color 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-9: margin-left 0.15s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-10: transform 1s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-11: -webkit-transform 1s cubic-bezier(0, 0.6, 0.35, 1) 0s;
+$transition-12: box-shadow 150ms ease-in-out 0s;
+$transition-13: -webkit-box-shadow 150ms ease-in-out 0s;

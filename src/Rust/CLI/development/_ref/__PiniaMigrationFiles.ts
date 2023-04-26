@@ -1,0 +1,534 @@
+// console.log(Deno.loadavg()); 
+///////
+// Deno.cwd()
+// Deno.chdir('../../..)
+// Deno.cwd()
+export const PINIA_APP_MODULE = '@/store/modules/app.module' // handled as special case
+
+
+//// HERE
+export const piniaNestedModules = 
+{'src/components/admin/BillingReportDialog.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/admin/OnAntiCoagulantRadio.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/admin/UserGroupCard.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/admin/UserGroupModal.vue':[
+	'@/store/modules/notifications.module',
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/components/admin/UserModal.vue':[
+	'@/store/modules/clinics.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+],
+'src/components/comments/PersonalInfoCommentPanel.vue':[
+	'@/store/modules/patients.module',
+],
+'src/components/common/AlertCountsIcon.vue':[
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/AlertListDetails.vue':[
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/BaseItem.vue':[
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+	'@/store/modules/export_status.module',
+],
+'src/components/common/CustomDatePicker.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/common/DeviceInfoPanel.vue':[
+	'@/store/modules/devices.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/DynamicFields.vue':[
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/app.module',
+],
+'src/components/common/DynamicForm.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/common/EulaModal.vue':[
+	'@/store/modules/auth.module',
+],
+'src/components/common/GenericWarning.vue':[
+	'@/store/modules/warnings.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/LeadsManufacturersDropdown.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/common/MergePatientsModal.vue':[
+	'@/store/modules/patients.module',
+	'@/store/modules/form_sections.module',
+],
+'src/components/common/PatientDevicesCommentHistoryModal.vue':[
+	'@/store/modules/notifications.module',
+],
+'src/components/common/PDFViewer.vue':[
+	'@/store/modules/notifications.module',
+],
+'src/components/common/PDFViewer2.vue':[
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/PersonalInfoPanel.vue':[
+	'@/store/modules/patients.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/common/PhysicianDetail.vue':[
+	'@/store/modules/patients.module',
+],
+'src/components/common/PhysiciansInfoPanel.vue':[
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/common/SupportDashboardAddNoteModal.vue':[
+	'@/store/modules/support_dashboard.module',
+],
+'src/components/common/SupportDashboardScreenshotModal.vue':[
+	'@/store/modules/support_dashboard.module',
+],
+'src/components/common/TopLayoutWarning.vue':[
+	'@/store/modules/warnings.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+],
+'src/components/common/TransmissionDetailsHeader.vue':[
+	'@/store/modules/patients.module',
+],
+'src/components/common/UserClinicsDropdown.vue':[
+	'@/store/modules/clinics.module',
+],
+'src/components/common/VendorsDropdown.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/session_expiring/ExpiringModal.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/AddNoteModal.vue':[
+	'@/store/modules/patient_device_issues.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/transmissions/AssignUsers.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/components/transmissions/EGMReport.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/Episodes.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+	'@/store/modules/patients.module',
+],
+'src/components/transmissions/ManualInclinic.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/MissingData.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/Overview.vue':[
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/PatientSearchAutoComplete.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/advanced_search.module',
+],
+'src/components/transmissions/Reports.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/TheCommentTab.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/comment_templates.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/TheOPReportTab.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/transmissions/TheSchedulingTab.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/patients.module',
+],
+'src/components/transmissions/TransmissionsCounters.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/billing/BillingCPT.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/patients.module',
+],
+'src/components/transmissions/billing/BillingDisclaimers.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/billing/BillingHistory.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/billing/BillingICD.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/billing/BillingStatus.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/patients.module',
+],
+'src/components/transmissions/billing/DXBilling.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/external_data/ExternalDataModal.vue':[
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/transmissions/history/PendingModal.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/history/TransmissionHistory.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/transmissions/idco/IDCORawData.vue':[
+	'@/store/modules/transmissions.module',
+],
+'src/components/transmissions/op_report/PDFSections.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/transmissions/scheduling/TheScheduling.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+],
+'src/components/transmissions/workflow/PreviewModal.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/components/transmissions/workflow/WorkflowActions.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/clinics.module',
+	'@/store/modules/app.module',
+	'@/store/modules/warnings.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/patients.module',
+],
+'src/components/user_profile/AboutPage.vue':[
+	'@/store/modules/app.module',
+],
+'src/components/user_profile/UserProfile.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/warnings.module',
+	'@/store/modules/comment_templates.module',
+],
+'src/filters/date_filters.ts':[
+	'@/store/modules/app.module',
+],
+'src/layouts/main-layout/Mainlayout.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/layouts/main-layout/sidebar/Sidebar.vue':[
+	'@/store/modules/export_status.module',
+],
+'src/layouts/main-layout/topbar/Notification.vue':[
+	'@/store/modules/notifications.module',
+],
+'src/layouts/main-layout/topbar/Topbar.vue':[
+	'@/store/modules/clinics.module',
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/layouts/main-layout/topbar/TopBarSearch.vue':[
+	'@/store/modules/app.module',
+],
+'src/layouts/main-layout/topbar/TopCounters.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/clinics.module',
+],
+'src/layouts/main-layout/topbar/UserMenu.vue':[
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+],
+'src/mixins/common-mixin.ts':[
+	'@/store/modules/transmissions.module',
+],
+'src/mixins/ui-mixin.ts':[
+	'@/store/modules/app.module',
+],
+'src/models/billing_history.model.ts':[
+	'@/store/modules/app.module',
+],
+'src/models/dynamic_info.model.ts':[
+	'@/store/modules/form_sections.module',
+],
+'src/models/episode.model.ts':[
+	'@/store/modules/app.module',
+],
+'src/models/integration_client.model.ts':[
+	'@/store/modules/clinics.module',
+],
+'src/models/patient_device_issue.model.ts':[
+	'@/store/modules/devices.module',
+	'@/store/modules/patients.module',
+],
+'src/models/patient_device.model.ts':[
+	'@/store/modules/devices.module',
+],
+'src/models/report_pdf.model.ts':[
+	'@/store/modules/app.module',
+],
+'src/models/setting.model.ts':[
+	'@/store/modules/app.module',
+],
+'src/models/transmission.model.ts':[
+	'@/store/modules/patients.module',
+	'@/store/modules/devices.module',
+],
+'src/services/advanced_search.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/app.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/auth.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/billing.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/clinic.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/comment_templates.service.ts':[
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/services/device.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/export_status.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/form_section.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/integrations.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/leads.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/logs.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/patient_device_issues.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/patient_device.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/patient.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/recall.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/reports.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/settings.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/support_dashboard.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/support.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/transmission.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/services/user.service.ts':[
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+],
+'src/services/vendor_sites.service.ts':[
+	'@/store/modules/app.module',
+],
+'src/views/admin/AddEditClinicModal.vue':[
+	'@/store/modules/clinics.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/admin/AddEditPatientModal.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/devices.module',
+	'@/store/modules/form_sections.module',
+],
+'src/views/admin/Clinics.vue':[
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/admin/ConfigurationEntry.vue':[
+	'@/store/modules/app.module',
+],
+'src/views/admin/Configurations.vue':[
+	'@/store/modules/notifications.module',
+],
+'src/views/admin/IntegrationConfigurations.vue':[
+	'@/store/modules/app.module',
+],
+'src/views/admin/IntegrationDetails.vue':[
+	'@/store/modules/notifications.module',
+	'@/store/modules/app.module',
+],
+'src/views/admin/IntegrationModal.vue':[
+	'@/store/modules/auth.module',
+],
+'src/views/admin/Integrations.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/admin/Logs.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/admin/PatientForm.vue':[
+	'@/store/modules/form_sections.module',
+],
+'src/views/admin/PatientList.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/admin/SupportDashboard.vue':[
+	'@/store/modules/support_dashboard.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/admin/Users.vue':[
+	'@/store/modules/auth.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/AddMissedTransmissionsModal.vue':[
+	'@/store/modules/patient_device_issues.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/app.module',
+],
+'src/views/frontend/AdvancedSearch.vue':[
+	'@/store/modules/advanced_search.module',
+	'@/store/modules/clinics.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/frontend/AssignedToMeSearch.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/BulkClose.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+],
+'src/views/frontend/BulkDismiss.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/transmissions.module',
+],
+'src/views/frontend/ExportStatus.vue':[
+	'@/store/modules/export_status.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/app.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/InClinicList.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/InclinicUpload.vue':[
+	'@/store/modules/notifications.module',
+],
+'src/views/frontend/MissedTransmissions.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/patient_device_issues.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/MissedTransmissionsConfig.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/frontend/Recalls.vue':[
+	'@/store/modules/notifications.module',
+	'@/store/modules/auth.module',
+],
+'src/views/frontend/ReportSearch.vue':[
+	'@/store/modules/app.module',
+	'@/store/modules/clinics.module',
+	'@/store/modules/notifications.module',
+],
+'src/views/frontend/TransmissionDetail.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/form_sections.module',
+	'@/store/modules/app.module',
+	'@/store/modules/patients.module',
+	'@/store/modules/warnings.module',
+],
+'src/views/frontend/TransmissionList.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/auth.module',
+	'@/store/modules/clinics.module',
+],
+'src/views/frontend/TransmissionSearch.vue':[
+	'@/store/modules/transmissions.module',
+	'@/store/modules/app.module',
+	'@/store/modules/notifications.module',
+	'@/store/modules/clinics.module',
+	'@/store/modules/auth.module',
+]}
+
+export const piniaMigrationFiles = Object.keys(piniaNestedModules)

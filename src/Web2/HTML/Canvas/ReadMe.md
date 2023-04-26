@@ -1,4 +1,13 @@
+THIS: -v
+- THIS: -v May all be archived, but very useful patterns
+- -> https://github.com/orgs/mozdevs/repositories <- 
+- https://github.com/mozdevs/gamedev-js-tiles (/square/logic-grid.js)
+^^^^                    ^^^^^^^^^^
+
+- https://joshondesign.com/p/books/canvasdeepdive/toc.html <- 
+
 https://www.html5canvastutorials.com/
+https://github.com/mdn/interactive-examples/tree/main/live-examples
 
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 - https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#paths
@@ -14,3 +23,6 @@ https://codepen.io/Dillo/pen/KKXeqNG - use bottom red line as path maybe?
 
 
 
+https://www.freecodecamp.org/news/learn-javascript-game-development-full-course/
+
+https://bucephalus.org/text/CanvasHandbook/CanvasHandbook.html

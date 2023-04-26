@@ -1,3 +1,18 @@
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json
+https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/connect
+https://extensionworkshop.com/documentation/develop/
+https://developer.chrome.com/docs/extensions/reference/
+https://developer.chrome.com/docs/extensions/reference/scripting/
+• https://developer.chrome.com/docs/extensions/reference/tabs/
+  - https://github.com/GoogleChrome/chrome-extensions-samples <<
+  -- need bookmark permissions, but:  <<<<<<
+  - https://developer.chrome.com/docs/extensions/reference/bookmarks/#method-getTree
+  - https://developer.chrome.com/docs/extensions/reference/bookmarks/#method-getSubTree
+• https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/apps
+- https://github.com/GoogleChrome/chrome-extensions-samples/tree/main/api
+https://developer.chrome.com/docs/extensions/mv3/richNotifications/
+
+
 https://developers.google.com/web/fundamentals
 - https://developers.google.com/web/fundamentals/architecture/app-shell | Start here(ish)
 - https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle
@@ -33,6 +48,11 @@ https://html.spec.whatwg.org/multipage/web-messaging.html#examples-5
 https://github.com/trekhleb/javascript-algorithms
 https://developer.mozilla.org/en-US/docs/WebAssembly/Using_the_JavaScript_API
 https://github.com/mdn/webassembly-examples
+
+chrome.tabs.highlight(
+    {tabs:[0]},
+  (cb)=>console.log('cb',cb),
+)
 
 
 Dynamic module loading - (from example.mjs)

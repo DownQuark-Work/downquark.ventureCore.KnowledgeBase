@@ -1,0 +1,11 @@
+canvas helpers and utils related to creating games
+- Grid
+  - https://web.dev/entanglement/ <-- HEX
+- movement delto
+- camera
+- hit detection
+  - etc
+
+  https://gist.github.com/roachhd/d579b58148d7e36a6b72
+
+  https://docs.hathora.dev/#/buildkit/tutorial_top_down_shooter <-- framework to vet

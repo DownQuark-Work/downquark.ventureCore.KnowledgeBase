@@ -1,5 +1,15 @@
 > ALSO: Delaunay triangulation
+REFERENCE: `../../Rust/Gaming/RogueLike/docs/rustrogueliketutorial/chapter-75-darkplaza/src/map_builders/voronoi.rs`
 
+--> http://www.raymondhill.net/voronoi/rhill-voronoi.html (tutorial)
+      http://www.raymondhill.net/voronoi/rhill-voronoi-core.js
+  https://github.com/gorhill/Javascript-Voronoi
+
+https://github.com/paperjs
+- http://paperjs.org/examples/voronoi/
+  - also uses rhill: http://paperjs.org/assets/js/rhill-voronoi-core.js
+
+http://experilous.com/1/blog/post/procedural-planet-generation
 http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/
 
 https://donjon.bin.sh/fantasy/town/

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rooms and Corridors</title>
+  <script src="./_dq-lib/_utils/proxy.js"></script>
+  <script src="./_dq-lib/canvas/grid.js"></script>
+</head>
+<body>
+  <div>
+    <canvas id="downquark-canvas" style="background-color:rgba(255, 228, 196, .5); margin-left:5vw; height:80vh; width:90vw"></canvas>
+  </div>
+  <section id="with-canvas-context" style="display: none;">
+    <fieldset id="grid-position-helper">
+      <legend>Position</legend>
+      index or point: <input name="grid-position-value" placeholder="accepts int or int,int" onkeyup="getGridPosition()"/>
+      <em> </em>
+    </fieldset>
+    <fieldset id="grid-generate-level">
+      <legend>Generate Level</legend>
+      Include: <input type="checkbox" checked name="rooms" /> rooms <input type="checkbox" checked name="maze" /> maze
+      <br/><small>TODO: make checkboxes work</small>
+      <!-- click event delegated at EOF -->
+      <br/><button id="btn-generate-level" type="button" onclick="updateDomGenerateLevel()">generate</button> <input type="checkbox" checked name="animate" /> animate
+    </fieldset>
+  </section>
+  <hr/>
+  <fieldset id="render-base-grid">
+    <legend>Grid</legend>
+    Columns: <input name="cols" type="number" value="22" />
+    Rows: <input name="rows" type="number" value="18" />
+    Type: <input id="grid-type-cell" name="grid-type" type="radio" value="cellular" /><label for='grid-type-cell'> Cellular</label><input id="grid-type-carved" name="grid-type" type="radio" value="carved" checked /><label for='grid-type-carved'> Carved</label>
+    <br/><br/>
+    Seed: <input id="seed-value" name="seed-value" value="Seed Value" />
+    <!-- click event delegated at EOF -->
+    <button id="btn-grid" type="button" style="float:right" onclick="updateDomBaseGrid()">render</button>
+  </fieldset>
+  <hr/>
+  <code style="white-space:pre">
+    <pre>
+      
+    </pre>
+  </code>
+  <small>currently all javascript files are `.js` due to everything being included on the FE. Configure typescript within the `_lib_modules_` folder when applicable.</small>
+  <br/><small>just so: https://octopus.do/2zacu20ksqi</small>
+  <br/><small>and such: https://storysynth.org/</small>
+  <br/><small>https://docs.storysynth.org/guide/#available-formats-and-templates</small>
+  <br/><small>- https://goblinshenchman.wordpress.com/hex-power-flower/</small>
+  <div>
+  </div>
+  <script src="./rooms-and-corridors.js"></script>
+  <script type="module">
+    import {GamingLib} from './_dq-lib/canvas/gaming/_lib.mjs'
+
+    document.querySelector('button#btn-grid').addEventListener('click', ()=> {
+      GamingLib(dqCanvasCntxt,document.getElementById('seed-value')?.value)
+    })
+    document.querySelector('button#btn-generate-level').addEventListener('click', ()=> {
+      console.log('GamingLib.BASE_SEED_POINTER: ', GamingLib.BASE_SEED_POINTER())
+    })
+  </script>
+  <details>
+    <summary>svg land generation - sans js</summary>
+    <svg viewBox="0 0 1000 1000"><defs><filter id="mapmaker" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%"><feTurbulence id="noise" type="fractalNoise" seed="88453" baseFrequency="0.003" numOctaves="8" result="noise"></feTurbulence><feComponentTransfer in="noise" result="noise-adj"><feFuncR id="elevation-adjust" type="gamma" amplitude="1" exponent="4" offset="-0.2"></feFuncR><feFuncG id="moisture-adjust" type="gamma" amplitude="2" exponent="0.15" offset="-1"></feFuncG></feComponentTransfer><feComponentTransfer in="noise" result="water-level"><feFuncR id="water-level" type="linear" intercept="400" slope="-1000"></feFuncR></feComponentTransfer><!-- The *columns* of the color matrix are E M 0 0 B, where
+      E is the elevation vector, M is the moisture vector, B is the base color,
+      as described below --><feColorMatrix type="matrix" in="noise-adj" result="biomes" values="0.6  -0.8  0 0  0.824                                  0.4  -0.57  0 0  0.726                                  0.4  -0.6  0 0  0.545                                  0.0   0.0  0 1  1.000"></feColorMatrix><feColorMatrix type="matrix" in="water-level" result="water" values=" 0.0 -0.05 -0.05  0  0.05                                 0.0  0.05  0.05  0  0.07                                 0.2  0.1    0.1  0  0                                 1.0  0.0    0.0  0  0"></feColorMatrix><feConvolveMatrix id="light" in="biomes" result="light" order="3" kernelMatrix="-2 -1 0 -1 1 1 0 1 2" kernelUnitLength="2.5"></feConvolveMatrix><feMerge><feMergeNode in="biomes"></feMergeNode><feMergeNode in="light"></feMergeNode><feMergeNode in="water"></feMergeNode></feMerge></filter></defs><rect width="1000" height="1000" filter="url(#mapmaker)"></rect></svg>
+    <code>
+      // FUn seed, looks like a "body" of water:
+      <br/><br/>
+      &#x3C;feTurbulence id=&#x22;noise&#x22; type=&#x22;fractalNoise&#x22; seed=&#x22;88453&#x22; baseFrequency=&#x22;0.003&#x22; numOctaves=&#x22;8&#x22; result=&#x22;noise&#x22;&#x3E;&#x3C;/feTurbulence&#x3E;
+      <br/>
+    </code>
+  </details>
+  <div><br/></div>
+</body>
+</html>

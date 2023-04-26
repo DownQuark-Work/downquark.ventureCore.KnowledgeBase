@@ -1,3 +1,5 @@
+TODO: Truchet effect
+
 https://itch.io/jam/procjam
 https://procgen.space/resources
 https://deep-fold.itch.io/pixel-planet-generator !!
@@ -51,5 +53,6 @@ In a different direction - use this to generate mock data for testing/etc
 
 Insp:
 - [https://www.reddit.com/r/proceduralgeneration/comments/sxmvz8/inspired_by_other_posts_here_i_tried_my_hand_at_a/](spellboook generator)
+- [https://game-dev-goose.itch.io/magic-circle-generator](magic circle generator)
 - [miscellaneous](http://cr31.co.uk/stagecast/wang/intro.html)
 - https://www.procjam.com/tutorials/
