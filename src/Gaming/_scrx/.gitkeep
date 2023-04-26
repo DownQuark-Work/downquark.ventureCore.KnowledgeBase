@@ -1,0 +1,97 @@
+# Just random musings, experiments, etc ... nothing really thought out at this point.
+
+## Misc Chars
+⛺︎⛵︎⚓︎⛲︎⛪︎⛳︎☄︎☄︎♆⚗︎☸︎☼☀︎☼⛅︎⛄︎☃︎§♕♔⚰︎⚰︎⚖︎⚕︎⚛︎✠⚱︎⚽︎⚾︎⚚⚕︎☘︎@⨓⨔⨕⊌⊍⊎⨷⩑⩒⟡⧂𝖕𝛀𝜟℗Ƥæⱴ¥₷●○◎⦿◉☞☞☞❖✩✪✦✧✓✔︎✗⇨➠➲➪⟶⇉⇶↬⇴⥇⥈⤳↜↫↬⥉⇯↯↟⇵⥯⇱⤣⥺☽☾☁︎☕︎♨︎⛽︎⚘⚔︎☯︎☮︎🃁⚆⚇🁭‽⸘%‰‱‼︎⁇⁈⁉︎~∗∮∯∰∾∿≙⊶⊷⊹⨧⨭⨮⨵⨴⨾⨷⩴⟐⟕⟖⟗⟠⦜⧆⧇℀µƾ℞∅₽
+
+https://clovers.network/
+
+## Resources:
+https://www.kdnuggets.com/2022/11/quick-overview-voronoi-diagrams.html
+https://developer.mozilla.org/en-US/docs/Games
+https://wiki.mozilla.org/Platform/Games
+
+- THIS: -v May all be archived, but very useful patterns
+- -> https://github.com/orgs/mozdevs/repositories <- 
+- https://github.com/mozdevs/gamedev-js-tiles
+^^^^                    ^^^^^^^^^^
+
+https://joshondesign.com/p/books/canvasdeepdive/toc.html
+- https://joshondesign.com/p/books/canvasdeepdive/chapter_07.html
+
+
+:: https://bucephalus.org/text/CanvasHandbook/CanvasHandbook.html <-- FULL
+
+https://developer.mozilla.org/en-US/docs/Games/Techniques/Control_mechanisms <<- interaction
+- https://github.com/end3r/JavaScript-Game-Controls/blob/gh-pages/index.html
+
+https://developer.mozilla.org/en-US/docs/Web/Performance/Animation_performance_and_frame_rate <<- Must know this entire section
+
+https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps << - should be hgh on the list
+- https://github.com/mozdevs/gamedev-js-tiles <<- pretty sure that's the fullest one
+  - https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps/Square_tilemaps_implementation:_Scrolling_maps
+https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection#separating_axis_theorem
+https://html5devstarter.enclavegames.com/
+
+https://www.redblobgames.com/ <-- just can't go wrong
+https://www.redblobgames.com/making-of/little-things/ <---nice
+http://www-cs-students.stanford.edu/~amitp/game-programming/grids/ <<<-- redblob games
+https://www.redblobgames.com/grids/hexagons/ <<---- YES
+- https://www.redblobgames.com/articles/probability/damage-rolls.html -DAMAGE
+- https://www.redblobgames.com/x/2202-turing-patterns/ -MOVING
+  - https://www.redblobgames.com/dynamics/predator-prey/
+- https://www.redblobgames.com/x/1822-modifying-spelling/ -SPELLING
+- https://simblob.blogspot.com/2014/05/map-homunculus.html -SOUNDS
+- https://www.redblobgames.com/x/1645-phoneme-namegen/ -NameSounds
+- http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/
+  - https://www.redblobgames.com/pathfinding/a-star/making-of.html
+
+https://github.com/mxgmn/MarkovJunior
+  https://github.com/mxgmn/MarkovJunior/tree/main/resources/tilesets
+
+## Mudlet
+:: https://www.mudlet.org/ ::
+ - https://wiki.mudlet.org/w/Special:MyLanguage/Manual:Contents
+http://www.topmudsites.com/
+- https://www.dartmud.com/
+- https://abandonedrealms.com/
+- http://www.aardwolf.com/
+- https://midnightsun2.org/gateways/worldmap.html?show=newbie
+
+  
+## Other
+- https://matthewstrom.com/writing/generative-art-og-images
+https://www.shadertoy.com/view/7tsfRB << Pixel Art Generator 
+
+> One of my favorite examples that motivated the development of MarkovJunior is Bob Nystrom's dungeon generation algorithm. It goes as follows:
+
+\[https://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/]
+\[https://github.com/munificent/rooms-and-mazes]
+\[https://github.com/munificent/hauberk/blob/db360d9efa714efb6d937c31953ef849c7394a39/lib/src/content/dungeon.dart]
+
+- Draw a grid {PBB=**P}.
+- Spawn a bunch of rooms (room.png).
+- Generate a maze on the rest of the grid. We can use any maze generation algorithm, but MazeBacktracker is preferred because it produces fewer branching points.
+- Make the resulting configuration of rooms and corridors connected. This can be elegantly done with a Markov node ({GWW=**G}(GBW=*WG)).
+- Make some additional connections (GBG=*W* #5), so the resulting dungeon has cycles. Dungeons without cycles are pretty boring, since the player has to return through already explored zones.
+- Retract dead ends {BBB/BWB=BBB/BBB}.
+> Doing that is actually pretty easy. A dead end is just a tile that has walls on three sides. When you find one of those, you fill that tile back in. That may in turn make the tile it connects to a dead end. Keep doing this until you run out of dead ends and you’ll end up with lots of solid area where rooms can be placed.
+
+### legacy - may be outdated
+Donjon: https://donjon.bin.sh/world/
+Tectonics: http://davidson16807.github.io/tectonics.js
+Azgaar's Fantasy Map Gen: https://azgaar.github.io/Fantasy-Map-Generator/
+Inkarnate: https://inkarnate.com/
+Medieval City: https://watabou.itch.io/
+
+Dungeon Painter: http://pyromancers.com/dungeon-painter-online/
+Illwinter's floor plan: http://www.illwinter.com/floorplan/
+Mapforge: https://www.mapforge-software.com/
+- See all my favorite map-drawing equipment in the WASD20 storefront: https://www.amazon.com/shop/wasd20
+
+wonderdraft
+Worldanvil
+
+### story
+https://brandonsanderson.com/sandersons-first-law/
+https://brandonsanderson.com/sandersons-second-law/
+https://brandonsanderson.com/sandersons-third-law-of-magic/

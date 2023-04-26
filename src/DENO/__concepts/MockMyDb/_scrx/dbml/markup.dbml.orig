@@ -1,0 +1,244 @@
+// -- DATABASE::WRITE
+//// -- Schemas, Tables and References
+// Creating tables
+Table "+mockmydb"."[Account] Users" as U {
+  id int [pk, increment, note:"@initial"] // auto-increment
+  created datetime [default: `now()`]
+  username varchar(18) [not null, unique]
+  email varchar(30) [not null, unique]
+}
+
+Table "+mockmydb"."[Content] Avatars" as AV {
+  id int [pk, ref: - U.id, note: 'A one to one mapping on the id makes these keys identical']
+  color_bg varchar(15) [note: 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc']
+  color_content varchar(15) [note: 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc']
+  content tinytext [note: 'defaults to a random emoji']
+  Note {'DBML IS NOT applying the schema name to table notes - for now just harcode where needed. then fix it in '}
+}
+Table "+mockmydb"."[Content] Comment" as CC {
+  apply_to int [note:'this is the `id` of the item the comment was is directed towards']
+  apply_to_type enum__type_comment_applied_to [default:null, note: '> `null` is when a comment is replying to another comment']
+  reply_to int [pk, increment, note: 'this is the `id` of the current comment']
+  commenter int [ref: > U.id]
+  comment varchar(255) [not null]
+  created datetime [default: `now()`]
+  edited datetime [default: null, note:'will aggregate as a special character if `true`']
+  Indexes {
+    (apply_to, apply_to_type) [pk] // composite key ensures uniqueness
+    commenter [name: 'fk_comment_creator']
+  }
+  Note {'
+    if this table had any fields that matched what is defined below
+    [@][Named-Overide] Girl-Power[@]
+    then they would have the new overrides attached to their account as well
+  '}
+}
+Table "+mockmydb"."[Content] Comment::Revisions" {
+  comment_id int  [not null, unique, ref: > CC.reply_to, note: 'many-to-one allows grabbing all revisions with single key']
+  revised_at datetime [note: 'will be CC.edited OR CC.created depending on revision amount']
+  comment_before_revision varchar(255) [not null]
+}
+
+Table "+mockmydb"."[Content] Pets" as P {
+  id int [pk, increment]
+  type enum__type_pet [default:null, note: '> `null` is when user has no pet']
+  name varchar(12)
+  age tinyint(2)
+ }
+ 
+// joins
+Table "+mockmydb"."[join] User:Friend:Type" {
+  user int [ref: > U.id]
+  friend int [ref: > U.id]
+  type enum__type_friend [note: '> `frenemy` is member who was blocked or removed from friends/family list']
+}
+
+Table "+mockmydb"."[join] User:Pet" {
+  user int [ref: > U.id]
+  pet int [ref: > P.id]
+}
+
+// END -- DATABASE::WRITE
+
+// -- DATABASE::READ
+/// _RDBMS_
+Table "-mockmydb"."[Account] Users" as A_U {
+  id uuid [pk]
+  username varchar(18) [not null, unique]
+  email varchar(30) [not null, unique]
+}
+Table "-mockmydb"."[Content] Avatars" as A_AV {
+  id uuid [pk, ref: - A_U.id, note: '''
+    A one to one mapping on the id makes these keys identical
+    'No reason to have the avatar a separate commentable entity. Comment on the avatar and it shows up as a comment to the user.'
+  ''']
+  color_bg varchar(15) [note: 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc']
+  color_content varchar(15) [note: 'any valid css value will work `#900`, `rgba(50,33,62,.8)`, etc']
+  content tinytext [note: 'defaults to a random emoji']
+  Note: 'This is a note of this tableTESTING'
+}
+Table "-mockmydb"."[Content] Comment" as A_CC {
+  apply_to uuid [note: 'apply_to_type is no longer needed since uuid is unique']
+  reply_to uuid  [note: 'this is the `id` of the current comment']
+  commenter uuid [ref: > A_U.id]
+  comment varchar(255) [not null]
+  created datetime [default: `now()`]
+  edited_count tinyint(2) [default: null, note: '''
+    aggregate will display amount of times the comment was edited. No other info leakable
+    [@ aggregate rule]sql::
+      SELECT COUNT(comment_id) as `edited_count`
+      FROM "[+Content] Comment::Revisions"
+      WHERE comment_id = apply_to
+    [@]
+  ''']
+  Indexes {
+    apply_to [pk]
+    commenter [name: 'fk_comment_creator']
+  }
+}
+Table "-mockmydb"."[Content] Pets" as A_P {
+  id uuid [pk]
+  type enum__type_pet [default:null, note: '> `null` is when user has no pet']
+  name varchar(12)
+  age tinyint(2)
+ }
+
+// joins
+Table "-mockmydb"."[join] User:Friend:Type" {
+  user uuid [ref: > A_U.id]
+  friend uuid [ref: > A_U.id]
+  type enum__type_friend
+}
+Table "-mockmydb"."[aggregate] Individual:Family" as A_IF [headercolor: #3498db] {
+  individual uuid [pk, ref: - A_U.id, ref: - A_P.id]
+  "@aggregate" ruleset [note:'''[
+     [sql::
+       SELECT user as ind,GROUP_CONCAT(pet) as fam
+       FROM `[+join] User:Pet`
+       GROUP_CONCAT(pet)] => humans
+     [sql::
+       SELECT pet as ind,GROUP_CONCAT(user) as fam
+       FROM `[+join] User:Pet`
+       GROUP_CONCAT(pet)] => pets
+    [js::
+      (humans,pets) => [..humans,...pets]]
+  ''']
+  family mediumtext [note: '''
+    this will be a stringified json value of all other
+    owners and pets associated with the queried individual
+    (basically, the result of running and parsing teh join query from the write db)
+  ''']
+}
+
+// enums [rdbms]
+Enum enum__type_comment_applied_to {
+  user
+  pet
+}
+
+Enum enum__type_friend {
+  friend
+  family
+  frenemy
+}
+
+Enum enum__type_pet {
+  dog
+  cat
+  goldfish
+  rock
+}
+/// _END RDBMS_
+//-------
+/// MOCK_CONFIGURATIONS
+Table "@"."[cnfg] Project" {
+  PROJECT_DEFAULT_OVERRIDES "@" [default: 'applies to all tables and fields']
+  RANGE_ALLOWS_NULL "@" [default:'[5..12]', note:'range values should follow rust syntax']
+  MOCK_ORDER "@" [default:'([+]-[-]-[graph])', note: '''
+    parenthesis allow for more dynamic 
+    `([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
+    but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
+    or the primary  starts and the secondary creates more mutations after the primary:
+      `([+]-[-])([+]-[graph])([-]-[graph])`
+  ''']
+  "[+]-[-]" any_writedb_to_readdb_changes [note: 'would be defined here']
+  "[-]-[graph]" any_read_db_to_graphdb_changes  [note: 'would be defined here']
+  "[+]-[graph]" any_write_db_to_graphdb_changes  [note: 'would be defined here']
+  "@varchar" "@" [note: 'this will match all fields with a varchar of ANY length']
+  "@varchar(100)" "@" [note: 'this will match all fields with a varchar ONLY if the length is 100']
+}
+Table "@"."[cnfg] Database" {
+  "mock-order" int [default:'([+]-[-]-[graph])', note: '''
+    parenthesis allow for more dynamic 
+    `([+]-[-]-[graph])` is equivalent to `([+]-[-])([-]-[graph])`
+    but the primary could also be used to populate the db: `([+]-[-])([+]-[graph])`
+    or the primary  starts and the secondary creates more mutations after the primary:
+      `([+]-[-])([+]-[graph])([-]-[graph])`
+  ''']
+  "[+]-[-]" any_writedb_to_readdb_changes [note: 'would be defined here']
+  "[-]-[graph]" any_read_db_to_graphdb_changes  [note: 'would be defined here']
+  "[+]-[graph]" any_write_db_to_graphdb_changes  [note: 'would be defined here']
+  Note: 'db to db changes can ONLY affect a lower priority db (as defined on the `database-flow` key)'
+}
+Table "@"."[Named-Overide] Girl-Power" {
+  name fakerjs_definitions_person [default: 'female_prefix']
+  first_name fakerjs_definitions_person [default: 'female_first_name']
+  last_name fakerjs_definitions_person [default: 'female_first_name']
+}
+/// END MOCK_CONFIGURATIONS
+
+/// _GRAPH_
+Table "@"."[graph] structure" {
+  type enum__type_graph [default:'undirected']
+  vertex enum__type_vertex [default: '"[-Account] Users","[-join] User:Friend:Type"']
+  edge enum__type_edge [default: '"[-Account] Pets"']
+  Note {'
+    this is still somewhat TBD until the logic can be created
+    should give some sort of intuitive structure to allow automated graphdb instantiation
+  '}
+}
+// END GRAPH
+
+// enums [graph]
+Enum enum__type_graph {
+  undirected
+  directed
+  directed_acyclic_graph
+}
+
+Enum enum__type_edge {
+  enum_type_friend [note: 'this could result in something along the lines of: User -> frenemy -> User']
+  enum_type_pet [note: 'this could result in something along the lines of: User -> rock -> Pet']
+}
+Enum enum__type_vertex {
+  user
+  pet
+}
+/// _END GRAPH_
+// END -- DATABASE::READ
+
+/// ORGANIZATION
+TableGroup relational_write {
+  "+mockmydb"."[Account] Users"
+  "+mockmydb"."[Content] Avatars"
+  "+mockmydb"."[Content] Comment"
+  "+mockmydb"."[Content] Comment::Revisions"
+  "+mockmydb"."[Content] Pets"
+  "+mockmydb"."[join] User:Friend:Type"
+  "+mockmydb"."[join] User:Pet"
+}
+
+TableGroup relational_read {
+  "-mockmydb"."[Account] Users"
+  "-mockmydb"."[Content] Avatars"
+  "-mockmydb"."[Content] Comment"
+  "-mockmydb"."[Content] Pets"
+  "-mockmydb"."[join] User:Friend:Type"
+  "-mockmydb"."[aggregate] Individual:Family"
+}
+
+TableGroup configuration {
+  "@"."[cnfg] Project"
+  "@"."[graph] structure"
+  "@"."[Named-Overide] Girl-Power"
+}
