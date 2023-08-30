@@ -1,5 +1,7 @@
-## For Lightweight apps
-- use "real" native or Flutter (etc) for heavy
+## ~~For Lightweight apps~~
+- ~~use "real" native or Flutter (etc) for heavy~~
+
+https://rust-unofficial.github.io/patterns
 
 TLDR; Electron equivalent
 https://tauri.studio/

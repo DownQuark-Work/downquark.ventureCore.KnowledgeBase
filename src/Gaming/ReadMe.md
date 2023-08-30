@@ -18,3 +18,9 @@ https://www.mapeditor.org/
 
 Interesting:
 https://github.com/WardCunningham/cave-wiki/blob/master/advdat.77-03-31.txt
+
+
+very cool:
+Gaming via API
+- https://docs.spacetraders.io/quickstart/mine-asteroids
+- https://www.gamespot.com/articles/amazon-prime-gaming-free-games-may-2023/1100-6513634/

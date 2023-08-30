@@ -12,6 +12,9 @@ This is a collection of documentation and development resources to be used as re
 
 Inspired by [Build Your Own X](https://github.com/danistefanovic/build-your-own-x). And chances are the content from that link will be implemented.
 
+New message queue to investigate:
+- https://bloomberg.github.io/blazingmq/
+
 Here are some other resources that will be referenced throughout:
 - https://github.com/EbookFoundation/free-programming-books
 - https://github.com/donnemartin/system-design-primer
@@ -23,11 +26,15 @@ Here are some other resources that will be referenced throughout:
   - https://roadmap.sh/
 - https://github.com/trekhleb/javascript-algorithms
 - https://github.com/jlevy/the-art-of-command-line
+- https://www.jointjs.com/blog/isometric-diagrams
+
+- https://www.jointjs.com/demos
 
 And, of course, _always_ remember the **[Octoverse](https://octoverse.github.com/)**
  - https://octoverse.github.com/sustainable-communities/
   - links to top 20 repos about 80% down the page
 
+#### https://awesomeopensource.com/
 
 And finally, a couple miscellaneous links
 - https://www.flagship.io/github-feature-flags/
@@ -39,3 +46,42 @@ And finally, a couple miscellaneous links
 
 ### Languages Resource
 - https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+
+### Design Resource
+- https://huemint.com/
+- https://colorhunt.co/
+- https://themeisle.com/illustrations/
+- https://weareskribbl.com/
+- https://www.glazestock.com/
+- https://lordicon.com/
+- https://useanimations.com/
+- https://brandcolors.net
+- https://www.prettyfolio.com
+- https://wireframe.cc/
+
+- https://www.coverletter.tools
+- https://www.descrumble.com
+
+
+### Recreate this
+- https://apps.apple.com/us/app/delicious-library-3/id635124250?mt=12
+- https://apps.apple.com/us/app/snippetslab/id1006087419?mt=12
+  - https://apps.apple.com/us/app/code-collector-pro/id587612662?mt=12 (organization to add to the above maybe?)
+- https://apps.apple.com/us/app/regexrx/id498370702?mt=12
+- https://apps.apple.com/us/app/monodraw/id920404675?mt=12
+- https://apps.apple.com/us/app/data-creator/id491686136?mt=12
+- https://apps.apple.com/us/app/mindlist-to-do-list-tasks/id1505964697👋👋👋
+
+### Remember this!
+- https://rogule.com/
+
+http://localhost:1342/
+https://github.com/StanGirard/quivr/
+https://www.quivr.app/brains-management/2823a410-ba8e-4e67-a9f1-10ce7305e637
+http://localhost:1342/html/builds/qurrent/downquark-design-system/namespace/dq/work/
+https://mrfreetools.com/tools/
+https://docs.freeplane.org/
+https://resource.fyi/
+https://www.toools.design/
+https://www.jointjs.com/demos
+https://hackernoon.com/exploring-the-trending-web-designs-of-2023

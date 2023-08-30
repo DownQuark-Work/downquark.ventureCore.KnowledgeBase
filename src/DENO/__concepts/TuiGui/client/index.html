@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tui Gui</title>
+  <link rel="stylesheet" href="https://v1.downquark.work/styles/_particles/_base/normalize.css" />
+  <link rel="stylesheet" href="https://v1.downquark.work/styles/_particles/_base/downquark-classless.css" />
+  <link rel="stylesheet" href="https://v1.downquark.work/styles/_particles/_base/downquark-classless-design-system.css" />
+  <link rel="stylesheet" href="https://v1.downquark.work/styles/dq.css">
+  <link rel="stylesheet" href="./styles/dq.tuigui.css">
+</head>
+<body>
+  <h1>A GUI to make TUIs</h1>
+  <dialog>The default GUI makes a TUI that is used to launch this GUI and TUI.
+    <br/><small>(it basically runs `cad` for the client, and launches `deno` for the shell.)</small>
+  </dialog>
+  <h2>GUI</h2>
+  <div>
+    Canvas and whatnot here!
+  </div>
+  <h3>End result:</h3>
+    <p>This will output a <code>code</code> block to copy and paste in the terminal.</p>
+    <p>The block could consist of a stringified <code>(TO|DQ)ML</code> parameter to be pasted inline <em>OR</em> a file download where the path would be included.</p>
+    <p>Instructions will be provided as to how to connect each separate shell process to external file(s) the user wishes to use.</p>
+    <p>The code inside the <em><strong>logic</strong></em> directory will parse the block and run the files specified to complete the GUI to TUI process.</p>
+  <h5>TODO:</h5>
+  <ul>
+    <li>[√] complete <em>Pixso</em> design</li>
+    <li>[-] create canvas to interact with</li>
+    <li>[ ] create <code>(TO|DQ)ML</code> Output
+      <ul><li>[ ] copy/paste</li>
+      <li>[ ] download file</li></ul>
+    </li>
+    <li>[optional] create template file(s) to download and/or copy/paste to be used when interacting with shell's subprocess</li>
+    <li>...</li>
+    <li>...</li>
+    <li>create logic (handled in directory separated from this one)</li>
+  </ul>
+</body>
+</html>

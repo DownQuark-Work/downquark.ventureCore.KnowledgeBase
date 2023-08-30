@@ -3,6 +3,7 @@
 
 TODO: [INTEGRATE] _perlin noise_ generator deno run --allow-read --allow-net fileserver.ts "../../../../../Generation/Noise/perlin.html"
 
+concept: https://github.com/chr15m/rogule.com <--- 1 a day roguelike
 
 # Structure
 ## Top Level Folders Relate to Application Layers

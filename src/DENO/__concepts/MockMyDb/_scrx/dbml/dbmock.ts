@@ -29,6 +29,17 @@ const dbMockDefaults = {},
 
 const sqlRawFile = dbmlToSqlFile || Deno.args[0]
 
+/*
+Original DBML libs:
+- https://github.com/microsoft/monaco-editor
+  - https://microsoft.github.io/monaco-editor/monarch.html
+  - https://microsoft.github.io/monaco-editor/playground.html <-- really neat
+  - https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
+  - https://github.com/microsoft/monaco-editor/blob/main/src/basic-languages/mysql/mysql.ts
+- https://konvajs.org/docs/index.html
+** HOWEVER **
+-> https://www.usenodl.dev/ 
+      may work better than knovajs
 // // awesome idea - may work great for this!
 // https://github.com/emilwidlund/nodl?ck_subscriber_id=2053558625
 

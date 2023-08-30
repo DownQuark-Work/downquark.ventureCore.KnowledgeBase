@@ -17,3 +17,6 @@ https://developers.google.com/ml-kit?hl=en
 
 https://opensource.google/projects/open-images-dataset
 https://search.gesis.org/research_data/SDN-10.7802-2516?doi=10.7802/2516
+
+https://www.asimovinstitute.org/
+https://www.asimovinstitute.org/overview-neural-network-zoo/

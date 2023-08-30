@@ -1,4 +1,5 @@
 https://dev.to/alexeagleson/how-to-set-up-a-fullstack-rust-project-with-axum-react-vite-and-shared-types-429e
+https://rust-unofficial.github.io/patterns/
 
 # Rust
 > https://www.rust-lang.org/

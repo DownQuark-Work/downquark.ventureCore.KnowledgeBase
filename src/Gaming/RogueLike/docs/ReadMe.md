@@ -13,6 +13,8 @@
 - https://nluqo.github.io/broughlike-tutorial/
 - https://www.codeproject.com/Articles/420046/Loot-Tables-Random-Maps-and-Monsters-Part-I
 
+- https://github.com/chr15m/rogule.com <- fun 1x a day play
+
 ### Design:
 - https://www.reddit.com/r/roguelikedev/wiki/tilesets
 - https://opengameart.org/art-search-advanced

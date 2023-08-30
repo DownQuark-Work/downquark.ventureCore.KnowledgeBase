@@ -1,0 +1,7 @@
+/* overrides */
+:where(html), :root {
+  --downquark-color-text-primary: var(--downquark-color-base-emerald-300);
+  --downquark-theme-color-text-headers: var(--downquark-color-base-emerald-300);
+  --downquark-color-background-secondary: var(--downquark-color-base-emerald-600);
+  & body { font-family: var(--downquark-font-family-mono) !important; }
+}
