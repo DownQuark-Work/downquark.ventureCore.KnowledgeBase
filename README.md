@@ -71,6 +71,7 @@ And finally, a couple miscellaneous links
 - https://apps.apple.com/us/app/monodraw/id920404675?mt=12
 - https://apps.apple.com/us/app/data-creator/id491686136?mt=12
 - https://apps.apple.com/us/app/mindlist-to-do-list-tasks/id1505964697👋👋👋
+- https://medium.com/@dmitrijkumancev571/awesome-python-scripts-6711873a35c3 <<-#7 on the list
 
 ### Remember this!
 - https://rogule.com/
@@ -85,3 +86,18 @@ https://resource.fyi/
 https://www.toools.design/
 https://www.jointjs.com/demos
 https://hackernoon.com/exploring-the-trending-web-designs-of-2023
+
+https://www.gamefront.com/
+
+- https://github.com/CorentinTh
+- https://github.com/CorentinTh/inert << tower defense
+
+https://maily.to/
+https://boxshadows.xyz/
+
+https://hackernoon.com/functional-programming-with-javascript-a-deep-dive?source=rss
+https://hackernoon.com/exploring-monads-in-javascript-for-file-handling
+- https://blog.logrocket.com/javascript-either-monad-error-handling/
+- https://jrsinclair.com/articles/2016/marvellously-mysterious-javascript-maybe-monad/
+
+https://medium.com/@dmitrijkumancev571/awesome-python-scripts-6711873a35c3
