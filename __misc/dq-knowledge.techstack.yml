@@ -1,0 +1,143 @@
+repo_name: DownQuark-Work/downquark.ventureCore.KnowledgeBase
+report_id: 27ce17aba9e8e7ddd9220417245b8509
+repo_type: Public
+timestamp: '2023-11-09T15:46:17+00:00'
+requested_by: dqmlnck
+provider: github
+branch: main
+detected_tools_count: 13
+tools:
+- name: Rust
+  description: A safe, concurrent, practical language
+  website_url: http://www.rust-lang.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1070/v7txhrjp9pdqrkdtxxp0.png
+  detection_source: Repo Metadata
+- name: TypeScript
+  description: A superset of JavaScript that compiles to clean JavaScript output
+  website_url: http://www.typescriptlang.org
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1612/bynNY5dJ.jpg
+  detection_source: Repo Metadata
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source: Repo Metadata
+- name: CSS 3
+  description: The latest evolution of the Cascading Style Sheets language
+  website_url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS3
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/6727/css.png
+  detection_source: Repo Metadata
+- name: Hack
+  description: A programming language for HHVM that interoperates seamlessly with
+    PHP
+  website_url: http://hacklang.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1208/download.png
+  detection_source: Repo Metadata
+- name: GLSL
+  description: A high-level C-style language
+  website_url: https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/6548/default_a66025fbe8f221c489bdaac3a99d84e5f138cbbd.png
+  detection_source: Repo Metadata
+- name: SQL
+  description: It is a domain-specific language used in programming
+  website_url: https://en.wikipedia.org/wiki/SQL
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/2271/default_068d33483bba6b81ee13fbd4dc7aab9780896a54.png
+  detection_source: src/DENO/__concepts/MockMyDb/_scrx/dbml/mockmydb.sql
+- name: PHP
+  description: A popular general-purpose scripting language that is especially suited
+    to web development
+  website_url: http://www.php.net/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/991/hwUcGZ41_400x400.jpg
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: Parcel
+  description: "\U0001F4E6\U0001F680  A fast, zero configuration web application bundler"
+  website_url: https://parceljs.org/
+  version: 1.12.4
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: JS Build Tools / JS Task Runners
+  image_url: https://img.stackshare.io/service/8054/fC6Wad-S_400x400.jpg
+  detection_source_url: src/Gaming/RogueLike/docs/zDelelte-Browser.BAK/Application/rogue/package-lock.json
+  detection_source: src/Gaming/RogueLike/docs/zDelelte-Browser.BAK/Application/rogue/package.json
+  last_updated_by: dq-mlnck
+  last_updated_on: 2022-06-02 05:16:03.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source: src/Gaming/RogueLike/docs/zDelelte-Browser.BAK/Application/rogue/package.json
+  last_updated_by: dq-mlnck
+  last_updated_on: 2022-06-02 05:16:03.000000000 Z
+- name: Shell
+  description: A shell is a text-based terminal, used for manipulating programs and
+    files. Shell scripts typically manage program execution.
+  website_url: https://en.wikipedia.org/wiki/Shell_script
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/4631/default_c2062d40130562bdc836c13dbca02d318205a962.png
+  detection_source: Repo Metadata
+- name: parcel-bundler
+  description: Blazing fast, zero configuration web application bundler
+  package_url: https://www.npmjs.com/parcel-bundler
+  version: 1.12.4
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16248/default_380ae3d73e22c7ca1f42b96479bcd0095dabc0d3.png
+  detection_source_url: src/Gaming/RogueLike/docs/zDelelte-Browser.BAK/Application/rogue/package-lock.json
+  detection_source: src/Gaming/RogueLike/docs/zDelelte-Browser.BAK/Application/rogue/package.json
+  last_updated_by: dq-mlnck
+  last_updated_on: 2022-06-02 05:16:03.000000000 Z

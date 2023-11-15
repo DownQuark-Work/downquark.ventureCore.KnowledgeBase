@@ -1,5 +1,7 @@
 TODO: Truchet effect
 
+consider making a [hex grid](https://goblinshenchman.wordpress.com/2019/06/03/hex-power-flower-weather/) via generation
+
 https://itch.io/jam/procjam
 https://procgen.space/resources
 https://deep-fold.itch.io/pixel-planet-generator !!
@@ -50,6 +52,7 @@ In a different direction - use this to generate mock data for testing/etc
 
   go to lib: https://github.com/Tw1ddle/MarkovNameGenerator
   https://www.cssportal.com/css-generators.php
+
 
 Insp:
 - [https://www.reddit.com/r/proceduralgeneration/comments/sxmvz8/inspired_by_other_posts_here_i_tried_my_hand_at_a/](spellboook generator)

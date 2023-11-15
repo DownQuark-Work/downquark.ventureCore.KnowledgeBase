@@ -12,6 +12,9 @@ This is a collection of documentation and development resources to be used as re
 
 Inspired by [Build Your Own X](https://github.com/danistefanovic/build-your-own-x). And chances are the content from that link will be implemented.
 
+https://github.com/marketplace/actions/aws-cli
+https://github.com/marketplace/actions/setup-awscli
+
 New message queue to investigate:
 - https://bloomberg.github.io/blazingmq/
 
