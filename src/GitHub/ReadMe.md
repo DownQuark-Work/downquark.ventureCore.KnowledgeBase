@@ -21,6 +21,16 @@ https://docs.github.com/en/actions/creating-actions/about-custom-actions
 > https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 > https://github.com/actions/typescript-action
 > > https://github.com/actions <<<-- nice
+> > https://github.com/actions/checkout <<<-- this is an actual repo:
+``` # use the above when needing to figure out hte ins-and-outs of the below
+steps:
+    - uses: actions/checkout@v3
+## Another example:
+ - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+# > > https://github.com/actions/setup-node <<<-- this is an actual repo:
+```
 > > https://github.com/features/actions <<<-- showcase
 
 ---
