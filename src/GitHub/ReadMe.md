@@ -6,7 +6,7 @@ _The_ generic workflow:
 Reference:
 - Checking in your node_modules directory can cause problems. As an alternative, you can use a tool called [@vercel/ncc](https://github.com/vercel/ncc) to compile your code and modules into one file used for distribution.
 
-
+- https://github.com/marketplace?category=&type=actions [marketplace examples]
 
 ## apps
 https://docs.github.com/en/apps/creating-github-apps/setting-up-a-github-app/about-creating-github-apps
