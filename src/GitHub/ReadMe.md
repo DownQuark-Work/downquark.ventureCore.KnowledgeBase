@@ -33,6 +33,10 @@ steps:
 ```
 > > https://github.com/features/actions <<<-- showcase
 
+> > https://github.com/devops-actions <<<-- user's collection of really nice utility actions
+    https://github.com/devops-actions/json-to-file/blob/main/action.yml
+    https://github.com/wow-actions
+
 ---
 ---
 TOOLKIT: more than just the two below
