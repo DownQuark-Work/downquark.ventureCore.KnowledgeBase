@@ -1,0 +1,6 @@
+# pack-refs with: peeled fully-peeled sorted 
+4c624fefc45d3f1467a6b61c42d02bec6fd3316f refs/remotes/origin/codeowners
+2cf1c6faee1d05e313978d84bd09cb928415cdba refs/remotes/origin/dependencies
+3c21e76417f32edd95f03877b783c1c4e20efa84 refs/remotes/origin/line-feed
+334b4095708da328d98db095ffdb6e2d273af226 refs/remotes/origin/main
+9b3f3b36835c10b2a8a417f6f3d5037b1a1f65cd refs/remotes/origin/update-eslint

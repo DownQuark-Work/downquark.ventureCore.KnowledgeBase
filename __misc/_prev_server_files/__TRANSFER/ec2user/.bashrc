@@ -1,5 +1,11 @@
 # .bashrc
 
+What we will need:
+full:
+   mariadb-dump --user=root --password=root --lock-tables --all-databases=true > full-db-backup.sql
+selected:
+    mariadb-dump --user=root --password=root --lock-tables --databases DownQuark DevQon > dq-db.sql
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc

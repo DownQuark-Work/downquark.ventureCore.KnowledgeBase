@@ -1,4 +1,10 @@
 # [ec2-user@ip-172-31-20-253 ~]$ cat /home/ec2-user/.bashrc
+
+What we will need:
+full:
+    mariadb-dump --user=root --password=root --lock-tables --all-databases=true > full-db-backup.sql
+selected:
+    mariadb-dump --user=root --password=root --lock-tables --databases DownQuark DevQon > dq-db.sql
 #
 
 # .bashrc
