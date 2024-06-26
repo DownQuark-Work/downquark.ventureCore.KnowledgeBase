@@ -1,6 +1,5 @@
-from src_python.grid.procgen.layout import maze
-from src_python.grid.utils import const as CONST
-from src_python.grid.utils.console import print_formatted_grid
+from src_python.procedural._proseedural import prng
+from src_python.procedural._generation.layout import maze
 
 """Used to distinguish procedurally generated level types"""
 
@@ -9,13 +8,13 @@ class Board:
     """Determines and displays procedurally generated levels"""
 
     def __init__(self, ):
-        """Instantiate Board with basic grid settings"""
+        """Instantiate Board with basic procedural settings"""
 
-    def create_maze(self, maze_opts):
-        """Create initial grid and proc-generated maze"""
-        created_maze = maze.create_maze(maze_opts)
-
-        print('created_maze', created_maze)
+    @staticmethod
+    def create_maze(maze_opts):
+        """Create initial procedural and proc-generated maze"""
+        maze.create_maze(maze_opts)
+        print('created_maze with seed:\n\t--', prng.initial_seed)
 
     def configure(self, conf):
         """Handle Specified Configuration Process"""

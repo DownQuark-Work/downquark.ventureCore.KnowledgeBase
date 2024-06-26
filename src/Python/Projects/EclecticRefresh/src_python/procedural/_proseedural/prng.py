@@ -2,9 +2,11 @@
 import secrets
 from random import random, seed as rand_seed
 
-from src_python.grid.utils.const import GRID
-from src_python.grid.utils.const import PRNG as PRNG_CONST
-from src_python.grid.procgen.decision import parse_value
+from src_python.procedural.utils.const import GRID
+from src_python.procedural.utils.const import PRNG as PRNG_CONST
+from src_python.procedural._proseedural.decision import parse_value
+
+initial_seed = -1
 
 
 class PRNG:
@@ -17,12 +19,10 @@ class PRNG:
         else:
             self._seed = set_seed
             self._initial_seed = set_seed
+        globals()['initial_seed'] = self._initial_seed
         self._rand_num = ''
 
-    @property
-    def initial_seed(self):
-        """_seed getter"""
-        return self._initial_seed
+
     @property
     def seed(self):
         """_seed getter"""
@@ -58,7 +58,7 @@ class PRNG:
             self.create_prng()
 
     def __repr__(self):
-        return f"{self.initial_seed}::{self._rand_num}"
+        return f"{self._rand_num}"
 
 
 class Walker(PRNG):
@@ -82,7 +82,7 @@ class Walker(PRNG):
             self._prng = f'{self.rand_num}'  # set once and convert to string
         if self._auto_inc:  # auto increment if applicable
             self._pos = self._pos + 1
-        if self._pos > self.rand_num_len:  # start over if @ end of prng
+        if self._pos >= self.rand_num_len:  # start over if @ end of prng
             self._pos = 0
         return int(self._prng[self._pos])
 

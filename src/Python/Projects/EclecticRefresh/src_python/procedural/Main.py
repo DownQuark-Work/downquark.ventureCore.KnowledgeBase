@@ -1,11 +1,16 @@
-from src_python.grid.utils.const import ENUM_DIR, ENUM_LAYOUT_TYPE, ENUM_MAZE_TYPE, ENUM_OPTION_TYPE, extend_initial_enums
-from src_python.grid.elements.board import Board
-from src_python.grid.procgen import prng
-from src_python.database.rdbms import *
+from src_python.procedural.utils.const import (ENUM_DIR,
+                                               ENUM_LAYOUT_TYPE,
+                                               ENUM_MAZE_ALGORITHM,
+                                               ENUM_OPTION_TYPE,
+                                               extend_initial_enums)
+from src_python.procedural.elements.board import Board
+from src_python.procedural._proseedural import prng
+
+# from src_python.database.rdbms import *
 
 """The hub/controller/what-have-you"""
 
-no_print_db()
+# no_print_db()
 # print_dbs()
 
 
@@ -48,7 +53,9 @@ class Main:
         extend_initial_enums('MAZE')
         # debug_grid_config(self._pointer)
         config_board({'pointer': self._pointer, 'layout': {'type': ENUM_LAYOUT_TYPE.get('MAZE'), 'opts': {
-            'type': ENUM_MAZE_TYPE.get('GROWING_TREE').get('type'),
-            'cell_selection': ENUM_MAZE_TYPE.get('GROWING_TREE').get('cell_selection').get('QUARTER'),
-            'recursive_actions': ENUM_MAZE_TYPE.get('GROWING_TREE').get('method_index_map'),
+            'type': ENUM_MAZE_ALGORITHM.get('GROWING_TREE').get('type'),
+            # 'cell_selection': ENUM_MAZE_ALGORITHM.get('GROWING_TREE').get('cell_selection').get('NEWEST'),
+            # .get('QUARTER')
+            'cell_selection': [.3, .3, .3, .1],
+            'recursive_actions': ENUM_MAZE_ALGORITHM.get('GROWING_TREE').get('method_index_map'),
         }}})

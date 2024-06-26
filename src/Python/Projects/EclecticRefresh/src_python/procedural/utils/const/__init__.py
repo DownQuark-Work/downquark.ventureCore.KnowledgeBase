@@ -1,10 +1,14 @@
-from src_python.grid.utils.const.maze import *
+from src_python.procedural.utils.const.maze import *
+
 # Enums
 GRID = {
-  'HEIGHT': 0,
-  'WIDTH': 0,
-  'BASE': [],
-  'PERIMETER': [],
+    '_TYPE': None,
+    '_TYPE_TUNNEL': None,
+    'ANIMATE': False,
+    'HEIGHT': 0,
+    'WIDTH': 0,
+    'BASE': [],
+    'PERIMETER': [],
 }
 PRNG = {
     'POINTER': None,
@@ -44,10 +48,13 @@ def extend_initial_enums(extend_type=None):
         apply_maze_enum_updates(GRID)
 
 
-def update_enums():
+def update_enums(is_walled_type=False):
+    carve_offset = 1 if is_walled_type else 2
     ENUM_LOCATION_IS_CARVEABLE.update({
-        'N': [0, -GRID.get('WIDTH') * 2],
-        'S': [0, GRID.get('WIDTH') * 2],
+        'E': [carve_offset, 0],
+        'N': [0, -GRID.get('WIDTH') * carve_offset],
+        'S': [0, GRID.get('WIDTH') * carve_offset],
+        'W': [-carve_offset, 0],
     })
     _ENUM_DIR_CARDINAL.update({
         'N': [0, -GRID.get('WIDTH')],

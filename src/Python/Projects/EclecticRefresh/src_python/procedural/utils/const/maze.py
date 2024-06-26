@@ -1,6 +1,11 @@
 def apply_maze_enum_updates(base_grid):
-    base_grid.update({'UNCARVED': [], 'EGRESSABLE': []})
+    base_grid.update({'MAZE_TYPE': None, 'UNCARVED': [], 'EGRESSABLE': []})
 
+
+ENUM_MAZE_CREATION_TYPE = {
+    'CARVED',
+    'WALLED',
+}
 
 ENUM_LOCATION_IS_CARVEABLE = {
     'E': [2, 0],
@@ -33,7 +38,7 @@ opts_growing_tree = {
 
     }
 }
-ENUM_MAZE_TYPE = {
+ENUM_MAZE_ALGORITHM = {
     'GROWING_TREE': opts_growing_tree,
     'KRUSKAL': {type: 'KRUSKAL'},
     'ELLERS': {type: 'ELLERS'},
@@ -46,11 +51,29 @@ ENUM_MAZE_TYPE = {
 ENUM_TILE_TYPE = {
     'AVAILABLE_ADJACENT': '+',
     'CORRIDOR': ' ',
-    'EGRESS': {'ENTER': '\x1b[1;34m🢕\x1b[0m', 'EXIT': '\x1b[1;31m↯\x1b[0m'},
+    'EGRESS': {'ENTER': '\x1b[1;35m🝊\x1b[0m', 'EXIT': '\x1b[1;33m↯\x1b[0m'},
     'UNCARVED': '⨀',
+    'PASSAGE': {
+        # Single direction
+        'E': '→', 'N': '↑', 'S': '↓', 'W': '←',
+        # Dual direction
+        # ' ': {'→': '→', '↑': '↑', '↓': '↓', '←': '←',},
+        '→': {'→': '↔', '↑': '┘', '↓': '┐', '←': '↔', },  # East
+        '↑': {'→': '┌', '↓': '↕', '←': '┐', '↑': '↕'},  # North
+        '↓': {'→': '└', '↑': '↕', '←': '┘', '↓': '↕'},  # South
+        '←': {'→': '↔', '↑': '└', '↓': '┌', '←': '↔'},  # West
+        # Triple direction
+        '↔': {'↑': '⊥', '↓': '⊤'},
+        '↕': {'→': '⊢', '←': '⊣'},
+        # '⟐': {'→': '⊢', '←': '⊣'},
+        # '⊞': {'→': '⊢', '←': '⊣'},
+        '┌': {'↑': '⊢', '←': '⊤'},
+        '┐': {'↑': '⊣', '→': '⊤'},
+        '└': {'←': '⊥', '↓': '⊢'},
+        '┘': {'→': '⊥', '↓': '⊣'},
+    },
     'PERIMETER': '#',
     'RECURSE': '¿',
     'SOLID': '⊞',
     'VETTING': '?',
 }
-

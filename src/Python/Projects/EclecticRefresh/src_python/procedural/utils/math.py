@@ -11,4 +11,4 @@ def reduce(function, iterable, initializer=None):
 
 def array_set(unset_list):
     list_set = set(unset_list)
-    return (list(list_set))
+    return list(list_set)

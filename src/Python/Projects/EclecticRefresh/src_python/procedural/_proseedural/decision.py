@@ -1,6 +1,6 @@
 import math
 
-from src_python.grid.utils.const import PRNG as PRNG_CONST
+from src_python.procedural.utils.const import PRNG as PRNG_CONST
 
 """Returns _fair-ish_ weighted decision"""
 prng_pos = None
@@ -13,10 +13,10 @@ def parse_value(opt_amt):
     if not globals()['prng_pos']:
         globals()['prng_pos'] = PRNG_CONST.get('POINTER')
     prng_position = globals()['prng_pos']
-    pos_int =prng_position.pos
+    pos_int = prng_position.pos
     # print('opt_amt', opt_amt)
 
-    if opt_amt > 10:
+    if opt_amt > 10:  # consider refactor for `divmod`
         divided_opt_amt_arr = []
         divided_opt_amt = opt_amt
         while divided_opt_amt > 10:
