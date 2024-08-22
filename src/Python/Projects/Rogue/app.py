@@ -5,7 +5,6 @@ from src_python.procedural import Controller
 # https://github.com/grantjenks/free-pyth/blob/master/src/freegames/__init__.py
 
 args = {}
-# only runs on init load
 if __name__ == '__main__':
     args = arg_utils.build_arg_parser()
     # print('args', args)
