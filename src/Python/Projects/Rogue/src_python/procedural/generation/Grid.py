@@ -1,12 +1,10 @@
 from src_python.procedural.utils.const import GRID
-
 """The base grid instance. Contains pseudo 2D array from 1D source"""
 
 class Grid:
     def __init__(self):
         self._h = 0
         self._w = 0
-        print('happening')
 
     @staticmethod
     def determine_grid_border_indexes(grid, w):
@@ -25,3 +23,4 @@ class Grid:
         self._h = GRID.get('HEIGHT')
         self._w = GRID.get('WIDTH')
         self.init_grid_config()
+

@@ -5,6 +5,25 @@ from src_python.procedural.generation.environments.maze import create
 from src_python.procedural.utils.const import (GRID, ENUM_TILE_TYPE)
 from src_python.procedural.utils.const.maze import ENUM_MAZE_CREATION_TYPE
 
+#     - py app.py 18 36 298608618 maze -Aw
+#     - py app.py maze -w
+#     - py app.py maze
+#     - py app.py 12 12 12 maze -A
+#     - 16 26 5810590
+#     - 8 13 58105907967881684749
+#     - 16 26 58
+#     - 16 26 134269
+#     - 20 40 17906106984432535371
+#     - 20 40 48866109023011662405 <-- had a few edge cases
+#     - 20 40 4886610902301166
+#     - 20 40 58884455474897919654
+#     - 8 12 13421342 -A <-- carved
+#     - 8 12 13421342 -Aw < -- walled
+#     - 20 40 588844554748979196545 -w
+#     - 18 36 29860086412884897115 -Aw
+#     - 18 36 298608618497115 -w <-- has '+'
+#     - 18 36 98782528972936655916
+#     - py app.py 15 12 77211838859715482 maze -wA
 
 def configure_initial_ascii(grid_full_border):
     """create base carve-able procedural"""

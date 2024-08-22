@@ -10,7 +10,7 @@ def clear():
 
 def print_formatted_grid(grid=None, width=0):
     """log given procedural, breaking on each `width` index"""
-    clear()
+    # clear()
     if grid is None:
         grid = GRID.get('BASE')
     if width == 0:
@@ -20,7 +20,7 @@ def print_formatted_grid(grid=None, width=0):
     for grid_item in grid:
         if grid_item is None:  # failsafe / edge case
             grid_item = ENUM_TILE_TYPE.get('SOLID')
-        formatted_grid.append(grid_item)
+        formatted_grid.append(str(grid_item))
         if len(formatted_grid) == width:
             print(' '.join(formatted_grid))
             formatted_grid = []

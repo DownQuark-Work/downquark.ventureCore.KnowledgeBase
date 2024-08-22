@@ -8,6 +8,8 @@ args = {}
 # only runs on init load
 if __name__ == '__main__':
     args = arg_utils.build_arg_parser()
+    # print('args', args)
+    # exit(1)
 
 grid_h = args.__getattribute__('dimensions')[0]
 grid_w = args.__getattribute__('dimensions')[1]
@@ -17,11 +19,26 @@ if grid_h % 2 == 0:
 if grid_w % 2 == 0:
     grid_w = grid_w + 1
 
+if len(args.__getattribute__('dimensions')) == 3:
+    prop_seed = args.__getattribute__('dimensions')[2]
+else:
+    prop_seed = args.__getattribute__('seed')
+
+
+Controller.CreatePRNGPointer(prop_seed)
+
+# TODO: The below should be moved into __init__ or into the Controller (or it's __init__) file.
 if 'procgen' in args:
     """If command is referring to procedural generation"""
     const_utils.GRID.update({ # set the type of grid to be rendered
         '_TYPE': args.procgen.upper(), # 'MAZE', 'DUNGEON, 'SQUARE_DIAMOND', ...
+        'HEIGHT': grid_h, 'WIDTH': grid_w
     })
+    Controller.CreatePRNGPointer(prop_seed)
+    if args.procgen == 'DS' or args.procgen == 'diamond-square':
+        """Process Diamond-Square Algorithm"""
+        args.procgen = 'DIAMOND_SQUARE' # quick consistency - TODO: Make these instances actual enums
+        Controller.ProcessAlgorithm(prop_seed,args)
     if args.procgen == 'maze':
         """Handle Maze Procedural Generation options"""
         tunnel_type = args.__getattribute__('walled')
@@ -29,13 +46,6 @@ if 'procgen' in args:
             # '_MAZE_TYPE': 'SIDEWINDER', 'GROWING_TREE', ..., # TODO: implement when logic created
             '_TYPE_TUNNEL': 'WALLED' if tunnel_type else 'CARVED',
             'ANIMATE': args.__getattribute__('anim'),
-            'HEIGHT': grid_h, 'WIDTH': grid_w
         })
         const_utils.update_enums(tunnel_type)
-
-if len(args.__getattribute__('dimensions')) == 3:
-    prop_seed = args.__getattribute__('dimensions')[2]
-else:
-    prop_seed = args.__getattribute__('seed')
-
-Controller.Controller(prop_seed)
+        Controller.ConfigureEnvironment(prop_seed)
