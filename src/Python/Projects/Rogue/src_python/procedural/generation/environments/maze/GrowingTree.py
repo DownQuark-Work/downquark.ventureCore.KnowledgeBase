@@ -27,6 +27,7 @@ class MazeGrowingTree(MazeBase):
         self._recursive_methods = maze_opts.get('recursive_actions')
         self._recurse_index = -1
         starting_index = self.mazebase_get_starting_point()
+        self._initial_index = starting_index
         self.on_uncarved_indexes_exist = self.valid_uncarved_indexes
         self.on_undefined_next_cell = self.define_next_cell
         self.generate_maze([starting_index, starting_index])

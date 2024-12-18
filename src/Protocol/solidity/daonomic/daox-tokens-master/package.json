@@ -1,0 +1,32 @@
+{
+  "name": "@daonomic/daox-tokens",
+  "version": "0.1.0",
+  "description": "Contracts for DAOX project",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/daox-tokens.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/daox-tokens/issues"
+  },
+  "homepage": "https://github.com/daonomic/daox-tokens",
+  "dependencies": {
+    "@daonomic/util": "~0.1",
+    "@daonomic/interfaces": "~0.1",
+    "daonomic-upgradeable": "0.0.2"
+  },
+  "devDependencies": {
+    "@daonomic/tests-common": "~0.1"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@daonomic/receivers",
+  "version": "0.1.5",
+  "description": "Different smart contracts for receiving tokens",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/receivers.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/receivers/issues"
+  },
+  "homepage": "https://github.com/daonomic/receivers",
+  "dependencies": {
+    "@daonomic/interfaces": "~0.1"
+  },
+  "devDependencies": {
+    "@daonomic/tokens": "~0.1",
+    "@daonomic/tests-common": "~0.1"
+  }
+}

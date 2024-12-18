@@ -1,0 +1,31 @@
+{
+  "name": "@daonomic/tokens",
+  "version": "0.2.0",
+  "description": "Standard tokens",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/tokens.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/tokens/issues"
+  },
+  "homepage": "https://github.com/daonomic/tokens",
+  "dependencies": {
+    "@daonomic/util": "~0.2",
+    "@daonomic/interfaces": "^0.2.1"
+  },
+  "devDependencies": {
+    "@daonomic/tests-common": "~0.2"
+  }
+}

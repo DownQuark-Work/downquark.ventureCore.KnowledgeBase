@@ -1,0 +1,9 @@
+.idea
+*.iml
+migrations
+test
+build
+truffle.js
+*.sh
+LICENSE
+*.md

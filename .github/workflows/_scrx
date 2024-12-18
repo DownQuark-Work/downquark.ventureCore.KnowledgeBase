@@ -1,0 +1,77 @@
+# Concept
+---
+Leveraging the concept [here](https://github.com/benjaminsampica) visitors that are signed in can create a digitized card that will be displayed on the profile. This card will be build with the following features:
+1. a PRNG seed will be created using the most recent commit from across all repositories \[ref#1\]
+  - the back of the card will display a procgen of one of the following
+    - maze
+    - mondrian \[elements#1\]
+    - \*phase2: [book?](https://www.reddit.com/r/proceduralgeneration/comments/os05xs/i_think_i_went_overboard_with_the_procedural_book/)
+    - \*phase2: [flags?](https://www.reddit.com/r/proceduralgeneration/comments/yci0yq/some_flags_my_bot_made/)
+  - the choice of what to make will be determined by a hash of the username
+  - the design will be based off of the procgen
+1. the front of the card will have
+  - a \(maybe stylized?\) version of the user's avatar
+  - the username
+  - stats of the user at that (point in time | for phase 1 at least) - derived from the [github readme stats](https://github.com/anuraghazra/github-readme-stats)
+> A fun phase 2 of this would be to allow the cards to "battle" based on the user's statistics.
+> - by making the stats dynamic and generated at "battle time" users could _level up_ by creating / contributing to their repos
+> In this phase we should also show CQRS with rdbms/graphdb/aggregate
+>
+
+#UI
+---
+## user profiles
+https://github.com/benjaminsampica
+
+### collections
+https://zzetao.github.io/awesome-github-profile/
+https://tduyng.com/blog/dynamic-github-profile-with-bun-typescript/
+https://github.com/simonw/simonw/blob/main/.github/workflows/build.yml
+https://github.com/orgs/community/discussions/134460
+https://github.com/huantt/huantt/blob/main/.github/workflows/update-readme.yml
+https://dev.to/jacktt/creating-dynamic-readmemd-file-388o
+
+## styling
+https://github.com/dbohdan/classless-css
+https://dohliam.github.io/dropin-minimal-css/switcher.js
+https://dohliam.github.io/dropin-minimal-css/min/preface.min.css
+https://dohliam.github.io/dropin-minimal-css/min/yamb.min.css
+https://dohliam.github.io/dropin-minimal-css/min/yorha.min.css
+https://dohliam.github.io/dropin-minimal-css/min/awsm-gondola.min.css
+https://dohliam.github.io/dropin-minimal-css/min/awsm-mischka.min.css
+https://dohliam.github.io/dropin-minimal-css/min/awsm-tasman.min.css
+https://dohliam.github.io/dropin-minimal-css/min/w3c-chocolate.min.css
+
+## elements
+https://www.mondriangenerator.io/
+https://codepen.io/rogie/details/bGzgMGo
+https://codepen.io/jdillon/details/JjaqgWN
+https://codepen.io/t_afif/details/GRwgyJM
+https://codepen.io/LukyVj/details/abRbqgy <- glow & particles
+https://codepen.io/nicolasjesenberger/details/rNodvzd <- hexagon
+https://codepen.io/Zaku/details/JqBxNg <- encrypted
+https://codepen.io/kathykato/details/rZRaNe
+https://codepen.io/natszafraniec/details/BavarrE <-  double borders
+
+
+# Logic
+---
+> Use all resources below, but this the core of the functionality will stem from:
+> - https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action?learn=create_actions&learnProduct=actions&platform=mac
+>     - examples: https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action?learn=create_actions&learnProduct=actions&platform=mac#example-composite-actions-on-github
+> - ==> -> Relevant: https://github.com/microsoft/action-python <- <==
+
+## docs
+https://docs.github.com/en/actions
+https://docs.github.com/en/actions/guides
+https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions
+https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action?learn=create_actions&learnProduct=actions&platform=mac
+https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-javascript-action
+https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions?learn=create_actions&learnProduct=actions
+https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs
+https://github.com/orgs/community/discussions/134460 <<-- interesting
+https://github.com/DownQuark-Work/downquark.ventureCore.KnowledgeBase/actions/new
+
+## ref
+1. https://github.com/search?q=author%3Adq-mlnck+author%3Amlnck+author%3Ajmelnick-atlantis+&type=commits
+1. https://github.com/simonw/simonw/blob/main/.github/workflows/build.yml

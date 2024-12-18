@@ -1,0 +1,5 @@
+export const assetOwners = [
+  '0x553963B10b2A65D221D2648dfDfB76B2Fc222Bf4',
+  '0x7EEA57816151A0df55184999a6CC03184aA6EB6D',
+  '0x12B8AF4BdCF68c5f110517495771CF833DA722fe',
+].map((address) => address.toLowerCase());

@@ -4,8 +4,13 @@ from src_python.procedural import Controller
 #  reference to model after:poetry env info
 # https://github.com/grantjenks/free-pyth/blob/master/src/freegames/__init__.py
 
+# example usage:
+#  py app.py 17 34 279482041024066720 maze -A
+#  py app.py 8 17 79916528711854978595 maze -Aw
+#  py app.py 8 17 31294641922518211535 maze -A
+#  py app.py 8 17 31294641922518211535 maze -Aw
+
 args = {}
-# only runs on init load
 if __name__ == '__main__':
     args = arg_utils.build_arg_parser()
     # print('args', args)

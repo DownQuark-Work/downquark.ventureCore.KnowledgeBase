@@ -1,0 +1,27 @@
+{
+  "name": "@daonomic/util",
+  "version": "0.2.0",
+  "description": "Util contracts for daonomic platform",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/util.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/util/issues"
+  },
+  "homepage": "https://github.com/daonomic/util",
+  "devDependencies": {
+    "@daonomic/tests-common": "~0.1"
+  }
+}

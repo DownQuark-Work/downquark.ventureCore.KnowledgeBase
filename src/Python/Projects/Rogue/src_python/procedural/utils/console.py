@@ -10,7 +10,7 @@ def clear():
 
 def print_formatted_grid(grid=None, width=0):
     """log given procedural, breaking on each `width` index"""
-    # clear()
+    clear()
     if grid is None:
         grid = GRID.get('BASE')
     if width == 0:

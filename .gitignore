@@ -1,6 +1,9 @@
 .DS*
 *BAK
 
+.idea/
+**/.idea/
+
 # Compiled
 src/assets/styles/css
 exports/.cache/**/

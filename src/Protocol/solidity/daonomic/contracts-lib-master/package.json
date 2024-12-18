@@ -1,0 +1,30 @@
+{
+  "name": "@daonomic/lib",
+  "version": "0.1.3",
+  "description": "Common contracts for different Daonomic projects",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/contracts-lib.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/contracts-lib/issues"
+  },
+  "homepage": "https://github.com/daonomic/contracts-lib",
+  "dependencies": {
+    "openzeppelin-solidity": "2.1.2"
+  },
+  "devDependencies": {
+    "@daonomic/tests-common": "~0.2"
+  }
+}

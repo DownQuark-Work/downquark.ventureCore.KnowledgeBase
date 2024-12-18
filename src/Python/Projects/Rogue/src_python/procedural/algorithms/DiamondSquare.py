@@ -128,6 +128,8 @@ class DiamondSquareAlgorithm:
         def get_value_in_arg_range():
             return max(DS_MIN_VALUE,self._prng_pointer.pos_val(DS_MAX_VALUE))
         def set_value_in_jitter_range(iter_amt):
+            # look into integrating this:
+            # -> const normalizeRatio = (value, min, max) => (value - min) / (max - min);
             cur_jitter = min(1,max(0,self._ds_args.jitter)) ** iter_amt
             self.jitter = cur_jitter
             # print('jitter',self.jitter)

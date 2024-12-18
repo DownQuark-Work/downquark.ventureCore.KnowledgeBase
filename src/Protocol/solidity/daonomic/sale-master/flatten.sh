@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+solidity_flattener --solc-paths="..=.." --solc-paths="daonomic-receivers=/home/quadro/Projects/daonomic/daonomic-sale/node_modules/daonomic-receivers" --solc-paths="daonomic-interfaces=/home/quadro/Projects/daonomic/daonomic-sale/node_modules/daonomic-interfaces" --solc-paths="daonomic-util=/home/quadro/Projects/daonomic/daonomic-sale/node_modules/daonomic-util" --output SimpleLoggingSale.sol contracts/SimpleLoggingSale.sol

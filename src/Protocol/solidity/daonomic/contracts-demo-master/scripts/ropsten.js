@@ -1,0 +1,4 @@
+DemoToken.at("0x562a3fe8d6ffd65fe4e41f7b884cfdad7a8600aa").transferOwnership("0x657aaaa7ad8e67dde416b86c50087fbbedb18d96");
+
+DemoSale.new("0x562a3fe8d6ffd65fe4e41f7b884cfdad7a8600aa", "0x5cbef5849c3b4d86f6830784fd3f879a2d2e61c7", 1519862400, 4675536000, "10000000000000000000000000");
+DemoSale.at("0x657aaaa7ad8e67dde416b86c50087fbbedb18d96").transferRole("operator", "0x293ee3c09264116c02659962d672ca071ec994cc");

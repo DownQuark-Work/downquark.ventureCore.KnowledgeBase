@@ -1,0 +1,32 @@
+{
+  "name": "@daonomic/sale",
+  "version": "0.2.1",
+  "description": "Sale contracts for Daonomic platform",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/sale.git"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/sale/issues"
+  },
+  "homepage": "https://github.com/daonomic/sale",
+  "dependencies": {
+    "@daonomic/util": "~0.2",
+    "@daonomic/interfaces": "~0.2"
+  },
+  "devDependencies": {
+    "@daonomic/tokens": "~0.2",
+    "@daonomic/tests-common": "~0.2"
+  }
+}

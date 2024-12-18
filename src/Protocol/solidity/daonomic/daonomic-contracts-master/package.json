@@ -1,0 +1,21 @@
+{
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity"
+  ],
+  "dependencies": {
+    "@daonomic/regulated": "^0.3.0",
+    "openzeppelin-solidity": "^2.1.2"
+  },
+  "devDependencies": {
+    "@daonomic/tests-common": "~0.2",
+    "@daonomic/sale": "^0.3.7"
+  }
+}

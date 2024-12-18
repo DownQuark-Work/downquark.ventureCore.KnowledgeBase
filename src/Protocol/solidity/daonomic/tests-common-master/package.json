@@ -1,0 +1,24 @@
+{
+  "name": "@daonomic/tests-common",
+  "version": "0.2.2",
+  "description": "Common utilities for smart contract testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daonomic/tests-common.git"
+  },
+  "keywords": [
+    "ethereum",
+    "truffle",
+    "test"
+  ],
+  "author": "0v1se",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daonomic/tests-common/issues"
+  },
+  "homepage": "https://github.com/daonomic/tests-common#readme"
+}

@@ -1,0 +1,15 @@
+{
+  "extends": ["@daonomic/eslint-config", "plugin:import/errors"],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "import/no-default-export": 2,
+    "no-console": 1
+  }
+}

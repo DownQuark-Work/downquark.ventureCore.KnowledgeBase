@@ -6,12 +6,11 @@ from src_python.procedural.utils.decorators import with_config_grid
 from src_python.procedural.utils.math import reduce, array_set
 from src_python.procedural.utils.console import print_formatted_grid
 
-
 @with_config_grid('ANIMATE')
 def print_grid(do_animate=False):
     if do_animate:
-        # time.sleep(.25)
-        time.sleep(.01)
+        time.sleep(.05)
+        # time.sleep(.01)
         print_formatted_grid()
 
 
@@ -24,6 +23,7 @@ class MazeBase:
         self._unchecked_indexes = GRID.get('UNCARVED').copy()
         self._on_uncarved_indexes_exist = None
         self._on_undefined_next_cell = None
+        self._initial_index = None
 
     @property
     def mazebase_prng_pointer(self):
@@ -88,7 +88,8 @@ class MazeBase:
         for cell_value in cell_indexes:
             self._path_maker.append(cell_value)
             GRID.get('BASE')[cell_value] = type_tile
-        self._unchecked_indexes.remove(cell_indexes[0])
+        if self._unchecked_indexes.__contains__(cell_indexes[0]):
+            self._unchecked_indexes.remove(cell_indexes[0])
         print_grid()
 
     def progress_build(self, vet_index: int) -> [int]:
@@ -128,6 +129,7 @@ class MazeBase:
 
     def generate_maze(self, cell_indexes: [int], prev_cell=None):
         type_tile = ENUM_TILE_TYPE.get('CORRIDOR')
+        # print('prev_cell',cell_indexes,prev_cell)
 
         if GRID.get('_TYPE_TUNNEL') == 'WALLED' and prev_cell is not None:
             [dir_type_tile, prev_cell_type] = self.get_cell_type_by_direction(cell_indexes[0], prev_cell)
@@ -137,8 +139,11 @@ class MazeBase:
         self.carve_current_index(cell_indexes, type_tile)
 
         if len(self._unchecked_indexes) == 0:
-            if GRID.get('_TYPE_TUNNEL') == 'WALLED' and prev_cell is not None:
-                self.set_cell_type_by_direction(prev_cell, ENUM_TILE_TYPE.get('SOLID'))
+            if GRID.get('_TYPE_TUNNEL') == 'WALLED':
+                # initialize walled maze with dead end tile type
+                self.carve_current_index([self._initial_index], ENUM_TILE_TYPE.get('SOLID'))
+                if prev_cell is not None: # final cell is dead end if connected to a path
+                    self.set_cell_type_by_direction(cell_indexes[0], ENUM_TILE_TYPE.get('SOLID'))
             self.mazebase_create_egress()
             return
 
