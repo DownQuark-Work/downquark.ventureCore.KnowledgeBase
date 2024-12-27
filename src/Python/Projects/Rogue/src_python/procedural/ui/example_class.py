@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 # py src_python/procedural/ui/example_class.py
 
@@ -103,6 +103,8 @@ class FeetToMeters:
         # btn.instate(['disabled'])  # true if disabled, else false
         # btn.instate(['!disabled'])  # true if not disabled, else false
         # btn.instate(['!disabled'], cmd)  # execute 'cmd' if not disabled
+        ### debug button
+        # print(' button.configure()', btn.configure(), btn['command'])
 
         ## checkbox example
         # measureSystem = StringVar()
@@ -205,8 +207,104 @@ class FeetToMeters:
             for i in w.winfo_children():
                 print_hierarchy(i, depth + 1)
 
-        print_hierarchy(root)
-        print(' button.configure()', btn.configure(), btn['command'])
+        # print_hierarchy(root)
+
+        def newFile():
+            print('newfile')
+        def openFile():
+            print('openFile')
+        def closeFile():
+            print('closeFile')
+
+        def make_menu():
+            # print('hi')
+            # It's essential to put the following line in your application somewhere before you start creating menus.
+            root.option_add('*tearOff', FALSE)
+            menubar = Menu(root)
+            app_menu = Menu(menubar, name='apple') # adds item to the default "Python" menu
+            app_menu.add_command(label='About My Application')
+            app_menu.add_separator()
+            menu_file = Menu(menubar)
+            menu_edit = Menu(menubar)
+            menubar.add_cascade(menu=app_menu)
+            menubar.add_cascade(menu=menu_file, label='File')
+            menubar.add_cascade(menu=menu_edit, label='Edit')
+            menu_file.add_command(label='New', command=newFile)
+            menu_file.add_command(label='Open...', command=openFile)
+            menu_file.add_command(label='Close', command=closeFile)
+            menu_file.add_separator()
+            menu_recent = Menu(menu_file)
+            menu_file.add_cascade(menu=menu_recent, label='Open Recent')
+            recent_files = ['a','b',13,42,'scissors']
+            for f in recent_files:
+                menu_recent.add_command(label=f, command=openFile)
+                # menu_recent.add_command(label=os.path.basename(f), command=lambda f=f: openFile(f))
+            check = StringVar()
+            menu_file.add_checkbutton(label='Check', variable=check, onvalue=1, offvalue=0)
+            radio = StringVar()
+            menu_file.add_radiobutton(label='One', variable=radio, value=1)
+            menu_file.add_radiobutton(label='Two', variable=radio, value=2)
+            menu_window = Menu(menubar, name='window') # adds minimize,zoom,etc
+            menubar.add_cascade(menu=menu_window, label='Window')
+            menu_help = Menu(menubar, name='help') # customized with 'showHelp' below
+            menubar.add_cascade(menu=menu_help, label='Help')
+
+            ## menu enhancements
+            menu_edit.add_command(label="Paste", command=lambda: root.focus_get().event_generate("<<Paste>>"))
+            menu_edit.add_command(label="Find...", command=lambda: root.event_generate("<<OpenFindDialog>>"))
+            menu_edit.entryconfigure('Find...', accelerator='Control+3') # <-- shortcut
+            menu_recent.delete(4, 'end') # 'scissors' is removed
+            # print(menu_file.entrycget(0, 'label'))  # get label of top entry in menu
+            # print(menu_file.entryconfigure(0))  # show all options for an item
+            menu_file.entryconfigure('Close', state=DISABLED)
+            # menu_bookmarks.entryconfigure(3, label="Hide Bookmarks")
+            # menu_edit.add_command(label='Path Browser', underline=5)  # underline "B"
+
+            def showSettings():
+                messagebox.showinfo(message="Settings would display here")
+            root.createcommand('tk::mac::ShowPreferences', showSettings)
+
+            def showHelp():
+                messagebox.showinfo(message="Help would display here")
+            root.createcommand('tk::mac::ShowHelp', showHelp)
+
+            def launchFindDialog(*args):
+                messagebox.showinfo(message="I hope you find what you're looking for!")
+            root.bind("<<OpenFindDialog>>", launchFindDialog)
+
+            ### contextual (pop-up) menu
+            # for i in ('One', 'Two', 'Three'):
+            #     menubar.add_command(label=i)
+                # menubar.add_command(label=i, command=lambda e: menubar.post(20, 20))
+            # if (root.tk.call('tk', 'windowingsystem') == 'aqua'):
+            #     root.bind('<2>', lambda e: menubar.post(e.x_root, e.y_root))
+            #     root.bind('<Control-1>', lambda e: menubar.post(e.x_root, e.y_root))
+            # else:
+            #     root.bind('<3>', lambda e: menubar.post(e.x_root, e.y_root))
+
+            ### Mac Menu Handlers
+            # tk::mac::ShowPreferences:
+            #   Called when the "Preferences..." menu item is selected.
+            # tk::mac::ShowHelp:
+            #   Called to display main online help for the application.
+            # tk::mac::Quit:
+            #   Called when the Quit menu item is selected, when a user is trying to shut down the system etc.
+            # tk::mac::OnHide:
+            #   Called when your application has been hidden.
+            # tk::mac::OnShow:
+            #   Called when your application is shown after being hidden.
+            # tk::mac::OpenApplication:
+            #   Called when your application is first opened.
+            # tk::mac::ReopenApplication:
+            #   Called when a user "reopens" your already-running application (e.g., clicks on it in the Dock)
+            # tk::mac::OpenDocument:
+            #   Called when the Finder wants the application to open one or more documents (e.g., that were dropped on it). The procedure is passed a list of pathnames of files to be opened.
+            # tk::mac::PrintDocument:
+            #   As with OpenDocument, but the documents should be printed rather than opened.
+
+            root['menu'] = menubar # attach menubar to tkinter
+
+        make_menu()
 
 
     def calculate(self, *args):
@@ -217,6 +315,8 @@ class FeetToMeters:
             pass
 
 
+
 root = Tk()
 FeetToMeters(root)
+# print(root.tk.call('tk', 'windowingsystem')) # returns x11, win32 or aqua
 root.mainloop()
