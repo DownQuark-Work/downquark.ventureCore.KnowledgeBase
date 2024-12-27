@@ -54,3 +54,4 @@ if 'procgen' in args:
         })
         const_utils.update_enums(tunnel_type)
         Controller.ConfigureEnvironment(prop_seed)
+
