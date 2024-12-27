@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 
 # py src_python/procedural/ui/example_class.py
 
@@ -74,6 +74,27 @@ class FeetToMeters:
 
         root.title("Feet to Meters")
 
+        # could be useful for a splash screen or something
+        # root.minsize(200, 100)
+        # root.maxsize(500, 500)
+        # root.attributes("-alpha", 0.85)
+
+        ## set to fullscreen:
+        # root.attributes("-fullscreen", 1)
+        ## https://wiki.tcl-lang.org/page/MacWindowStyle - mac specific styles
+
+        ## hide and show window without killing process
+        # root.state('normal')
+        # root.iconify()
+        # root.deiconify()
+        # root.withdraw()
+        ###
+        # For document-centric applications, where you want to allow closing any window without the application exiting
+        # (as would happen if you destroy the root window), use withdraw on the root window to remove it from the screen,
+        # use new toplevel windows for your user interface.
+        ###
+        # print('root.state',root.state())
+
         mainframe = ttk.Frame(root, padding="3 3 12 12")
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
         root.columnconfigure(0, weight=1)
@@ -83,6 +104,19 @@ class FeetToMeters:
         # mainframe.columnconfigure(2, weight=3)
         # mainframe.rowconfigure(0, weight=1)
         # mainframe.rowconfigure(2, weight=3)
+
+        ## 'z-index'-like methods
+        # window.attributes("-topmost", 1)
+        # window.lift()
+        # window.lift(otherwin)
+        # window.lower()
+        # window.lower(otherwin)
+        ### example
+        # little = ttk.Label(mainframe, text="Little ")
+        # bigger = ttk.Label(mainframe, text='Much bigger label')
+        # little.grid(column=0, row=0)
+        # bigger.grid(column=0, row=0)
+        # mainframe.after(2000, lambda: little.lift())
 
 
         self.feet = StringVar()
@@ -210,11 +244,14 @@ class FeetToMeters:
         # print_hierarchy(root)
 
         def newFile():
-            print('newfile')
+            dirname = filedialog.askdirectory()
+            print('newfile',dirname)
         def openFile():
-            print('openFile')
+            filename = filedialog.askopenfilename()
+            print('openFile',filename)
         def closeFile():
-            print('closeFile')
+            filename = filedialog.asksaveasfilename()
+            print('closeFile',filename)
 
         def make_menu():
             # print('hi')
@@ -256,9 +293,43 @@ class FeetToMeters:
             menu_recent.delete(4, 'end') # 'scissors' is removed
             # print(menu_file.entrycget(0, 'label'))  # get label of top entry in menu
             # print(menu_file.entryconfigure(0))  # show all options for an item
-            menu_file.entryconfigure('Close', state=DISABLED)
+            menu_file.entryconfigure('Open...', state=DISABLED)
             # menu_bookmarks.entryconfigure(3, label="Hide Bookmarks")
             # menu_edit.add_command(label='Path Browser', underline=5)  # underline "B"
+
+            ###
+            ## color chooser
+            # from tkinter import colorchooser
+            # colorchooser.askcolor(initialcolor='#ff0000')
+
+            ## font chooser
+            # l = ttk.Label(root, text="Hello World", font="helvetica 24")
+            # l.grid(padx=10, pady=10)
+            # def font_changed(font):
+            #     l['font'] = font
+            # root.tk.call('tk', 'fontchooser', 'configure', '-font', 'helvetica 24', '-command',
+            #              root.register(font_changed))
+            # root.tk.call('tk', 'fontchooser', 'show')
+
+            ## confirm prompt
+            # messagebox.askyesno(
+            #     message='Are you sure you want to install SuperVirus?'
+            #     icon = 'question' title = 'Install')
+            #### other methods (type):
+            # ok(default): ⇒ ok                             showinfo: ⇒ "ok"                                        askquestion: ⇒ "yes" or "no"
+            # okcancel: ⇒ ok or cancel                      showwarning: ⇒ "ok"                                     askyesnocancel: ⇒ True (on yes), False (on no), or None (on cancel)
+            # yesno: ⇒ yes or no                            showerror: ⇒ "ok"
+            # yesnocancel: ⇒ yes, no or cancel              askokcancel: ⇒ True (on ok) or False (on cancel)
+            # retrycancel: ⇒ retry or cancel                askyesno: ⇒ True (on yes) or False (on no)
+            # abortretryignore: ⇒ abort, retry or ignore    askretrycancel: ⇒ True (on retry) or False (on cancel)
+            ### full options
+            # type: As described above.
+            # message: The main message displayed inside the alert.
+            # detail: A secondary message (if needed).
+            # title: Title for the dialog window. Not used on macOS.
+            # icon: Icon, one of info (default), error, question, or warning.
+            # default: Default button, e.g., ok or cancel for an okcancel dialog.
+            # parent: Window of your application this dialog is being posted for.
 
             def showSettings():
                 messagebox.showinfo(message="Settings would display here")
@@ -303,8 +374,22 @@ class FeetToMeters:
             #   As with OpenDocument, but the documents should be printed rather than opened.
 
             root['menu'] = menubar # attach menubar to tkinter
-
         make_menu()
+
+        # for splash screen maybe
+        def make_dialog():
+            def dismiss():
+                dlg.grab_release()
+                dlg.destroy()
+
+            dlg = Toplevel(root)
+            ttk.Button(dlg, text="Done", command=dismiss).grid()
+            dlg.protocol("WM_DELETE_WINDOW", dismiss)  # intercept close button
+            dlg.transient(root)  # dialog window is related to main
+            dlg.wait_visibility()  # can't grab until window appears, so we wait
+            dlg.grab_set()  # ensure all input goes to our window
+            dlg.wait_window()  # block until window is destroyed
+        # make_dialog()
 
 
     def calculate(self, *args):
@@ -318,5 +403,10 @@ class FeetToMeters:
 
 root = Tk()
 FeetToMeters(root)
-# print(root.tk.call('tk', 'windowingsystem')) # returns x11, win32 or aqua
+
+## screen information
+# print("color depth=" + str(root.winfo_screendepth())+ " (" + root.winfo_screenvisual() + ")")
+# print("pixels per inch=" + str(root.winfo_pixels('1i')))
+# print("width=", str(root.winfo_screenwidth()) + " height=", str(root.winfo_screenheight()))
+
 root.mainloop()
