@@ -118,6 +118,7 @@ class FeetToMeters:
         # bigger.grid(column=0, row=0)
         # mainframe.after(2000, lambda: little.lift())
 
+        ## root.winfo_rgb('red') OR root.winfo_rgb('#3FF') OR root.winfo_rgb('#FF016A') OR root.info_rgb(<between 0 and 65535>)
 
         self.feet = StringVar()
         feet_entry = ttk.Entry(mainframe, width=7, textvariable=self.feet)
@@ -200,6 +201,29 @@ class FeetToMeters:
         ## password example
         # password = StringVar()
         # pw = ttk.Entry(mainframe, textvariable=password, show="*").grid(column=0,row=0, sticky=(N,E))
+
+        ## separator
+        # sprtr = ttk.Separator(parent, orient=HORIZONTAL)
+
+        ## labelframe (like fieldset/legend)
+        # lf = ttk.Labelframe(parent, text='Label')
+
+        ## panedwindow
+        ###  stack two or more resizable widgets above and below each other (or to the left and right).
+        # p = ttk.Panedwindow(parent, orient=VERTICAL)
+        # # two panes, each of which would get widgets gridded into it:
+        # f1 = ttk.Labelframe(p, text='Pane1', width=100, height=100)
+        # f2 = ttk.Labelframe(p, text='Pane2', width=100, height=100)
+        # p.add(f1)
+        # p.add(f2)
+
+        ## notebook (tabbed view)
+        ### Notebook widgets generate a <<NotebookTabChanged>> virtual event whenever a new tab is selected.
+        # n = ttk.Notebook(parent)
+        # f1 = ttk.Frame(n)  # first page, which would get widgets gridded into it
+        # f2 = ttk.Frame(n)  # second page
+        # n.add(f1, text='One')
+        # n.add(f2, text='Two')
 
         ## validation example
         # import re
