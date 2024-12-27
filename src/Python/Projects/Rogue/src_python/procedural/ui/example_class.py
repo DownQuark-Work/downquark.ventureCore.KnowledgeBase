@@ -180,6 +180,8 @@ class FeetToMeters:
         ## text
         # txt = Text(parent, width=40, height=10)
         # txt['state'] = 'disabled'
+        # flowers = PhotoImage(file='flowers.gif')
+        # txt.image_create('sel.first', image=flowers)
 
         ## scale
         # num = StringVar()
@@ -224,6 +226,34 @@ class FeetToMeters:
         # f2 = ttk.Frame(n)  # second page
         # n.add(f1, text='One')
         # n.add(f2, text='Two')
+
+        ## treeview
+        # tree = ttk.Treeview(mainframe)
+        # ## Inserted at the root, program chooses id:
+        # tree.insert('', 'end', 'widgets', text='Widget Tour')
+        # ## Same thing, but inserted as first child:
+        # tree.insert('', 0, 'gallery', text='Applications')
+        # ## Treeview chooses the id:
+        # id = tree.insert('', 'end', text='Tutorial')
+        # ## Inserted underneath an existing node:
+        # tree.insert('widgets', 'end', text='Canvas')
+        # tree.insert(id, 'end', text='Tree')
+        ### interactions
+        # tree.move('widgets', 'gallery', 'end')  # move widgets under gallery
+        # tree.detach('widgets') # remove from ui - allows for future reattachment
+        # tree.delete('widgets') # remove from memory - no future reattachment possible
+        # tree.item('widgets', open=TRUE) # set
+        # isopen = tree.item('widgets', 'open') # get
+        # tree['columns'] = ('size', 'modified', 'owner')
+        # tree.set('widgets', 'size', '12KB')
+        # size = tree.set('widgets', 'size')
+        # tree.insert('', 'end', text='Listbox', values=(size, 'Yesterday', 'mark'))
+        # tree.insert('', 'end', text='button', tags=('ttk', 'simple'))
+        # tree.tag_configure('ttk', background='yellow')
+        # def treeItemClicked():
+        #     print('tree item clicked')
+        # tree.tag_bind('ttk', '<1>', treeItemClicked)
+        # the item clicked can be found via tree.focus()
 
         ## validation example
         # import re
@@ -424,13 +454,52 @@ class FeetToMeters:
             pass
 
 
+class Sketchpad(Canvas): # extending `Canvas` widget for class
+    # all Item Attributes and Item Types here:
+    ## https://tkdocs.com/tutorial/canvas.html#:~:text=item%20attributes
+    ## https://tkdocs.com/tutorial/canvas.html#:~:text=item%20types
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent, **kwargs)
+        self.bind("<Button-1>", self.save_posn)
+        self.bind("<B1-Motion>", self.add_line)
+
+    def save_posn(self, event):
+        self.lastx, self.lasty = event.x, event.y
+
+    def add_line(self, event):
+        self.create_line((self.lastx, self.lasty, event.x, event.y))
+        self.save_posn(event)
+    ## overwrite as with other widgets:
+    # id = canvas.create_line(0, 0, 10, 10, fill='red')
+    # ...
+    # canvas.itemconfigure(id, fill='blue', width=2)
+
+    ## full opts
+    # fill: color to draw the object
+    # width: line width of the item (or its outline)
+    # outline: for filled shapes like rectangles, the color to draw the item's outline
+    # dash: draw a dashed line instead of a solid one, e.g., 2 4 6 4 alternates short (2 pixels) and long (6 pixels) dashes with 4 pixels between
+    # stipple: instead of a solid fill color, use a pattern, typically gray75, gray50, gray25, or gray12; stippling is currently not supported on macOS
+    # state: assign a state of normal (default), disabled (item event bindings are ignored), or hidden (removed from display)
+    # disabledfill, disabledwidth, ...: if the item's state is set to disabled, the item will display using these variants of the usual attributes
+    # activefill, activewidth, ...
 
 root = Tk()
-FeetToMeters(root)
 
 ## screen information
 # print("color depth=" + str(root.winfo_screendepth())+ " (" + root.winfo_screenvisual() + ")")
 # print("pixels per inch=" + str(root.winfo_pixels('1i')))
 # print("width=", str(root.winfo_screenwidth()) + " height=", str(root.winfo_screenheight()))
+
+# theming (https://wiki.tcl-lang.org/page/List+of+ttk+Themes)
+# ttkStyle = ttk.Style()
+# print('builtin themes: ',ttkStyle.theme_names(),'\r\tusing theme:', ttkStyle.theme_use())
+# ttkStyle.theme_use('classic'); print('now using theme:', ttkStyle.theme_use())
+## creating and applying custom styles: https://tkdocs.com/tutorial/styles.html#styleoptions
+
+FeetToMeters(root)
+### Canvas Example
+# sketch = Sketchpad(root)
+# sketch.grid(column=0, row=0, sticky=(N, W, E, S))
 
 root.mainloop()
