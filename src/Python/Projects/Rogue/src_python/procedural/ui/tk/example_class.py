@@ -1,8 +1,6 @@
 from tkinter import *
 from tkinter import ttk, messagebox, filedialog
 
-# py src_python/procedural/ui/example_class.py
-
 # winfo reference
 # ---
 # winfo_class:
@@ -69,9 +67,7 @@ from tkinter import ttk, messagebox, filedialog
 
 
 class FeetToMeters:
-
     def __init__(self, root):
-
         root.title("Feet to Meters")
 
         # could be useful for a splash screen or something
