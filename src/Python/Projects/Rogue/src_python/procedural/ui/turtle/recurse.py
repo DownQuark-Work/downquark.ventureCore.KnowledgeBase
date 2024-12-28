@@ -560,4 +560,5 @@ class Trtle:
 # Trtle.Sierpinski('TRIANGLE')
 # Trtle.Sierpinski('CARPET')
 # Trtle.UlamSpiral()
-Trtle.VariedFractal(0) # accepts range 0-10
+# Trtle.VariedFractal(0) # accepts range 0-10
+print('make sure to run a fnc')
