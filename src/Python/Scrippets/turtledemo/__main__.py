@@ -3,6 +3,11 @@
       turtleDemo - Help
   ----------------------------------------------
 
+  # USAGE
+# /dq/dq/downquark.ventureCore.KnowledgeBase/src/Python/Scrippets                                     [💎 v2.7.6][☁️  (us-east-1)][☁️  dq.mlnck@gmail.com]  
+# └> 👉  py turtledemo    
+
+
   This document has two sections:
 
   (1) How to use the demo viewer
