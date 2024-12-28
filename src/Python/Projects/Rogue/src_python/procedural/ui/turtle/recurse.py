@@ -4,6 +4,7 @@ import turtle
 
 from time import sleep
 
+# https://docs.python.org/3/library/turtle.html
 # https://inventwithpython.com/recursion/chapter9.html
 
 class Trtle:
