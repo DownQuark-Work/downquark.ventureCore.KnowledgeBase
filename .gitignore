@@ -22,6 +22,8 @@ node_modules/
 # Optional cache directories
 .eslintcache
 .npm
+__pycache__/
+**/__pycache__/
 
 # Optional private notes directory
 _notes/.ignored/
