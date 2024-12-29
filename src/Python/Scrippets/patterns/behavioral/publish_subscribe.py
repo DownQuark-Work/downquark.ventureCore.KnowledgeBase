@@ -2,6 +2,9 @@
 Reference:
 http://www.slideshare.net/ishraqabd/publish-subscribe-model-overview-13368808
 Author: https://github.com/HanWenfang
+
+A slightly more elaborate implementation: 
+- https://github.com/ashishps1/awesome-low-level-design/blob/main/solutions/python/pubsubsystem/pub_sub_system_demo.py
 """
 
 from __future__ import annotations
