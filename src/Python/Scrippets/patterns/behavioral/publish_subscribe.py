@@ -9,7 +9,6 @@ A slightly more elaborate implementation:
 
 from __future__ import annotations
 
-
 class Provider:
     def __init__(self) -> None:
         self.msg_queue = []
